@@ -1,0 +1,80 @@
+.form-container {
+  width: 90%;
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 2px solid #258570;
+  border-radius: 10px;
+  background: #c0f1e0;
+}
+
+h2 {
+  text-align: center;
+  color: #12795f;
+}
+
+h3 {
+  margin-top: 20px;
+  color: #444;
+  border-bottom: 1px solid #ccc;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+input, select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.btn-container {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  flex: 1;
+  padding: 10px;
+  background: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button[type="reset"] {
+  background: #777;
+}
+
+button:disabled {
+  background: #aaa;
+}
+.kyc-documents {
+  margin-top: 30px;
+  display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+.heading {
+  color: #0f7d6d;
+  border-bottom: 2px solid #0a5c50;
+  padding-bottom: 5px;
+}
+.section {
+  background-color: #f8ffff; /* light cyan background like your image */
+  border: 1px solid #d9e9ec;
+}
+.form-label {
+  font-size: 14px;
+}
+input, select {
+  font-size: 13px;
+  text-transform: uppercase;
+}
