@@ -1,15 +1,23 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faArrowUpFromBracket } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-customer',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, FontAwesomeModule],
   templateUrl: './customer.html',
-  styleUrl: './customer.css'
+  styleUrls: ['./customer.css']
 })
 export class Customer {
+  previewUrl: string | null = null;  // For showing uploaded image preview
+
+  constructor(library: FaIconLibrary) {
+    library.addIcons(faArrowUpFromBracket);
+  }
+
   customer: any = {
     type: 'Individual',
     documentType: '',
@@ -51,5 +59,21 @@ export class Customer {
   onSave() {
     console.log("Customer Saved:", this.customer);
     alert("Customer data saved successfully!");
+  }
+
+  // File upload handler
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      console.log("Selected file:", file.name);
+      this.customer.profile = file;
+
+      // Generate preview
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.previewUrl = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
   }
 }

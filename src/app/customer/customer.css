@@ -5,7 +5,8 @@
   padding: 20px;
   border: 2px solid #258570;
   border-radius: 10px;
-  background: #c0f1e0;
+  background: #eef1f0;
+  box-shadow: 0 0 10px rgba(198, 13, 13, 0.1);
 }
 
 h2 {
@@ -37,6 +38,7 @@ input, select {
   margin-top: 20px;
   display: flex;
   gap: 10px;
+  color: red;
 }
 
 button {
@@ -49,13 +51,13 @@ button {
   cursor: pointer;
 }
 
-button[type="reset"] {
-  background: #777;
+button{
+  background: #068b5d;
 }
 
-button:disabled {
+/* button:disabled {
   background: #aaa;
-}
+} */
 .kyc-documents {
   margin-top: 30px;
   display: flex;
@@ -64,11 +66,17 @@ button:disabled {
 }
 .heading {
   color: #0f7d6d;
-  border-bottom: 2px solid #0a5c50;
+  border: .5px solid #0a5c50;
   padding-bottom: 5px;
+  text-align: center;
+  height: 30px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-items: center;
 }
 .section {
-  background-color: #f8ffff; /* light cyan background like your image */
+  background-color: #f8ffff; 
   border: 1px solid #d9e9ec;
 }
 .form-label {
@@ -77,4 +85,17 @@ button:disabled {
 input, select {
   font-size: 13px;
   text-transform: uppercase;
+}
+.address{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-top: 20px;
+  padding: 10px;
+}
+.text-danger {
+  color: red;
+}
+.Demographic{
+  margin-top: 20px;
 }
