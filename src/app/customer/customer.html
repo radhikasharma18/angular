@@ -2,8 +2,6 @@
   <h2>Add Customer</h2>
 
   <form (ngSubmit)="onSave()" #customerForm="ngForm">
-
-    
     <label>Type</label>
     <select [(ngModel)]="customer.type" name="type" required>
       <option>Individual</option>
@@ -12,82 +10,111 @@
 
     <h3 class="heading">KYC Documents</h3>
     <div class="kyc-documents">
+      <div>
+        <div><label>Document Type*</label></div>
         <div>
-   <div> <label>Document Type*</label></div>
-   <div> <select [(ngModel)]="customer.documentType" name="documentType" required>
-      <option *ngFor="let doc of documentTypes">{{doc}}</option>
-    </select></div></div>
-<div>
-    <label>Document Number*</label>
-    <input type="text" [(ngModel)]="customer.documentNumber" name="documentNumber" required /></div>
-<div class="col-md-2 text-center">
-  <label class="form-label fw-bold">Document Image</label>
-  <input type="file" id="documentImage" class="d-none" />
-  <label for="documentImage" class="btn btn-outline-primary">
-    <i class="fa-solid fa-arrow-up-from-bracket"></i> 
-  </label>
-</div>
+          <select [(ngModel)]="customer.documentType" name="documentType" required>
+            <option *ngFor="let doc of documentTypes">{{ doc }}</option>
+          </select>
+        </div>
+      </div>
 
-<div class="col-md-2 text-center">
-  <label class="form-label fw-bold">Document Image</label>
-  <input type="file" id="documentImage" class="d-none" />
-  <label for="documentImage" class="btn btn-outline-primary">
-    <i class="fa-solid fa-arrow-up-from-bracket"></i> 
-  </label>
-</div>
-</div>
- <h3 class="heading">Demographic Information</h3>
- <div class="address">
-   <div> <label>First Name<span class="text-danger">*</span></label>
-    <input type="text" [(ngModel)]="customer.firstName" name="firstName" required /></div>
+      <div>
+        <label>Document Number*</label>
+        <input type="text" [(ngModel)]="customer.documentNumber" name="documentNumber" required />
+      </div>
 
-    <div><label>Last Name<span class="text-danger">*</span></label>
-    <input type="text" [(ngModel)]="customer.lastName" name="lastName" required /></div>
+      <div class="col-md-2 text-center">
+        <label class="form-label fw-bold">Document Image</label>
+        <input type="file" id="documentImage" class="d-none" />
+        <label for="documentImage" class="btn btn-outline-primary">
+          <i class="fa-solid fa-arrow-up-from-bracket"></i>
+        </label>
+      </div>
+    </div>
 
-   <div><label>Gender<span class="text-danger">*</span></label>
-    <select [(ngModel)]="customer.gender" name="gender" required>
-      <option *ngFor="let g of genders">{{g}}</option>
-    </select></div> 
+    <h3 class="heading">Demographic Information</h3>
+    <div class="address">
+      <div>
+        <label>First Name<span class="text-danger">*</span></label>
+        <input type="text" [(ngModel)]="customer.firstName" name="firstName" required />
+      </div>
 
-    <div><label>DOB<span class="text-danger">*</span></label>
-    <input type="date" [(ngModel)]="customer.dob" name="dob" required /></div>
+      <div>
+        <label>Last Name<span class="text-danger">*</span></label>
+        <input type="text" [(ngModel)]="customer.lastName" name="lastName" required />
+      </div>
 
-    <div><label>Email</label>
-    <input type="email" [(ngModel)]="customer.email" name="email" /></div>
+      <div>
+        <label>Gender<span class="text-danger">*</span></label>
+        <select [(ngModel)]="customer.gender" name="gender" required>
+          <option *ngFor="let g of genders">{{ g }}</option>
+        </select>
+      </div>
 
-    <div><label>WhatsApp No</label>
-    <input type="text" [(ngModel)]="customer.whatsapp" name="whatsapp" /></div>
+      <div>
+        <label>DOB<span class="text-danger">*</span></label>
+        <input type="date" [(ngModel)]="customer.dob" name="dob" required />
+      </div>
 
-    <div><label>Primary Contact*</label>
-    <input type="text" [(ngModel)]="customer.contact" name="contact" required /></div>
+      <div>
+        <label>Email</label>
+        <input type="email" [(ngModel)]="customer.email" name="email" />
+      </div>
 
-    <div><label>Alternate No</label>
-    <input type="text" [(ngModel)]="customer.altContact" name="altContact" /></div></div>
+      <div>
+        <label>WhatsApp No</label>
+        <input type="text" [(ngModel)]="customer.whatsapp" name="whatsapp" />
+      </div>
+
+      <div>
+        <label>Primary Contact*</label>
+        <input type="text" [(ngModel)]="customer.contact" name="contact" required />
+      </div>
+
+      <div>
+        <label>Alternate No</label>
+        <input type="text" [(ngModel)]="customer.altContact" name="altContact" />
+      </div>
+    </div>
 
     <h3 class="heading">Customer Address</h3>
     <div class="address">
-    <div><label>Address<span class="text-danger">*</span></label>
-    <input type="text" [(ngModel)]="customer.address" name="address" required /></div>
-    
-      <div><label>Landmark<span class="text-danger">*</span></label>
-    <input type="text" [(ngModel)]="customer.landmark" name="landmark" required /></div>
+      <div>
+        <label>Address<span class="text-danger">*</span></label>
+        <input type="text" [(ngModel)]="customer.address" name="address" required />
+      </div>
 
-    <div> <label>District</label>
-    <input type="text" [(ngModel)]="customer.district" name="district" /></div>
-   
-<div><label>Tehsil</label>
-    <input type="text" [(ngModel)]="customer.tehsil" name="tehsil" /></div>
+      <div>
+        <label>Landmark<span class="text-danger">*</span></label>
+        <input type="text" [(ngModel)]="customer.landmark" name="landmark" required />
+      </div>
 
-    <div><label>State</label>
-    <input type="text" [(ngModel)]="customer.state" name="state" /></div>
+      <div>
+        <label>District</label>
+        <input type="text" [(ngModel)]="customer.district" name="district" />
+      </div>
 
-    <div> <label>Pincode</label>
-    <input type="text" [(ngModel)]="customer.pincode" name="pincode" /></div></div>
-   
+      <div>
+        <label>Tehsil</label>
+        <input type="text" [(ngModel)]="customer.tehsil" name="tehsil" />
+      </div>
+
+      <div>
+        <label>State</label>
+        <select [(ngModel)]="customer.state" name="state">
+          <option *ngFor="let s of states" [value]="s.StateID">{{ s.State_Name }}</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Pincode</label>
+        <input type="text" [(ngModel)]="customer.pincode" name="pincode" />
+      </div>
+    </div>
 
     <div class="btn-container">
       <button class="button" type="submit" [disabled]="!customerForm.form.valid">Save</button>
-      
     </div>
   </form>
 </div>
