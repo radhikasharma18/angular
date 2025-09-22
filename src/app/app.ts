@@ -8,6 +8,7 @@ import { Customer } from './customer/customer';
   imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
+
 })
 export class App {
   protected readonly title = signal('my-app');

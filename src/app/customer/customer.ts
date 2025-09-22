@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faArrowUpFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
-
+import { constantUrl } from '../constantUrls';
 @Component({
   selector: 'app-customer',
   standalone: true,
@@ -15,6 +15,8 @@ import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http'
 export class Customer implements OnInit {
   previewUrl: string | null = null;
   states: any[] = [];
+  district: any[] = [];
+  tehsil:any[]=[];
 
   constructor(library: FaIconLibrary, private http: HttpClient) {
     library.addIcons(faArrowUpFromBracket);
@@ -49,7 +51,7 @@ export class Customer implements OnInit {
     pincode: '',
     years: '',
     rentOwn: '',
-    distance: ''
+    distance: '',
   };
 
   countries = ['India', 'USA', 'UK', 'Canada'];
@@ -57,7 +59,8 @@ export class Customer implements OnInit {
   genders = ['Male', 'Female', 'Other'];
   maritalStatuses = ['Single', 'Married', 'Divorced'];
   religions = ['Hindu', 'Muslim', 'Christian', 'Sikh', 'Other'];
-
+customer_state:any = " ";
+customer_district=" ";
   ngOnInit() {
     this.loadStates();
   }
@@ -65,8 +68,8 @@ export class Customer implements OnInit {
   
   loadStates() {
     const url = 'https://demo.finnaux.com/api/api/Masters/GetState';
-    const token = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTgyMTk1NDksImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTIxNSIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTIxNSJ9.cP8cRZ8vIAFIKJvbOLYyyOcEJv9j8ePdYCnzuKVDLD8';
-
+    const token = constantUrl.token;
+  
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': token
@@ -76,13 +79,83 @@ export class Customer implements OnInit {
       next: (res: any) => {
         this.states = res;
         console.log('States API Response:', this.states);
+        return this.states;
 
       },
       error: (err) => {
         console.error('Error fetching states:', err);
       }
     });
+    
   }
+ loadDistricts(stateId: any) {
+  console.log('Selected State ID:', stateId); 
+
+  if (!stateId) return;
+
+  const url = 'https://demo.finnaux.com/api/api/Masters/GetDistricts';
+  const token = constantUrl.token;
+
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Authorization': token
+  });
+
+  this.http.post(url, { StateID: stateId }, { headers }).subscribe({
+    next: (res: any) => {
+      this.district = res; 
+      console.log('Districts API Response:', this.district);
+    },
+    error: (err) => {
+      console.error('Error fetching districts:', err);
+    }
+  });
+}
+loadTehsils(districtId: any) {
+  console.log('Selected District ID:', districtId); 
+
+  if (!districtId) return;
+
+  const url = 'https://demo.finnaux.com/api/api/Masters/GetTahsil';
+  const token = constantUrl.token;
+
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Authorization': token
+  });
+
+  this.http.post(url, { DistrictID: districtId }, { headers }).subscribe({
+    next: (res: any) => {
+      this.tehsil = res; 
+      console.log('Tehsils API Response:', this.tehsil);
+    },
+    error: (err) => {
+      console.error('Error fetching Tehsils:', err);
+    }
+  });
+}
+saveCustomer() {
+  const url = 'https://demo.finnaux.com/api/api/LMS/SaveCustomerOutside'; 
+  const token = constantUrl.token;
+
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Authorization': token
+  });
+
+  
+  this.http.post(url, this.customer, { headers }).subscribe({
+    next: (res: any) => {
+      console.log('Customer saved successfully:', res);
+      alert('Customer data saved successfully!');
+    },
+    error: (err) => {
+      console.error('Error saving customer:', err);
+      alert('Failed to save customer. Please try again.');
+    }
+  });
+}
+
 
   onSave() {
     console.log("Customer Saved:", this.customer);

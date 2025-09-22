@@ -1,7 +1,7 @@
 <div class="form-container">
   <h2>Add Customer</h2>
 
-  <form (ngSubmit)="onSave()" #customerForm="ngForm">
+  <form (ngSubmit)="saveCustomer()" #customerForm="ngForm">
     <label>Type</label>
     <select [(ngModel)]="customer.type" name="type" required>
       <option>Individual</option>
@@ -89,23 +89,30 @@
         <label>Landmark<span class="text-danger">*</span></label>
         <input type="text" [(ngModel)]="customer.landmark" name="landmark" required />
       </div>
+      <div>
+  <label>State</label>
+  <select [(ngModel)]="customer_state" name="state" (ngModelChange)="loadDistricts($event)" required>
+    <option *ngFor="let s of states" [value]="s.StateId">{{ s.State_Name }}</option>
+  </select>
+</div>
+
 
       <div>
-        <label>District</label>
-        <input type="text" [(ngModel)]="customer.district" name="district" />
-      </div>
+  <label>District</label>
+  <select [(ngModel)]="customer_district" name="district" (ngModelChange)="loadTehsils($event)" required>
+    <option *ngFor="let d of district" [value]="d.DistrictId">{{ d.District_Name }}</option>
+  </select>
+</div>
+
 
       <div>
-        <label>Tehsil</label>
-        <input type="text" [(ngModel)]="customer.tehsil" name="tehsil" />
-      </div>
+  <label>Tehsil</label>
+  <select [(ngModel)]="customer.tehsil" name="tehsil" >
+    <option *ngFor="let t of tehsil" [value]="t.Tehsil">{{ t.Tehsil_Name }}</option>
+  </select>
+</div>
 
-      <div>
-        <label>State</label>
-        <select [(ngModel)]="customer.state" name="state">
-          <option *ngFor="let s of states" [value]="s.StateID">{{ s.State_Name }}</option>
-        </select>
-      </div>
+      
 
       <div>
         <label>Pincode</label>
@@ -116,5 +123,9 @@
     <div class="btn-container">
       <button class="button" type="submit" [disabled]="!customerForm.form.valid">Save</button>
     </div>
+  
+ 
+ 
+
   </form>
 </div>
