@@ -11,7 +11,7 @@
     <h3 class="heading">KYC Documents</h3>
     <div class="kyc-documents">
       <div>
-        <div><label>Document Type*</label></div>
+        <div><label>Document Type<span class="text-danger">*</span></label></div>
         <div>
           <select [(ngModel)]="customer.documentType" name="documentType" required>
             <option *ngFor="let doc of documentTypes">{{ doc }}</option>
@@ -20,21 +20,35 @@
       </div>
 
       <div>
-        <label>Document Number*</label>
+        <label>Document Number<span class="text-danger">*</span></label>
         <input type="text" [(ngModel)]="customer.documentNumber" name="documentNumber" required />
       </div>
 
       <div class="col-md-2 text-center">
         <label class="form-label fw-bold">Document Image</label>
-        <input type="file" id="documentImage" class="d-none" />
+        <input type="file" id="documentImage" class="d-none" (change)="onFileSelected($event)" />
         <label for="documentImage" class="btn btn-outline-primary">
           <i class="fa-solid fa-arrow-up-from-bracket"></i>
         </label>
+        <div *ngIf="previewUrl">
+          <img [src]="previewUrl" alt="Preview" width="100" class="mt-2" />
+        </div>
       </div>
     </div>
 
     <h3 class="heading">Demographic Information</h3>
     <div class="address">
+      <div>
+        <label class="form-label fw-bold">Profile Image</label>
+        <input type="file" id="profileImage" class="d-none" (change)="onFileSelected($event)" />
+        <label for="profileImage" class="btn btn-outline-primary">
+          <i class="fa-solid fa-arrow-up-from-bracket"></i>
+        </label>
+        <div *ngIf="previewUrl">
+          <img [src]="previewUrl" alt="Preview" width="100" class="mt-2" />
+        </div>
+      </div>
+
       <div>
         <label>First Name<span class="text-danger">*</span></label>
         <input type="text" [(ngModel)]="customer.firstName" name="firstName" required />
@@ -46,37 +60,102 @@
       </div>
 
       <div>
+        <label>Relation <span class="text-danger">*</span></label>
+        <select [(ngModel)]="customer.relation" name="relation" required>
+          <option value="">Select</option>
+          <option value="Father">S/O</option>
+          <option value="Mother">D/O</option>
+          <option value="Spouse">C/O</option>
+          <option value="Spouse">W/O</option>
+        </select>
+      </div>
+      <div>
+        <label>First Name<span class="text-danger">*</span></label>
+        <input type="text" [(ngModel)]="customer.relation.firstName" name="firstName" required />
+      </div>
+
+      <div>
+        <label>Last Name<span class="text-danger">*</span></label>
+        <input type="text" [(ngModel)]="customer.relation.lastName" name="lastName" required />
+      </div>
+
+
+      <div>
         <label>Gender<span class="text-danger">*</span></label>
         <select [(ngModel)]="customer.gender" name="gender" required>
           <option *ngFor="let g of genders">{{ g }}</option>
         </select>
       </div>
 
+
       <div>
         <label>DOB<span class="text-danger">*</span></label>
-        <input type="date" [(ngModel)]="customer.dob" name="dob" required />
+        <input
+          type="date"
+          [(ngModel)]="customer.dob"
+          name="dob"
+          (change)="calculateAge()"
+          required
+        />
       </div>
 
       <div>
-        <label>Email</label>
-        <input type="email" [(ngModel)]="customer.email" name="email" />
+        <label>Age</label>
+        <input type="number" [(ngModel)]="customer.age" name="age" readonly />
+      </div>
+
+    
+      <div *ngIf="customer.age && customer.age < 18">
+        <small class="text-danger">Customer must be at least 18 years old.</small>
+      </div>
+
+      <div>
+        <label>Primary Contact<span class="text-danger">*</span></label>
+        <input type="text" [(ngModel)]="customer.contact" name="contact" required />
       </div>
 
       <div>
         <label>WhatsApp No</label>
         <input type="text" [(ngModel)]="customer.whatsapp" name="whatsapp" />
       </div>
-
-      <div>
-        <label>Primary Contact*</label>
-        <input type="text" [(ngModel)]="customer.contact" name="contact" required />
-      </div>
-
-      <div>
+ <div>
         <label>Alternate No</label>
         <input type="text" [(ngModel)]="customer.altContact" name="altContact" />
       </div>
-    </div>
+   
+     <div>
+        <label>Email</label>
+        <input type="email" [(ngModel)]="customer.email" name="email" />
+      </div>
+       <div>
+        <label> Other Email</label>
+        <input type="email" [(ngModel)]="customer.otheremail" name="email" />
+      </div>
+
+      <div><label>Marital Status<span class="text-danger">*</span></label>
+<select [(ngModel)]="customer.maritalStatus" name="maritalStatus" required>
+  
+  <option>Married</option>
+  <option>UnMarried</option>
+</select> </div>
+
+<div>
+  <label>Customer Religion<span class="text-danger">*</span></label>
+  <select [(ngModel)]="customer.religion" name="religion" required>
+      <option>Hindu</option>
+      <option>Muslim</option>
+      <option>Christian</option>
+      <option>Sikh</option>
+        <option>Other</option>
+
+      </select></div>
+      <div>
+  <label>Customer Profile</label>
+  <select [(ngModel)]="customer.profile" name="profile">
+    <option *ngFor="let profile of customerprofile" [value]="profile.id">{{ profile.Value }}</option>
+  </select>
+</div>
+ </div>
 
     <h3 class="heading">Customer Address</h3>
     <div class="address">
@@ -89,43 +168,72 @@
         <label>Landmark<span class="text-danger">*</span></label>
         <input type="text" [(ngModel)]="customer.landmark" name="landmark" required />
       </div>
-      <div>
-  <label>State</label>
-  <select [(ngModel)]="customer_state" name="state" (ngModelChange)="loadDistricts($event)" required>
-    <option *ngFor="let s of states" [value]="s.StateId">{{ s.State_Name }}</option>
-  </select>
-</div>
-
 
       <div>
-  <label>District</label>
-  <select [(ngModel)]="customer_district" name="district" (ngModelChange)="loadTehsils($event)" required>
-    <option *ngFor="let d of district" [value]="d.DistrictId">{{ d.District_Name }}</option>
-  </select>
-</div>
-
-
-      <div>
-  <label>Tehsil</label>
-  <select [(ngModel)]="customer.tehsil" name="tehsil" >
-    <option *ngFor="let t of tehsil" [value]="t.Tehsil">{{ t.Tehsil_Name }}</option>
-  </select>
-</div>
-
-      
-
-      <div>
-        <label>Pincode</label>
-        <input type="text" [(ngModel)]="customer.pincode" name="pincode" />
+        <label>State<span class="text-danger">*</span></label>
+        <select
+          [(ngModel)]="customer_state"
+          name="state"
+          (ngModelChange)="loadDistricts($event)"
+          required
+        >
+          <option *ngFor="let s of states" [value]="s.StateId">{{ s.State_Name }}</option>
+        </select>
       </div>
+
+      <div>
+        <label>District<span class="text-danger">*</span></label>
+        <select
+          [(ngModel)]="customer_district"
+          name="district"
+          (ngModelChange)="loadTehsils($event)"
+          required
+        >
+          <option *ngFor="let d of district" [value]="d.DistrictId">{{ d.District_Name }}</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Tehsil<span class="text-danger">*</span></label>
+        <select [(ngModel)]="customer.tehsil" name="tehsil" required>
+          <option *ngFor="let t of tehsil" [value]="t.Tehsil">{{ t.Tehsil_Name }}</option>
+        </select>
+      </div>
+
+      <div>
+  <label>Pincode</label>
+  <input
+    type="text"
+    [(ngModel)]="customer.pincode"
+    name="pincode"
+    required
+    pattern="^[0-9]{6}$"
+    maxlength="6"
+    #pincode="ngModel"
+  />
+  <div *ngIf="pincode.invalid && (pincode.dirty || pincode.touched)">
+    <small class="text-danger" *ngIf="pincode.errors?.['required']">
+      Pincode is required.
+    </small>
+    <small class="text-danger" *ngIf="pincode.errors?.['pattern']">
+      Pincode must be exactly 6 digits.
+    </small>
+  </div>
+</div>
+
+
+
+     
     </div>
 
     <div class="btn-container">
-      <button class="button" type="submit" [disabled]="!customerForm.form.valid">Save</button>
+      <button
+        class="button"
+        type="submit"
+        [disabled]="!customerForm.form.valid || (customer.age && customer.age < 18)"
+      >
+        Save
+      </button>
     </div>
-  
- 
- 
-
   </form>
 </div>
