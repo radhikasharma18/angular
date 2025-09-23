@@ -111,16 +111,18 @@
 
       <div>
         <label>Primary Contact<span class="text-danger">*</span></label>
-        <input type="text" [(ngModel)]="customer.contact" name="contact" required />
+      
+        <input type="text" [(ngModel)]="customer.contact" name="contact" required pattern="^[0-9]{6}$"
+    maxlength="10"/>
       </div>
 
       <div>
         <label>WhatsApp No</label>
-        <input type="text" [(ngModel)]="customer.whatsapp" name="whatsapp" />
+        <input type="text" [(ngModel)]="customer.whatsapp" name="whatsapp" pattern="^[0-9]{6}$" maxlength="10"/>
       </div>
  <div>
         <label>Alternate No</label>
-        <input type="text" [(ngModel)]="customer.altContact" name="altContact" />
+        <input type="text" [(ngModel)]="customer.altContact" name="altContact" pattern="^[0-9]{6}$" maxlength="10"/>
       </div>
    
      <div>
@@ -134,14 +136,15 @@
 
       <div><label>Marital Status<span class="text-danger">*</span></label>
 <select [(ngModel)]="customer.maritalStatus" name="maritalStatus" required>
-  
-  <option>Married</option>
+  <option value="">--Select--</option>
+   <option>Married</option>
   <option>UnMarried</option>
 </select> </div>
 
 <div>
   <label>Customer Religion<span class="text-danger">*</span></label>
   <select [(ngModel)]="customer.religion" name="religion" required>
+    <option value="">--Select--</option>
       <option>Hindu</option>
       <option>Muslim</option>
       <option>Christian</option>
@@ -151,11 +154,41 @@
       </select></div>
       <div>
   <label>Customer Profile</label>
-  <select [(ngModel)]="customer.profile" name="profile">
-    <option *ngFor="let profile of customerprofile" [value]="profile.id">{{ profile.Value }}</option>
+  <select [(ngModel)]="customer.profile" name="profile"  (ngModelChange)="loadCustomercategory($event)">
+    <option value="">Select Profile</option>
+    <option *ngFor="let profile of profile" [value]="profile.id">{{ profile.Value }}</option>
+  </select>
+</div>
+<div>
+  <label>Customer Category <span class="text-danger">*</span></label>
+  <select [(ngModel)]="customer.category" name="category"  (ngModelChange)="loadCustomerSubcategory($event)" required>
+    <option value="">Select Category</option>
+    <option *ngFor="let category of catergory" [value]="category.id">{{ category.Value }}</option>
+  </select>
+</div>
+<div>
+  <label>Customer Sub-Category <span class="text-danger">*</span></label>
+  <select [(ngModel)]="customer.subcategory" name="subcategory"   (ngModelChange)="loadCustomerNatureOfWork($event)"  required>
+    <option value="">Select Sub-Category</option>
+    <option *ngFor="let subcategory of subcatergory" [value]="subcategory.id">{{ subcategory.Value }}</option>
+  </select>
+</div>
+<div>
+  <label>Nature Of Work <span class="text-danger">*</span></label>
+  <select [(ngModel)]="customer.natureofwork" name="natureofwork"     required>
+    <option value="">Nature of work</option>
+    <option *ngFor="let natureofwork of natureofwork" [value]="natureofwork.Id">{{ natureofwork.Value}}</option>
+  </select>
+</div>
+<div>
+  <label>Customer Caste <span class="text-danger">*</span></label>
+  <select [(ngModel)]="customer.caste" name="caste"  required>
+    <option value="">Select Profile</option>
+    <option *ngFor="let caste of caste" [value]="caste.id">{{ caste.Value }}</option>
   </select>
 </div>
  </div>
+
 
     <h3 class="heading">Customer Address</h3>
     <div class="address">
@@ -230,7 +263,7 @@
       <button
         class="button"
         type="submit"
-        [disabled]="!customerForm.form.valid || (customer.age && customer.age < 18)"
+        [disabled]="customer.age <= 18"
       >
         Save
       </button>

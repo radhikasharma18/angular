@@ -18,7 +18,11 @@ export class Customer implements OnInit {
   states: any[] = [];
   district: any[] = [];
   tehsil: any[] = [];
-  customerprofile: any[] = [];
+  profile: any[] = [];
+  catergory: any[] = [];
+  subcatergory: any[] = [];
+  natureofwork: any[] = [];
+  caste: any[] = [];
 
   constructor(library: FaIconLibrary, private http: HttpClient) {
     library.addIcons(faArrowUpFromBracket);
@@ -53,7 +57,11 @@ export class Customer implements OnInit {
     pincode: '',
     years: '',
     rentOwn: '',
-    distance: ''
+    distance: '',
+    profile: '',
+    catergory:'',
+    subcategory:'',
+    natureofwork:''
   };
 
   countries = ['India', 'USA', 'UK', 'Canada'];
@@ -61,7 +69,6 @@ export class Customer implements OnInit {
   genders = ['Male', 'Female', 'Other'];
   maritalStatuses = ['Single', 'Married', 'Divorced'];
   religions = ['Hindu', 'Muslim', 'Christian', 'Sikh', 'Other'];
-
   customer_state: any = '';
   customer_district: any = '';
 
@@ -100,25 +107,77 @@ export class Customer implements OnInit {
       'Authorization': token
     });
 
-    this.http.post(url, {}, { headers }).subscribe({
+    this.http.post(url, {P_ID: 0,Type: "Profile"}, { headers }).subscribe({
       next: (res: any) => {
-        this.customerprofile = res;
-        console.log('customer profile API Response:', this.customerprofile);
+        this.profile = res;
+        console.log('customer profile API Response:', this.profile);
       },
       error: (err) => {
         console.error('Error fetching customer profile:', err);
       }
     });
   }
-//   loadCustomerProfile() {
-//   this.http.get('YOUR_API_URL').subscribe({
-//     next: (res: any) => {
-//       console.log(res); // check if API is returning data
-//       this.customerprofile = res; // assign API response
-//     },
-//     error: (err) => console.error(err)
-//   });
-// }
+   loadCustomercategory(profileId: any) {
+    const url = 'https://demo.finnaux.com/api/api/Masters/GetCustomer_Profile_Master_For_Dropdown';
+    const token = constantUrl.token;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': token
+    });
+
+    this.http.post(url, {P_ID: 0,Type: "Category"}, { headers }).subscribe({
+      next: (res: any) => {
+        this.catergory = res;
+        console.log('customer category API Response:', this.catergory);
+      },
+      error: (err) => {
+        console.error('Error fetching customer category:', err);
+      }
+    });
+  }
+  loadCustomerSubcategory(CategoryId: any) {
+    const url = 'https://demo.finnaux.com/api/api/Masters/GetCustomer_Profile_Master_For_Dropdown';
+    const token = constantUrl.token;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': token
+    });
+
+    this.http.post(url, {P_ID: 0,Type: "Sub-Category"}, { headers }).subscribe({
+      next: (res: any) => {
+        this.subcatergory = res;
+        console.log('customer category API Response:', this.subcatergory);
+      },
+      error: (err) => {
+        console.error('Error fetching customer category:', err);
+      }
+    });
+  }
+  loadCustomerNatureOfWork(subCategoryId: any) {
+    const url = 'https://demo.finnaux.com/api/api/Masters/GetCustomer_Profile_Master_For_Dropdown';
+    const token = constantUrl.token;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': token
+    });
+
+    this.http.post(url, {P_ID: 0 ,Type: "Nature of work"}, { headers }).subscribe({
+      next: (res: any) => {
+        this.natureofwork = res;
+        console.log('customer category API Response:', this.natureofwork);
+      },
+      error: (err) => {
+        console.error('Error fetching customer category:', err);
+      }
+    });
+  }
+  loadCustomerCaste(casteId: any) {
+    const url = 'https://demo.finnaux.com/api/api/Masters/GetCustomer_Profile_Master_For_Dropdown';
+  }
+
 
   loadStates() {
     const url = 'https://demo.finnaux.com/api/api/Masters/GetState';
@@ -209,7 +268,7 @@ export class Customer implements OnInit {
     const file = event.target.files[0];
     if (file) {
       console.log("Selected file:", file.name);
-      this.customer.profileImage = file;   // ✅ renamed to avoid clash
+      this.customer.profileImage = file;   
 
       const reader = new FileReader();
       reader.onload = () => {
