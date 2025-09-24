@@ -36,7 +36,7 @@ export class Customer implements OnInit {
     Customer_LastName: '',
     Customer_Relation_Type: '',
     Customer_Gender: '',
-    dob: '',
+    Customer_DOB: '',
     age: '',
     Customer_Email: '',
     Customer_WhatsAppNo: '',
@@ -45,19 +45,6 @@ export class Customer implements OnInit {
     Customer_MaritalStatus: '',
     Customer_Religion: '',
     Customer_Cast: '',
-    work: '',
-    businessType: '',
-    profileImage: '',   
-    subCategory: '',
-    address: '',
-    landmark: '',
-    district: '',
-    tehsil: '',
-    state: '',
-    pincode: '',
-    years: '',
-    rentOwn: '',
-    distance: '',
     Customer_Profile: '',
     Customer_Category:'',
     Customer_SubCategory:'',
@@ -66,14 +53,30 @@ export class Customer implements OnInit {
     Customer_Relation_FirstName:'',
     Customer_Relation_LastName:''
   };
+  address: any={
+    StateId: '',
+    DistrictId: '',
+    TehsilId: '',
+    NoOfLiving: '',
+    RentOwn: '',
+    Address: '',
+    LandMark: '',
+    PinCode: '',
+    DistanceBranch: '',
+    IsCommunicationAddress: '',
+    AddressId: ''
+  };
+ 
+
 
   countries = ['India', 'USA', 'UK', 'Canada'];
   documentTypes = ['Aadhar Card', 'PAN Card', 'Passport'];
-  genders = ['Male', 'Female', 'Other'];
+  Customer_Gender = ['Male', 'Female', 'Other'];
   maritalStatuses = ['Single', 'Married', 'Divorced'];
   religions = ['Hindu', 'Muslim', 'Christian', 'Sikh', 'Other'];
-  customer_state: any = '';
+  StateId: any = '';
   customer_district: any = '';
+  customer_tehsil:any='';
 
   ngOnInit() {
     this.loadStates();
@@ -81,10 +84,10 @@ export class Customer implements OnInit {
   }
 
   calculateAge() {
-    if (!this.customer.dob) return;
+    if (!this.customer.Customer_DOB) return;
 
     const today = new Date();
-    const birthDate = new Date(this.customer.dob);
+    const birthDate = new Date(this.customer.Customer_DOB);
     let age = today.getFullYear() - birthDate.getFullYear();
     const month = today.getMonth() - birthDate.getMonth();
 
@@ -96,7 +99,7 @@ export class Customer implements OnInit {
 
     if (age < 18) {
       alert("Customer must be at least 18 years old.");
-      this.customer.dob = '';
+      this.customer.Customer_DOB = '';
       this.customer.age = '';
     }
   }
@@ -247,7 +250,7 @@ export class Customer implements OnInit {
   }
 
   saveCustomer() {
-    const url = 'https://demo.finnaux.com/api/api/LMS/SaveCustomerOutside'; 
+    const url = 'https://demo.finnaux.com/api/api/LMS/SaveCustomerOutside';
     const token = constantUrl.token;
 
     const headers = new HttpHeaders({
@@ -255,7 +258,15 @@ export class Customer implements OnInit {
       'Authorization': token
     });
 
-    this.http.post(url, this.customer, { headers }).subscribe({
+    const payload = this.buildPayload();
+   
+    const body = {
+      CustomerId: 0,
+      JSON: JSON.stringify(payload)
+    };
+    console.log('Wrapped body to send:', JSON.stringify(body));
+
+    this.http.post(url, body, { headers }).subscribe({
       next: (res: any) => {
         console.log('Customer saved successfully:', res);
         alert('Customer data saved successfully!');
@@ -265,6 +276,108 @@ export class Customer implements OnInit {
         alert('Failed to save customer. Please try again.');
       }
     });
+  }
+
+  onSave() {
+    this.saveCustomer();
+  }
+
+  buildPayload() {
+    const dobIso = this.customer.Customer_DOB ? new Date(this.customer.Customer_DOB).toISOString() : null;
+
+    const sanitize = (v: any) => {
+      if (v === undefined || v === null) return '';
+      if (typeof v === 'string' && v.trim().toLowerCase() === 'undefined') return '';
+      return v;
+    };
+
+    const applicationCustomer: any = {
+      Type: sanitize(this.customer.type || this.customer.Type) || 'Individual',
+      Customer_FirstName: sanitize(this.customer.Customer_FirstName || this.customer.firstName),
+      Customer_LastName: sanitize(this.customer.Customer_LastName || this.customer.lastName),
+      Customer_Relation_Type: sanitize(this.customer.Customer_Relation_Type || this.customer.relation),
+      Customer_Relation_FirstName: sanitize(this.customer.Customer_Relation_FirstName || ''),
+      Customer_Relation_LastName: sanitize(this.customer.Customer_Relation_LastName || ''),
+      Customer_Gender: sanitize(this.customer.Customer_Gender || ''),
+      Customer_DOB: dobIso,
+      Customer_PhoneNo: sanitize(this.customer.Customer_PhoneNo || this.customer.contact),
+      Customer_Email: sanitize(this.customer.Customer_Email || this.customer.email),
+      Customer_Other_Email: sanitize(this.customer.Customer_Other_Email || ''),
+      Customer_WhatsAppNo: sanitize(this.customer.Customer_WhatsAppNo || this.customer.whatsapp),
+      Customer_MaritalStatus: sanitize(this.customer.Customer_MaritalStatus || this.customer.maritalStatus),
+      Customer_Religion: sanitize(this.customer.Customer_Religion || this.customer.religion),
+      Customer_Profile: sanitize(this.customer.Customer_Profile || this.customer.profileImage),
+      Customer_Category: sanitize(this.customer.Customer_Category),
+      Customer_SubCategory: sanitize(this.customer.Customer_SubCategory),
+      Customer_Natureofwork: sanitize(this.customer.Customer_Natureofwork),
+      Customer_Cast: sanitize(this.customer.Customer_Cast),
+      BusinessCategory: sanitize(this.customer.BusinessCategory || ''),
+      Customer_CreateBy: this.customer.Customer_CreateBy || 0,
+      Customer_PhoneNo_IsVerified: this.customer.Customer_PhoneNo_IsVerified || 0,
+      DocData: sanitize(this.customer.DocData || '')
+    };
+
+    const kycDoc = {
+      KYC_DocId: sanitize(this.customer.KYC_DocId || ''),
+      KYC_DocNumber: sanitize(this.customer.documentNumber || ''),
+      KYC_DocFile: '',
+      KYC_DocFile1: '',
+      Verified_Button: false,
+      LastVerfiedDate: '',
+      KYC_IsVerified: 0
+    };
+
+    const address = {
+      StateId: sanitize(this.StateId || this.customer.StateId || ''),
+      DistrictId: sanitize(this.customer_district || this.customer.district || ''),
+      TehsilId: sanitize(this.customer.tehsil || ''),
+      NoOfLiving: this.customer.NoOfLiving || 0,
+      RentOwn: sanitize(this.customer.rentOwn || this.customer.RentOwn || ''),
+      Address: sanitize(this.customer.address || ''),
+      LandMark: sanitize(this.customer.landmark || ''),
+      PinCode: sanitize(this.customer.pincode || ''),
+      DistanceBranch: sanitize(this.customer.distance || ''),
+      IsCommunicationAddress: true
+    };
+
+    const customerPermanent = {
+      StateId: address.StateId,
+      DistrictId: address.DistrictId,
+      TehsilId: address.TehsilId,
+      NoOfLiving: address.NoOfLiving,
+      RentOwn: address.RentOwn,
+      IfIsPermanentAddressSamePresentAddress: true,
+      Address: address.Address,
+      LandMark: address.LandMark,
+      PinCode: address.PinCode,
+      DistanceBranch: address.DistanceBranch,
+      District: null,
+      Tehsil: null
+    };
+
+    const customerBankDetail = [
+      {
+        BeneficiaryName: '',
+        AccountNo: '',
+        BankName: '',
+        BankBranch: '',
+        BankAcType: '',
+        BankIFSC: '',
+        BankMICRCode: ''
+      }
+    ];
+
+    const payload = {
+      ApplicationCustomer: applicationCustomer,
+      CustomerKYCDoc: [kycDoc],
+      address: address,
+      customerPermanent: customerPermanent,
+      customerWork: [],
+      CustomerBankDetail: customerBankDetail,
+      Int_Id: 0
+    };
+
+    return payload;
   }
 
   onFileSelected(event: any) {

@@ -37,6 +37,7 @@
     </div>
 
     <h3 class="heading">Demographic Information</h3>
+    
     <div class="address">
       <div>
         <label class="form-label fw-bold">Profile Image</label>
@@ -83,7 +84,8 @@
       <div>
         <label>Gender<span class="text-danger">*</span></label>
         <select [(ngModel)]="customer.Customer_Gender" name="gender" required>
-          <option *ngFor="let g of genders">{{ g }}</option>
+          <option *ngFor="let g of customer.Customer_Gender">{{ g }}</option>
+          <option></option>
         </select>
       </div>
 
@@ -92,7 +94,7 @@
         <label>DOB<span class="text-danger">*</span></label>
         <input
           type="date"
-          [(ngModel)]="customer.dob"
+          [(ngModel)]="customer.Customer_DOB"
           name="dob"
           (change)="calculateAge()"
           required
@@ -105,7 +107,7 @@
       </div>
 
     
-      <div *ngIf="customer.age && customer.age < 18">
+      <div *ngIf="customer.age < 18">
         <small class="text-danger">Customer must be at least 18 years old.</small>
       </div>
 
@@ -155,42 +157,158 @@
       <div>
   <label>Customer Profile</label>
   <select [(ngModel)]="customer.Customer_Profile" name="profile"  (ngModelChange)="loadCustomercategory($event)">
-    <option value="">Select Profile</option>
+    <option value="">--Select--</option>
     <option *ngFor="let profile of profile" [value]="profile.id">{{ profile.Value }}</option>
   </select>
 </div>
 <div>
   <label>Customer Category <span class="text-danger">*</span></label>
   <select [(ngModel)]="customer.Customer_Category" name="category"  (ngModelChange)="loadCustomerSubcategory($event)" required>
-    <option value="">Select Category</option>
+    <option value="">--Select--</option>
     <option *ngFor="let category of catergory" [value]="category.id">{{ category.Value }}</option>
   </select>
 </div>
 <div>
   <label>Customer Sub-Category <span class="text-danger">*</span></label>
   <select [(ngModel)]="customer.Customer_SubCategory" name="subcategory"   (ngModelChange)="loadCustomerNatureOfWork($event)"  required>
-    <option value="">Select Sub-Category</option>
+    <option value="">-Select--</option>
     <option *ngFor="let subcategory of subcatergory" [value]="subcategory.id">{{ subcategory.Value }}</option>
   </select>
 </div>
 <div>
   <label>Nature Of Work <span class="text-danger">*</span></label>
   <select [(ngModel)]="customer.Customer_Natureofwork" name="natureofwork"     required>
-    <option value="">Nature of work</option>
+    <option value="">--Select--</option>
     <option *ngFor="let natureofwork of natureofwork" [value]="natureofwork.Id">{{ natureofwork.Value}}</option>
   </select>
 </div>
 <div>
   <label>Customer Caste <span class="text-danger">*</span></label>
   <select [(ngModel)]="customer.Customer_Cast" name="caste"  required>
-    <option value="">Select Profile</option>
+    <option value="">--Select--</option>
     <option *ngFor="let caste of caste" [value]="caste.id">{{ caste.Value }}</option>
   </select>
 </div>
  </div>
 
-
+<div>
     <h3 class="heading">Customer Address</h3>
+    <h4 class="address">Present Address:</h4>
+    <div class="address1"> 
+    <div class="address">
+
+      <div>
+        <label>Address<span class="text-danger">*</span></label>
+        <input type="text" [(ngModel)]="address.Address" name="address" required />
+      </div>
+
+      <div>
+        <label>Landmark<span class="text-danger">*</span></label>
+        <input type="text" [(ngModel)]="address.LandMark" name="landmark" required />
+      </div>
+
+      <div>
+        <label>State<span class="text-danger">*</span></label>
+        <select
+          [(ngModel)]="address.StateId"
+          name="state"
+          (ngModelChange)="loadDistricts($event)"
+          required
+        >
+        <option value="">--Select--</option>
+          <option *ngFor="let s of states" [value]="s.StateId">{{ s.State_Name }}</option>
+        </select>
+      </div>
+
+      <div>
+        <label>District<span class="text-danger">*</span></label>
+        <select
+          [(ngModel)]="address.DistrictId"
+          name="district"
+          (ngModelChange)="loadTehsils($event)"
+          required
+        > <option value="">--Select--</option>
+          <option *ngFor="let d of district" [value]="d.DistrictId">{{ d.District_Name }}</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Tehsil<span class="text-danger">*</span></label>
+        <select [(ngModel)]="address.TehsilId" name="tehsil" required>
+           <option value="">--Select--</option>
+          <option *ngFor="let t of tehsil" [value]="t.Tehsil">{{ t.Tehsil_Name }}</option>
+        </select>
+      </div>
+
+      <div>
+  <label>Pincode</label>
+  <input
+    type="text"
+    [(ngModel)]="address.PinCode"
+    name="pincode"
+    required
+    pattern="^[0-9]{6}$"
+    maxlength="6"
+    #pincode="ngModel"
+  />
+  <div *ngIf="pincode.invalid && (pincode.dirty || pincode.touched)">
+    <small class="text-danger" *ngIf="pincode.errors?.['required']">
+      Pincode is required.
+    </small>
+    <small class="text-danger" *ngIf="pincode.errors?.['pattern']">
+      Pincode must be exactly 6 digits.
+    </small>
+  </div>
+</div>
+<div>
+  <label>No of Living Here<span class="text-danger">*</span></label>
+  <input 
+  type="number" 
+  [(ngModel)]="address.NoOfLiving" 
+  name="NoOfLiving" 
+  maxlength="2"
+  oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
+/> </div>
+<div>
+  <label>Rent/Own<span class="text-danger">*</span></label>
+  <select [(ngModel)]="address.RentOwn" name="RentOwn" required>
+    <option value="">--Select--</option>
+      <option>Rent</option>
+      <option>Own</option></select></div>
+    <div>
+  <label>Distance To Branch(KM)<span class="text-danger">*</span></label>
+  <input 
+  type="number" 
+  [(ngModel)]="address.DistanceBranch" 
+  name="NoOfLiving" 
+  maxlength="2"
+  placeholder="Distance From Branch"
+  oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
+/> </div>
+<div class="communicationaddress">
+  <input class="box"
+  type="checkbox"
+  [(ngModel)]="address.IsCommunicationAddress" 
+  name="NoOfLiving" 
+  maxlength="2"
+  placeholder="Distance From Branch"
+  oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
+/>  <label calss="communicate">Is This Cummunication Address<span class="text-danger">*</span></label></div>
+</div></div>
+
+
+
+<h4>Parmanent Address:</h4>
+<div class="communicationaddress">
+  <input class="box"
+  type="checkbox"
+  [(ngModel)]="customer.NoOfLiving" 
+  name="" 
+  maxlength="2"
+  placeholder="Distance From Branch"
+  oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
+/>  <label calss="communicate">Select if Permanent Address same as Present Address </label></div>  
+<div class="address1"> 
     <div class="address">
       <div>
         <label>Address<span class="text-danger">*</span></label>
@@ -205,11 +323,12 @@
       <div>
         <label>State<span class="text-danger">*</span></label>
         <select
-          [(ngModel)]="customer_state"
+          [(ngModel)]="address.StateId"
           name="state"
           (ngModelChange)="loadDistricts($event)"
           required
         >
+        <option value="">--Select--</option>
           <option *ngFor="let s of states" [value]="s.StateId">{{ s.State_Name }}</option>
         </select>
       </div>
@@ -221,7 +340,7 @@
           name="district"
           (ngModelChange)="loadTehsils($event)"
           required
-        >
+        > <option value="">--Select--</option>
           <option *ngFor="let d of district" [value]="d.DistrictId">{{ d.District_Name }}</option>
         </select>
       </div>
@@ -229,6 +348,7 @@
       <div>
         <label>Tehsil<span class="text-danger">*</span></label>
         <select [(ngModel)]="customer.tehsil" name="tehsil" required>
+           <option value="">--Select--</option>
           <option *ngFor="let t of tehsil" [value]="t.Tehsil">{{ t.Tehsil_Name }}</option>
         </select>
       </div>
@@ -253,10 +373,151 @@
     </small>
   </div>
 </div>
-
+<div>
+  <label>No of Living Here<span class="text-danger">*</span></label>
+  <input 
+  type="number" 
+  [(ngModel)]="customer.NoOfLiving" 
+  name="NoOfLiving" 
+  maxlength="2"
+  oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
+/> </div>
+<div>
+  <label>Rent/Own<span class="text-danger">*</span></label>
+  <select [(ngModel)]="customer.RentOwn" name="RentOwn" required>
+    <option value="">--Select--</option>
+      <option>Rent</option>
+      <option>Own</option></select></div>
+    <div>
+  <label>Distance To Branch(KM)<span class="text-danger">*</span></label>
+  <input 
+  type="number" 
+  [(ngModel)]="customer.NoOfLiving" 
+  name="NoOfLiving" 
+  maxlength="2"
+  placeholder="Distance From Branch"
+  oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
+/> </div>
+<div class="communicationaddress">
+  <input class="box"
+  type="checkbox"
+  [(ngModel)]="customer.NoOfLiving" 
+  name="NoOfLiving" 
+  maxlength="2"
+  placeholder="Distance From Branch"
+  oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
+/>  <label calss="communicate">Is This Cummunication Address<span class="text-danger">*</span></label></div>
+<div></div>
 
 
      
+    </div></div>
+    <h4>Work Address:</h4>
+    <div class="address1"> 
+    <div class="address">
+
+      <div>
+        <label>Address<span class="text-danger">*</span></label>
+        <input type="text" [(ngModel)]="customer.address" name="address" required />
+      </div>
+
+      <div>
+        <label>Landmark<span class="text-danger">*</span></label>
+        <input type="text" [(ngModel)]="customer.landmark" name="landmark" required />
+      </div>
+
+      <div>
+        <label>State<span class="text-danger">*</span></label>
+        <select
+          [(ngModel)]="address.StateId"
+          name="state"
+          (ngModelChange)="loadDistricts($event)"
+          required
+        >
+        <option value="">--Select--</option>
+          <option *ngFor="let s of states" [value]="s.StateId">{{ s.State_Name }}</option>
+        </select>
+      </div>
+
+      <div>
+        <label>District<span class="text-danger">*</span></label>
+        <select
+          [(ngModel)]="customer_district"
+          name="district"
+          (ngModelChange)="loadTehsils($event)"
+          required
+        > <option value="">--Select--</option>
+          <option *ngFor="let d of district" [value]="d.DistrictId">{{ d.District_Name }}</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Tehsil<span class="text-danger">*</span></label>
+        <select [(ngModel)]="customer.tehsil" name="tehsil" required>
+           <option value="">--Select--</option>
+          <option *ngFor="let t of tehsil" [value]="t.Tehsil">{{ t.Tehsil_Name }}</option>
+        </select>
+      </div>
+
+      <div>
+  <label>Pincode</label>
+  <input
+    type="text"
+    [(ngModel)]="customer.pincode"
+    name="pincode"
+    required
+    pattern="^[0-9]{6}$"
+    maxlength="6"
+    #pincode="ngModel"
+  />
+  <div *ngIf="pincode.invalid && (pincode.dirty || pincode.touched)">
+    <small class="text-danger" *ngIf="pincode.errors?.['required']">
+      Pincode is required.
+    </small>
+    <small class="text-danger" *ngIf="pincode.errors?.['pattern']">
+      Pincode must be exactly 6 digits.
+    </small>
+  </div>
+</div>
+<div>
+  <label>No of Living Here<span class="text-danger">*</span></label>
+  <input 
+  type="number" 
+  [(ngModel)]="customer.NoOfLiving" 
+  name="NoOfLiving" 
+  maxlength="2"
+  oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
+/> </div>
+<div>
+  <label>Rent/Own<span class="text-danger">*</span></label>
+  <select [(ngModel)]="customer.RentOwn" name="RentOwn" required>
+    <option value="">--Select--</option>
+      <option>Rent</option>
+      <option>Own</option></select></div>
+    <div>
+  <label>Distance To Branch(KM)<span class="text-danger">*</span></label>
+  <input 
+  type="number" 
+  [(ngModel)]="customer.NoOfLiving" 
+  name="NoOfLiving" 
+  maxlength="2"
+  placeholder="Distance From Branch"
+  oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
+/> </div>
+<div class="communicationaddress">
+  <input class="box"
+  type="checkbox"
+  [(ngModel)]="customer.NoOfLiving" 
+  name="NoOfLiving" 
+  maxlength="2"
+  placeholder="Distance From Branch"
+  oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
+/>  <label calss="communicate">Is This Cummunication Address<span class="text-danger">*</span></label></div>
+<div></div>
+
+
+     
+    </div></div>
     </div>
 
     <div class="btn-container">

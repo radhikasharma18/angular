@@ -101,3 +101,21 @@ input, select {
 .Demographic{
   margin-top: 20px;
 }
+.communicationaddress{  
+  display: flex;
+  font-style: normal;
+  justify-content: center;
+  align-items: center;
+ 
+
+}
+.communicate{
+  width: 200px;
+}
+.box{
+  width:15px;
+  margin-top: 10px;
+}
+.address1{
+  border-bottom: 2px solid rgb(71, 69, 69) ;
+}
