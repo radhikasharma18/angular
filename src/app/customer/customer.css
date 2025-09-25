@@ -8,24 +8,20 @@
   background: #eef1f0;
   box-shadow: 0 0 10px rgba(198, 13, 13, 0.1);
 }
-
 h2 {
   text-align: center;
   color: #12795f;
 }
-
 h3 {
   margin-top: 20px;
   color: #444;
   border-bottom: 1px solid #ccc;
 }
-
 label {
   display: block;
   margin-top: 10px;
   font-weight: bold;
 }
-
 input, select {
   width: 100%;
   padding: 8px;
@@ -33,14 +29,12 @@ input, select {
   border-radius: 5px;
   border: 1px solid #ccc;
 }
-
 .btn-container {
   margin-top: 20px;
   display: flex;
   gap: 10px;
   color: red;
 }
-
 button {
   flex: 1;
   padding: 10px;
@@ -50,14 +44,9 @@ button {
   border-radius: 5px;
   cursor: pointer;
 }
-
 button{
   background: #068b5d;
 }
-
-/* button:disabled {
-  background: #aaa;
-} */
 .kyc-documents {
   margin-top: 30px;
   display: flex;
@@ -106,9 +95,7 @@ input, select {
   font-style: normal;
   justify-content: center;
   align-items: center;
- 
-
-}
+ }
 .communicate{
   width: 200px;
 }

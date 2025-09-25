@@ -9,7 +9,7 @@ import { constantUrl } from '../constantUrls';
 @Component({
   selector: 'app-customer',
   standalone: true,
-  imports: [CommonModule, FormsModule, FontAwesomeModule, HttpClientModule], 
+  imports: [CommonModule, FormsModule, FontAwesomeModule, HttpClientModule],
   templateUrl: './customer.html',
   styleUrls: ['./customer.css']
 })
@@ -23,7 +23,7 @@ export class Customer implements OnInit {
   subcatergory: any[] = [];
   natureofwork: any[] = [];
   caste: any[] = [];
-  BusinessCategory:any[]=[];
+  BusinessCategory: any[] = [];
 
   constructor(library: FaIconLibrary, private http: HttpClient) {
     library.addIcons(faArrowUpFromBracket);
@@ -32,7 +32,7 @@ export class Customer implements OnInit {
   customer: any = {
     type: 'Individual',
     documentType: '',
-    documentNumber: '',
+    KYC_DocNumber: '',
     Customer_FirstName: '',
     Customer_LastName: '',
     Customer_Relation_Type: '',
@@ -47,82 +47,92 @@ export class Customer implements OnInit {
     Customer_Religion: '',
     Customer_Cast: '',
     Customer_Profile: '',
-    Customer_Category:'',
-    Customer_SubCategory:'',
-    Customer_Natureofwork:'',
-    Customer_Other_Email:'',
-    Customer_Relation_FirstName:'',
-    Customer_Relation_LastName:'',
-    BusinessCategory:''
+    Customer_Category: '',
+    Customer_SubCategory: '',
+    Customer_Natureofwork: '',
+    Customer_Other_Email: '',
+    Customer_Relation_FirstName: '',
+    Customer_Relation_LastName: '',
+    BusinessCategory: ''
   };
-  address: any={
-    StateId: '',
-    DistrictId: '',
-    TehsilId: '',
-    NoOfLiving: '',
-    NoOfLivingpermanent: false,
-    RentOwn: '',
-    Address: '',
-    LandMark: '',
-    PinCode: '',
-    DistanceBranch: '',
-    IsCommunicationAddress: '',
-    AddressId: ''
-  };
-   customerPermanent: any={
-    StateId: '',
-    DistrictId: '',
-    TehsilId: '',
-    NoOfLiving: '',
-    RentOwn: '',
-    Address: '',
-    LandMark: '',
-    PinCode: '',
-    DistanceBranch: '',
-    IsCommunicationAddress: '',
-    AddressId: ''
-  };
-  customerWork: any={
-    StateId: '',
-    DistrictId: '',
-    TehsilId: '',
-    NoOfLiving: '',
-    RentOwn: '',
-    Address: '',
-    LandMark: '',
-    PinCode: '',
-    DistanceBranch: '',
-    IsCommunicationAddress: '',
-    AddressId: ''
-  };
- 
 
+  address: any = {
+    StateId: '',
+    DistrictId: '',
+    TehsilId: '',
+    NoOfLiving: '',
+    RentOwn: '',
+    Address: '',
+    LandMark: '',
+    PinCode: '',
+    DistanceBranch: '',
+    IsCommunicationAddress: '',
+    AddressId: '',
+    NoOfLivingpermanent: false
+  };
 
-  countries = ['India', 'USA', 'UK', 'Canada'];
-  documentTypes = ['Aadhar Card', 'PAN Card', 'Passport'];
-  Customer_Gender = ['Male', 'Female', 'Other'];
-  maritalStatuses = ['Single', 'Married', 'Divorced'];
-  religions = ['Hindu', 'Muslim', 'Christian', 'Sikh', 'Other'];
+  customerPermanent: any = {
+    StateId: '',
+    DistrictId: '',
+    TehsilId: '',
+    NoOfLiving: '',
+    RentOwn: '',
+    Address: '',
+    LandMark: '',
+    PinCode: '',
+    DistanceBranch: '',
+    IsCommunicationAddress: '',
+    AddressId: ''
+  };
+
+  customerWork: any = {
+    StateId: '',
+    DistrictId: '',
+    TehsilId: '',
+    NoOfLiving: '',
+    RentOwn: '',
+    Address: '',
+    LandMark: '',
+    PinCode: '',
+    DistanceBranch: '',
+    IsCommunicationAddress: '',
+    AddressId: ''
+  };
+
+  documentTypes: any = '';
   StateId: any = '';
   customer_district: any = '';
-
 
   ngOnInit() {
     this.loadStates();
     this.loadCustomerProfile();
     this.loadCustomerType();
   }
-  sameAsParmanent(){
-    this.address.NoOfLivingpermanent =! this.address.NoOfLivingpermanent;
-    console.log("permanentttttt", this.address.NoOfLivingpermanent);
-    if(this.customer.NoOfLivingpermanent === true){
-      this.customerPermanent.Address == this.address.Address
-console.log("helloo", this.customerPermanent.Address )
-    }
-    else{
 
-    }
+ sameAsParmanent() {
+  console.log("Checkbox value:", this.address.NoOfLivingpermanent);
+
+  if (this.address.NoOfLivingpermanent === true) {
+    this.customerPermanent = { ...this.address };
+    console.log("DONE", this.customerPermanent);
+  } else {
+    this.customerPermanent = {
+      StateId: '',
+      DistrictId: '',
+      TehsilId: '',
+      NoOfLiving: '',
+      RentOwn: '',
+      Address: '',
+      LandMark: '',
+      PinCode: '',
+      DistanceBranch: '',
+      IsCommunicationAddress: '',
+      AddressId: ''
+    };
+    console.log("cleared");
   }
+}
+
 
   calculateAge() {
     if (!this.customer.Customer_DOB) return;
@@ -144,25 +154,25 @@ console.log("helloo", this.customerPermanent.Address )
       this.customer.age = '';
     }
   }
-  loadCustomerType(){
-    const url= 'https://demo.finnaux.com/api/api/Masters/GetCommonMaster_FOR_DROPDOWN';
-    const token =constantUrl.token;
 
-    const headers =new HttpHeaders({
-      'Content-Type':'application/json',
+  loadCustomerType() {
+    const url = 'https://demo.finnaux.com/api/api/Masters/GetCommonMaster_FOR_DROPDOWN';
+    const token = constantUrl.token;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
       'Authorization': token
     });
 
-    this.http.post(url,{Type: "BusinessCategory"},{headers}).subscribe({
-      next:(res:any)=>{
-        this.BusinessCategory =res;
-        console.log('customer type API Response:' ,this.BusinessCategory);
+    this.http.post(url, { Type: "BusinessCategory" }, { headers }).subscribe({
+      next: (res: any) => {
+        this.BusinessCategory = res;
+        console.log('customer type API Response:', this.BusinessCategory);
       },
-      error:(err)=>{
-        console.log('customer type API Response:' ,err);
+      error: (err) => {
+        console.log('customer type API Response:', err);
       }
     });
-
   }
 
   loadCustomerProfile() {
@@ -172,9 +182,9 @@ console.log("helloo", this.customerPermanent.Address )
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': token
-    }); 
+    });
 
-    this.http.post(url, {P_ID: 0,Type: "Profile"}, { headers }).subscribe({
+    this.http.post(url, { P_ID: 0, Type: "Profile" }, { headers }).subscribe({
       next: (res: any) => {
         this.profile = res;
         console.log('customer profile API Response:', this.profile);
@@ -184,7 +194,8 @@ console.log("helloo", this.customerPermanent.Address )
       }
     });
   }
-   loadCustomercategory(profileId: any) {
+
+  loadCustomercategory(profileId: any) {
     const url = 'https://demo.finnaux.com/api/api/Masters/GetCustomer_Profile_Master_For_Dropdown';
     const token = constantUrl.token;
 
@@ -193,7 +204,7 @@ console.log("helloo", this.customerPermanent.Address )
       'Authorization': token
     });
 
-    this.http.post(url, {P_ID: 0,Type: "Category"}, { headers }).subscribe({
+    this.http.post(url, { P_ID: 0, Type: "Category" }, { headers }).subscribe({
       next: (res: any) => {
         this.catergory = res;
         console.log('customer category API Response:', this.catergory);
@@ -203,6 +214,7 @@ console.log("helloo", this.customerPermanent.Address )
       }
     });
   }
+
   loadCustomerSubcategory(CategoryId: any) {
     const url = 'https://demo.finnaux.com/api/api/Masters/GetCustomer_Profile_Master_For_Dropdown';
     const token = constantUrl.token;
@@ -212,7 +224,7 @@ console.log("helloo", this.customerPermanent.Address )
       'Authorization': token
     });
 
-    this.http.post(url, {P_ID: 0,Type: "Sub-Category"}, { headers }).subscribe({
+    this.http.post(url, { P_ID: 0, Type: "Sub-Category" }, { headers }).subscribe({
       next: (res: any) => {
         this.subcatergory = res;
         console.log('customer category API Response:', this.subcatergory);
@@ -222,6 +234,7 @@ console.log("helloo", this.customerPermanent.Address )
       }
     });
   }
+
   loadCustomerNatureOfWork(subCategoryId: any) {
     const url = 'https://demo.finnaux.com/api/api/Masters/GetCustomer_Profile_Master_For_Dropdown';
     const token = constantUrl.token;
@@ -231,7 +244,7 @@ console.log("helloo", this.customerPermanent.Address )
       'Authorization': token
     });
 
-    this.http.post(url, {P_ID: 0 ,Type: "Nature of work"}, { headers }).subscribe({
+    this.http.post(url, { P_ID: 0, Type: "Nature of work" }, { headers }).subscribe({
       next: (res: any) => {
         this.natureofwork = res;
         console.log('customer category API Response:', this.natureofwork);
@@ -241,10 +254,6 @@ console.log("helloo", this.customerPermanent.Address )
       }
     });
   }
-  loadCustomerCaste(casteId: any) {
-    const url = 'https://demo.finnaux.com/api/api/Masters/GetCustomer_Profile_Master_For_Dropdown';
-  }
-
 
   loadStates() {
     const url = 'https://demo.finnaux.com/api/api/Masters/GetState';
@@ -279,7 +288,7 @@ console.log("helloo", this.customerPermanent.Address )
 
     this.http.post(url, { StateID: stateId }, { headers }).subscribe({
       next: (res: any) => {
-        this.district = res; 
+        this.district = res;
         console.log('Districts API Response:', this.district);
       },
       error: (err) => {
@@ -301,7 +310,7 @@ console.log("helloo", this.customerPermanent.Address )
 
     this.http.post(url, { DistrictID: districtId }, { headers }).subscribe({
       next: (res: any) => {
-        this.tehsil = res; 
+        this.tehsil = res;
         console.log('Tehsils API Response:', this.tehsil);
       },
       error: (err) => {
@@ -320,7 +329,7 @@ console.log("helloo", this.customerPermanent.Address )
     });
 
     const payload = this.buildPayload();
-   
+
     const body = {
       CustomerId: 0,
       JSON: JSON.stringify(payload)
@@ -354,25 +363,25 @@ console.log("helloo", this.customerPermanent.Address )
 
     const applicationCustomer: any = {
       Type: sanitize(this.customer.type || this.customer.Type) || 'Individual',
-      Customer_FirstName: sanitize(this.customer.Customer_FirstName || this.customer.firstName),
-      Customer_LastName: sanitize(this.customer.Customer_LastName || this.customer.lastName),
-      Customer_Relation_Type: sanitize(this.customer.Customer_Relation_Type || this.customer.relation),
-      Customer_Relation_FirstName: sanitize(this.customer.Customer_Relation_FirstName || ''),
-      Customer_Relation_LastName: sanitize(this.customer.Customer_Relation_LastName || ''),
-      Customer_Gender: sanitize(this.customer.Customer_Gender || ''),
+      Customer_FirstName: sanitize(this.customer.Customer_FirstName),
+      Customer_LastName: sanitize(this.customer.Customer_LastName),
+      Customer_Relation_Type: sanitize(this.customer.Customer_Relation_Type),
+      Customer_Relation_FirstName: sanitize(this.customer.Customer_Relation_FirstName),
+      Customer_Relation_LastName: sanitize(this.customer.Customer_Relation_LastName),
+      Customer_Gender: sanitize(this.customer.Customer_Gender),
       Customer_DOB: dobIso,
-      Customer_PhoneNo: sanitize(this.customer.Customer_PhoneNo || this.customer.contact),
-      Customer_Email: sanitize(this.customer.Customer_Email || this.customer.email),
-      Customer_Other_Email: sanitize(this.customer.Customer_Other_Email || ''),
-      Customer_WhatsAppNo: sanitize(this.customer.Customer_WhatsAppNo || this.customer.whatsapp),
-      Customer_MaritalStatus: sanitize(this.customer.Customer_MaritalStatus || this.customer.maritalStatus),
-      Customer_Religion: sanitize(this.customer.Customer_Religion || this.customer.religion),
-      Customer_Profile: sanitize(this.customer.Customer_Profile || this.customer.profileImage),
+      Customer_PhoneNo: sanitize(this.customer.Customer_PhoneNo),
+      Customer_Email: sanitize(this.customer.Customer_Email),
+      Customer_Other_Email: sanitize(this.customer.Customer_Other_Email),
+      Customer_WhatsAppNo: sanitize(this.customer.Customer_WhatsAppNo),
+      Customer_MaritalStatus: sanitize(this.customer.Customer_MaritalStatus),
+      Customer_Religion: sanitize(this.customer.Customer_Religion),
+      Customer_Profile: sanitize(this.customer.Customer_Profile),
       Customer_Category: sanitize(this.customer.Customer_Category),
       Customer_SubCategory: sanitize(this.customer.Customer_SubCategory),
       Customer_Natureofwork: sanitize(this.customer.Customer_Natureofwork),
       Customer_Cast: sanitize(this.customer.Customer_Cast),
-      BusinessCategory: sanitize(this.customer.BusinessCategory || ''),
+      BusinessCategory: sanitize(this.customer.BusinessCategory),
       Customer_CreateBy: this.customer.Customer_CreateBy || 0,
       Customer_PhoneNo_IsVerified: this.customer.Customer_PhoneNo_IsVerified || 0,
       DocData: sanitize(this.customer.DocData || '')
@@ -401,20 +410,7 @@ console.log("helloo", this.customerPermanent.Address )
       IsCommunicationAddress: true
     };
 
-    const customerPermanent = {
-      StateId: address.StateId,
-      DistrictId: address.DistrictId,
-      TehsilId: address.TehsilId,
-      NoOfLiving: address.NoOfLiving,
-      RentOwn: address.RentOwn,
-      IfIsPermanentAddressSamePresentAddress: true,
-      Address: address.Address,
-      LandMark: address.LandMark,
-      PinCode: address.PinCode,
-      DistanceBranch: address.DistanceBranch,
-      District: null,
-      Tehsil: null
-    };
+    const customerPermanent = this.address.NoOfLivingpermanent ? { ...address } : {};
 
     const customerBankDetail = [
       {
@@ -428,24 +424,22 @@ console.log("helloo", this.customerPermanent.Address )
       }
     ];
 
-    const payload = {
+    return {
       ApplicationCustomer: applicationCustomer,
       CustomerKYCDoc: [kycDoc],
-      address: address,
-      customerPermanent: customerPermanent,
+      address,
+      customerPermanent,
       customerWork: [],
       CustomerBankDetail: customerBankDetail,
       Int_Id: 0
     };
-
-    return payload;
   }
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
       console.log("Selected file:", file.name);
-      this.customer.profileImage = file;   
+      this.customer.profileImage = file;
 
       const reader = new FileReader();
       reader.onload = () => {

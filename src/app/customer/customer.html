@@ -13,15 +13,31 @@
       <div>
         <div><label>Document Type<span class="text-danger">*</span></label></div>
         <div>
-          <select [(ngModel)]="customer.documentType" name="documentType" required>
-            <option *ngFor="let doc of documentTypes">{{ doc }}</option>
-          </select>
+          <select  [(ngModel)]="customer.KYC_DocId" name="documentType" required>
+          <option value="">--Select Document Type--</option>
+          <option value="6"> Aadhaar Card </option>
+          <option value="22"> CKYC ID /O</option>
+          <option value="48"> DIN </option>
+          <option value="5"> Driving License </option>
+          <option value="2">  Electricity Bill  </option>
+          <option value="28">  Firm Registration No </option>
+          <option value="33">  Form-60  </option>
+          <option value="29">  GST No  </option>
+           <option value="49">  MSME Registration  </option>
+          <option value="42">  OCR Aadhaar </option>
+          <option value="7">  Other Photo ID  </option>
+          <option value="1">  PAN Card  </option>
+          <option value="3">   Passport Copy   </option>
+          <option value="21">  Ration Card </option>
+          <option value="30">  Tan No. </option>
+          <option value="4">  Voter ID Card  </option>
+        </select>
         </div>
       </div>
 
       <div>
         <label>Document Number<span class="text-danger">*</span></label>
-        <input type="text" [(ngModel)]="customer.documentNumber" name="documentNumber" required />
+        <input type="text" [(ngModel)]="customer.KYC_DocNumber" name="documentNumber" required />
       </div>
 
       <div class="col-md-2 text-center">
@@ -287,11 +303,17 @@
         </div>
       </div>
       <h4>Parmanent Address:</h4>
-      <div class="communicationaddress">
-        <input class="box" type="checkbox" [(ngModel)]="address.NoOfLivingpermanent" (change)="sameAsParmanent()"/>
-         <label
-          calss="communicate">Select if Permanent Address same as Present Address </label>
-      </div>
+     <div class="communicationaddress">
+  <input 
+    class="box" 
+    type="checkbox" 
+    [(ngModel)]="address.NoOfLivingpermanent" 
+    (change)="sameAsParmanent()" 
+     name="NoOfLivingpermanent"  
+  />
+  <label>Select if Permanent Address same as Present Address</label>
+</div>
+
       <div class="address1">
         <div class="address">
           <div>
@@ -306,7 +328,7 @@
 
           <div>
             <label>State<span class="text-danger">*</span></label>
-            <select [(ngModel)]="address.StateId" name="state" (ngModelChange)="loadDistricts($event)" required>
+            <select [(ngModel)]="customerPermanent.StateId" name="state" (ngModelChange)="loadDistricts($event)" required>
               <option value="">--Select--</option>
               <option *ngFor="let s of states" [value]="s.StateId">{{ s.State_Name }}</option>
             </select>
@@ -314,7 +336,7 @@
 
           <div>
             <label>District<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customer_district" name="district" (ngModelChange)="loadTehsils($event)" required>
+            <select [(ngModel)]="customerPermanent.DistrictId" name="district" (ngModelChange)="loadTehsils($event)" required>
               <option value="">--Select--</option>
               <option *ngFor="let d of district" [value]="d.DistrictId">{{ d.District_Name }}</option>
             </select>
@@ -343,7 +365,7 @@
           </div>
           <div>
             <label>No of Living Here<span class="text-danger">*</span></label>
-            <input type="number" [(ngModel)]="customerPermanent.NoOfLiving" name="NoOfLiving" maxlength="2"
+            <input type="number" [(ngModel)]="customerPermanent.NoOfLiving" name="customerPermanent.NoOfLiving" maxlength="2"
               oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
           </div>
           <div>
@@ -356,7 +378,7 @@
           </div>
           <div>
             <label>Distance To Branch(KM)<span class="text-danger">*</span></label>
-            <input type="number" [(ngModel)]="customerPermanent.NoOfLiving" name="NoOfLiving" maxlength="2"
+            <input type="number" [(ngModel)]="customerPermanent.DistanceBranch" name="customerPermanent.DistanceBranch" maxlength="2"
               placeholder="Distance From Branch"
               oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
           </div>
