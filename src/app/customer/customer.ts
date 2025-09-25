@@ -23,6 +23,7 @@ export class Customer implements OnInit {
   subcatergory: any[] = [];
   natureofwork: any[] = [];
   caste: any[] = [];
+  BusinessCategory:any[]=[];
 
   constructor(library: FaIconLibrary, private http: HttpClient) {
     library.addIcons(faArrowUpFromBracket);
@@ -51,9 +52,37 @@ export class Customer implements OnInit {
     Customer_Natureofwork:'',
     Customer_Other_Email:'',
     Customer_Relation_FirstName:'',
-    Customer_Relation_LastName:''
+    Customer_Relation_LastName:'',
+    BusinessCategory:''
   };
   address: any={
+    StateId: '',
+    DistrictId: '',
+    TehsilId: '',
+    NoOfLiving: '',
+    NoOfLivingpermanent: false,
+    RentOwn: '',
+    Address: '',
+    LandMark: '',
+    PinCode: '',
+    DistanceBranch: '',
+    IsCommunicationAddress: '',
+    AddressId: ''
+  };
+   customerPermanent: any={
+    StateId: '',
+    DistrictId: '',
+    TehsilId: '',
+    NoOfLiving: '',
+    RentOwn: '',
+    Address: '',
+    LandMark: '',
+    PinCode: '',
+    DistanceBranch: '',
+    IsCommunicationAddress: '',
+    AddressId: ''
+  };
+  customerWork: any={
     StateId: '',
     DistrictId: '',
     TehsilId: '',
@@ -76,11 +105,23 @@ export class Customer implements OnInit {
   religions = ['Hindu', 'Muslim', 'Christian', 'Sikh', 'Other'];
   StateId: any = '';
   customer_district: any = '';
-  customer_tehsil:any='';
+
 
   ngOnInit() {
     this.loadStates();
     this.loadCustomerProfile();
+    this.loadCustomerType();
+  }
+  sameAsParmanent(){
+    this.address.NoOfLivingpermanent =! this.address.NoOfLivingpermanent;
+    console.log("permanentttttt", this.address.NoOfLivingpermanent);
+    if(this.customer.NoOfLivingpermanent === true){
+      this.customerPermanent.Address == this.address.Address
+console.log("helloo", this.customerPermanent.Address )
+    }
+    else{
+
+    }
   }
 
   calculateAge() {
@@ -103,6 +144,26 @@ export class Customer implements OnInit {
       this.customer.age = '';
     }
   }
+  loadCustomerType(){
+    const url= 'https://demo.finnaux.com/api/api/Masters/GetCommonMaster_FOR_DROPDOWN';
+    const token =constantUrl.token;
+
+    const headers =new HttpHeaders({
+      'Content-Type':'application/json',
+      'Authorization': token
+    });
+
+    this.http.post(url,{Type: "BusinessCategory"},{headers}).subscribe({
+      next:(res:any)=>{
+        this.BusinessCategory =res;
+        console.log('customer type API Response:' ,this.BusinessCategory);
+      },
+      error:(err)=>{
+        console.log('customer type API Response:' ,err);
+      }
+    });
+
+  }
 
   loadCustomerProfile() {
     const url = 'https://demo.finnaux.com/api/api/Masters/GetCustomer_Profile_Master_For_Dropdown';
@@ -111,7 +172,7 @@ export class Customer implements OnInit {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': token
-    });
+    }); 
 
     this.http.post(url, {P_ID: 0,Type: "Profile"}, { headers }).subscribe({
       next: (res: any) => {
