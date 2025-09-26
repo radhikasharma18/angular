@@ -13,7 +13,7 @@
       <div>
         <div><label>Document Type<span class="text-danger">*</span></label></div>
         <div>
-          <select  [(ngModel)]="customer.KYC_DocId" name="documentType" required>
+          <select  [(ngModel)]="CustomerKYCDoc[0].KYC_DocId" name="KYC_DocId" required>
           <option value="">--Select Document Type--</option>
           <option value="6"> Aadhaar Card </option>
           <option value="22"> CKYC ID /O</option>
@@ -32,39 +32,47 @@
           <option value="30">  Tan No. </option>
           <option value="4">  Voter ID Card  </option>
         </select>
+    
         </div>
       </div>
 
       <div>
         <label>Document Number<span class="text-danger">*</span></label>
-        <input type="text" [(ngModel)]="customer.KYC_DocNumber" name="KYC_DocNumber" required />
+        <input type="text" [(ngModel)]="CustomerKYCDoc[0].KYC_DocNumber" name="KYC_DocNumber" required />
       </div>
 
       <div class="col-md-2 text-center">
-        <label class="form-label fw-bold">Document Image</label>
-        <input type="file" id="documentImage" class="d-none" (change)="onFileSelected($event)" />
-        <label for="documentImage" class="btn btn-outline-primary">
-          <i class="fa-solid fa-arrow-up-from-bracket"></i>
-        </label>
-        <div *ngIf="previewUrl">
-          <img [src]="previewUrl" alt="Preview" width="100" class="mt-2" />
-        </div>
-      </div>
+  <label class="form-label fw-bold">Document Image</label>
+  <input type="file" (change)="onFileSelectedDoc($event,0)" />
+  <label for="documentImage" class="btn btn-outline-primary">
+    <i class="fa-solid fa-arrow-up-from-bracket"></i>
+  </label>
+  <div *ngIf="CustomerKYCDoc[0].KYC_DocFile">
+    <img [src]="CustomerKYCDoc[0].KYC_DocFile" alt="Preview" width="100" class="mt-2" />
+  </div>
+</div>
+
+
+
+
+
+
+
     </div>
 
     <h3 class="heading">Demographic Information</h3>
 
     <div class="address">
-      <div>
-        <label class="form-label fw-bold">Profile Image</label>
-        <input type="file" id="profileImage" class="d-none" (change)="onFileSelected($event)" />
-        <label for="profileImage" class="btn btn-outline-primary">
-          <i class="fa-solid fa-arrow-up-from-bracket"></i>
-        </label>
-        <div *ngIf="previewUrl">
-          <img [src]="previewUrl" alt="Preview" width="100" class="mt-2" />
-        </div>
-      </div>
+     <div>
+  <label class="form-label fw-bold">Profile Image</label>
+  <input type="file" id="profileImage" class="d-none" (change)="onFileSelectedProfile($event)" />
+  <label for="profileImage" class="btn btn-outline-primary">
+    <i class="fa-solid fa-arrow-up-from-bracket"></i>
+  </label>
+  <div *ngIf="profilePreviewUrl">
+    <img [src]="profilePreviewUrl" alt="Preview" width="100" class="mt-2" />
+  </div>
+</div>
 
       <div>
         <label>First Name<span class="text-danger">*</span></label>

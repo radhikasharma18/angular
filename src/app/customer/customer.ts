@@ -14,6 +14,8 @@ import { constantUrl } from '../constantUrls';
   styleUrls: ['./customer.css']
 })
 export class Customer implements OnInit {
+  documentPreviewUrl: any;
+  profilePreviewUrl: any;
   previewUrl: string | null = null;
   states: any[] = [];
   district: any[] = [];
@@ -99,7 +101,7 @@ export class Customer implements OnInit {
     AddressIdW: ''
   };
 
-  CustomerKYCDoc:any= {
+  CustomerKYCDoc:any[] = [{
       KYC_CustomerId: '',
       KYC_DocId :'',
       KYC_DocNumber: '',
@@ -110,7 +112,7 @@ export class Customer implements OnInit {
       LastVerfiedDate: '',
       KYC_IsVerified: 0,
       Verified_Button: true
-    }
+    }]
  
   customer_district: any = '';
 
@@ -161,10 +163,23 @@ export class Customer implements OnInit {
 
 
   calculateAge() {
-    if (!this.customer.Customer_DOB) return;
+    console.log('calculateAge called with DOB:', this.customer.Customer_DOB);
+    
+    if (!this.customer.Customer_DOB) {
+      console.log('No date of birth provided');
+      return;
+    }
 
     const today = new Date();
     const birthDate = new Date(this.customer.Customer_DOB);
+    
+    console.log('Parsed birth date:', birthDate);
+    
+    if (isNaN(birthDate.getTime())) {
+      console.error('Invalid date format');
+      return;
+    }
+
     let age = today.getFullYear() - birthDate.getFullYear();
     const month = today.getMonth() - birthDate.getMonth();
 
@@ -172,6 +187,7 @@ export class Customer implements OnInit {
       age--;
     }
 
+    console.log('Calculated age:', age);
     this.customer.age = age;
 
     if (age < 18) {
@@ -414,12 +430,12 @@ export class Customer implements OnInit {
     };
 
     const kycDoc = {
-      KYC_DocId: sanitize(this.CustomerKYCDoc.KYC_DocId || ''),
-      KYC_DocNumber: sanitize(this.CustomerKYCDoc.KYC_DocNumber || ''),
-      KYC_DocFile: sanitize(this.CustomerKYCDoc.KYC_DocFile || ''),
-      KYC_DocFile1: sanitize(this.CustomerKYCDoc.KYC_DocFile1 || ''),
+      KYC_DocId: sanitize(this.CustomerKYCDoc[0].KYC_DocId || ''),
+      KYC_DocNumber: sanitize(this.CustomerKYCDoc[0].KYC_DocNumber || ''),
+      KYC_DocFile: sanitize(this.CustomerKYCDoc[0].KYC_DocFile || ''),
+      KYC_DocFile1: sanitize(this.CustomerKYCDoc[0].KYC_DocFile1 || ''),
       Verified_Button: false,
-      LastVerfiedDate: sanitize(this.CustomerKYCDoc.LastVerfiedDate || ''),
+      LastVerfiedDate: sanitize(this.CustomerKYCDoc[0].LastVerfiedDate || ''),
       KYC_IsVerified: 0
     };
 
@@ -475,17 +491,24 @@ export class Customer implements OnInit {
     };
   }
 
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      console.log("Selected file:", file.name);
-      this.customer.profileImage = file;
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.previewUrl = reader.result as string;
-      };
-      reader.readAsDataURL(file);
-    }
+ onFileSelectedDoc(event: any) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.documentPreviewUrl = reader.result;
+    };
+    reader.readAsDataURL(file);
   }
+}
+onFileSelectedProfile(event: any) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.profilePreviewUrl = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
 }
