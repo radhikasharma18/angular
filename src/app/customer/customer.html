@@ -37,7 +37,7 @@
 
       <div>
         <label>Document Number<span class="text-danger">*</span></label>
-        <input type="text" [(ngModel)]="customer.KYC_DocNumber" name="documentNumber" required />
+        <input type="text" [(ngModel)]="customer.KYC_DocNumber" name="KYC_DocNumber" required />
       </div>
 
       <div class="col-md-2 text-center">
@@ -191,7 +191,7 @@
         <label>Customer Profile<span class="text-danger">*</span></label>
         <select [(ngModel)]="customer.Customer_Profile" name="profile" (ngModelChange)="loadCustomercategory($event)">
           <option value="">--Select--</option>
-          <option *ngFor="let profile of profile" [value]="profile.id">{{ profile.Value }}</option>
+          <option *ngFor="let profile of profile" [value]="profile.Id">{{ profile.Value }}</option>
         </select>
       </div>
       <div>
@@ -199,7 +199,7 @@
         <select [(ngModel)]="customer.Customer_Category" name="category"
           (ngModelChange)="loadCustomerSubcategory($event)" required>
           <option value="">--Select--</option>
-          <option *ngFor="let category of catergory" [value]="category.id">{{ category.Value }}</option>
+          <option *ngFor="let category of catergory" [value]="category.Id">{{ category.Value }}</option>
         </select>
       </div>
       <div>
@@ -207,12 +207,20 @@
         <select [(ngModel)]="customer.Customer_SubCategory" name="subcategory"
           (ngModelChange)="loadCustomerNatureOfWork($event)" required>
           <option value="">-Select--</option>
-          <option *ngFor="let subcategory of subcatergory" [value]="subcategory.id">{{ subcategory.Value }}</option>
+          <option *ngFor="let subcategory of subcatergory" [value]="subcategory.Id">{{ subcategory.Value }}</option>
+        </select>
+      </div>
+       <div>
+        <label>Nature Of Work<span class="text-danger">*</span></label>
+        <select [(ngModel)]="customer.Customer_Natureofwork" name="Customer_Natureofwork" required>
+          <option value="">--Select--</option>
+          <option *ngFor="let Natureofwork of Natureofwork" [value]="Natureofwork.Id">{{
+            Natureofwork.Value}}</option>
         </select>
       </div>
       <div>
         <label>Type<span class="text-danger">*</span></label>
-        <select [(ngModel)]="customer.BusinessCategory" name="natureofwork" required>
+        <select [(ngModel)]="customer.BusinessCategory" name="BusinessCategory" required>
           <option value="">--Select--</option>
           <option *ngFor="let BusinessCategory of BusinessCategory" [value]="BusinessCategory.Id">{{
             BusinessCategory.Value}}</option>
@@ -230,17 +238,17 @@
 
           <div>
             <label>Address<span class="text-danger">*</span></label>
-            <input type="text" [(ngModel)]="address.Address" name="address" required />
+            <input type="text" [(ngModel)]="address.AddressS" name="address" required />
           </div>
 
           <div>
             <label>Landmark<span class="text-danger">*</span></label>
-            <input type="text" [(ngModel)]="address.LandMark" name="landmark" required />
+            <input type="text" [(ngModel)]="address.LandMarkS" name="landmark" required />
           </div>
 
           <div>
             <label>State<span class="text-danger">*</span></label>
-            <select [(ngModel)]="address.StateId" name="state" (ngModelChange)="loadDistricts($event)" required>
+            <select [(ngModel)]="address.StateIdS" name="state" (ngModelChange)="loadDistricts($event)" required>
               <option value="">--Select--</option>
               <option *ngFor="let s of states" [value]="s.StateId">{{ s.State_Name }}</option>
             </select>
@@ -248,7 +256,7 @@
 
           <div>
             <label>District<span class="text-danger">*</span></label>
-            <select [(ngModel)]="address.DistrictId" name="district" (ngModelChange)="loadTehsils($event)" required>
+            <select [(ngModel)]="address.DistrictIdS" name="district" (ngModelChange)="loadTehsils($event)" required>
               <option value="">--Select--</option>
               <option *ngFor="let d of district" [value]="d.DistrictId">{{ d.District_Name }}</option>
             </select>
@@ -256,15 +264,15 @@
 
           <div>
             <label>Tehsil<span class="text-danger">*</span></label>
-            <select [(ngModel)]="address.TehsilId" name="tehsil" required>
+            <select [(ngModel)]="address.TehsilIdS" name="tehsil" required>
               <option value="">--Select--</option>
-              <option *ngFor="let t of tehsil" [value]="t.Tehsil">{{ t.Tehsil_Name }}</option>
+              <option *ngFor="let t of tehsil" [value]="t.TehsilId">{{ t.Tehsil_Name }}</option>
             </select>
           </div>
 
           <div>
             <label>Pincode</label>
-            <input type="text" [(ngModel)]="address.PinCode" name="pincode" required pattern="^[0-9]{6}$" maxlength="6"
+            <input type="text" [(ngModel)]="address.PinCodeS" name="pincode" required pattern="^[0-9]{6}$" maxlength="6"
               #pincode="ngModel" />
             <div *ngIf="pincode.invalid && (pincode.dirty || pincode.touched)">
               <small class="text-danger" *ngIf="pincode.errors?.['required']">
@@ -277,12 +285,12 @@
           </div>
           <div>
             <label>No of Living Here<span class="text-danger">*</span></label>
-            <input type="number" [(ngModel)]="address.NoOfLiving" name="NoOfLiving" maxlength="2"
+            <input type="number" [(ngModel)]="address.NoOfLivingS" name="NoOfLiving" maxlength="2"
               oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
           </div>
           <div>
             <label>Rent/Own<span class="text-danger">*</span></label>
-            <select [(ngModel)]="address.RentOwn" name="RentOwn" required>
+            <select [(ngModel)]="address.RentOwnS" name="RentOwn" required>
               <option value="">--Select--</option>
               <option>Rent</option>
               <option>Own</option>
@@ -290,7 +298,7 @@
           </div>
           <div>
             <label>Distance To Branch(KM)<span class="text-danger">*</span></label>
-            <input type="number" [(ngModel)]="address.DistanceBranch" name="NoOfLiving" maxlength="2"
+            <input type="number" [(ngModel)]="address.DistanceBranchS" name="NoOfLiving" maxlength="2"
               placeholder="Distance From Branch"
               oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
           </div>
@@ -400,17 +408,17 @@
 
           <div>
             <label>Address<span class="text-danger">*</span></label>
-            <input type="text" [(ngModel)]="customerWork.Address" name="address" required />
+            <input type="text" [(ngModel)]="customerWork.AddressW" name="address" required />
           </div>
 
           <div>
             <label>Landmark<span class="text-danger">*</span></label>
-            <input type="text" [(ngModel)]="customerWork.LandMark" name="landmark" required />
+            <input type="text" [(ngModel)]="customerWork.LandMarkW" name="landmark" required />
           </div>
 
           <div>
             <label>State<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerWork.StateId" name="state" (ngModelChange)="loadDistricts($event)" required>
+            <select [(ngModel)]="customerWork.StateIdW" name="state" (ngModelChange)="loadDistricts($event)" required>
               <option value="">--Select--</option>
               <option *ngFor="let s of states" [value]="s.StateId">{{ s.State_Name }}</option>
             </select>
@@ -418,7 +426,7 @@
 
           <div>
             <label>District<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerWork.DistrictId" name="district" (ngModelChange)="loadTehsils($event)" required>
+            <select [(ngModel)]="customerWork.DistrictIdW" name="district" (ngModelChange)="loadTehsils($event)" required>
               <option value="">--Select--</option>
               <option *ngFor="let d of district" [value]="d.DistrictId">{{ d.District_Name }}</option>
             </select>
@@ -426,7 +434,7 @@
 
           <div>
             <label>Tehsil<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerWork.TehsilId" name="tehsil" required>
+            <select [(ngModel)]="customerWork.TehsilIdW" name="tehsil" required>
               <option value="">--Select--</option>
               <option *ngFor="let t of tehsil" [value]="t.Tehsil">{{ t.Tehsil_Name }}</option>
             </select>
@@ -434,7 +442,7 @@
 
           <div>
             <label>Pincode</label>
-            <input type="text" [(ngModel)]="customerWork.PinCode" name="pincode" required pattern="^[0-9]{6}$" maxlength="6"
+            <input type="text" [(ngModel)]="customerWork.PinCodeW" name="pincode" required pattern="^[0-9]{6}$" maxlength="6"
               #pincode="ngModel" />
             <div *ngIf="pincode.invalid && (pincode.dirty || pincode.touched)">
               <small class="text-danger" *ngIf="pincode.errors?.['required']">
@@ -447,12 +455,12 @@
           </div>
           <div>
             <label>No of Living Here<span class="text-danger">*</span></label>
-            <input type="number" [(ngModel)]="customerWork.NoOfLiving" name="NoOfLiving" maxlength="2"
+            <input type="number" [(ngModel)]="customerWork.NoOfLivingW" name="NoOfLiving" maxlength="2"
               oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
           </div>
           <div>
             <label>Rent/Own<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerWork.RentOwn" name="RentOwn" required>
+            <select [(ngModel)]="customerWork.RentOwnW" name="RentOwn" required>
               <option value="">--Select--</option>
               <option>Rent</option>
               <option>Own</option>
@@ -460,12 +468,12 @@
           </div>
           <div>
             <label>Distance To Branch(KM)<span class="text-danger">*</span></label>
-            <input type="number" [(ngModel)]="customerWork.DistanceBranch" name="NoOfLiving" maxlength="2"
+            <input type="number" [(ngModel)]="customerWork.DistanceBranchW" name="NoOfLiving" maxlength="2"
               placeholder="Distance From Branch"
               oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
           </div>
           <div class="communicationaddress">
-            <input class="box" type="checkbox" [(ngModel)]="customerWork.IsCommunicationAddress" name="NoOfLiving" maxlength="2"
+            <input class="box" type="checkbox" [(ngModel)]="customerWork.IsCommunicationAddressW" name="NoOfLiving" maxlength="2"
               placeholder="Distance From Branch"
               oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
             <label calss="communicate">Is This Cummunication Address<span class="text-danger">*</span></label>

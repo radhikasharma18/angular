@@ -21,7 +21,7 @@ export class Customer implements OnInit {
   profile: any[] = [];
   catergory: any[] = [];
   subcatergory: any[] = [];
-  natureofwork: any[] = [];
+  Natureofwork: any[] = [];
   caste: any[] = [];
   BusinessCategory: any[] = [];
 
@@ -57,16 +57,16 @@ export class Customer implements OnInit {
   };
 
   address: any = {
-    StateId: '',
-    DistrictId: '',
-    TehsilId: '',
-    NoOfLiving: '',
-    RentOwn: '',
-    Address: '',
-    LandMark: '',
-    PinCode: '',
-    DistanceBranch: '',
-    IsCommunicationAddress: '',
+    StateIdS: '',
+    DistrictIdS: '',
+    TehsilIdS: '',
+    NoOfLivingS: '',
+    RentOwnS: '',
+    AddressS: '',
+    LandMarkS: '',
+    PinCodeS: '',
+    DistanceBranchS: '',
+    IsCommunicationAddressS: '',
     AddressId: '',
     NoOfLivingpermanent: false
   };
@@ -86,21 +86,32 @@ export class Customer implements OnInit {
   };
 
   customerWork: any = {
-    StateId: '',
-    DistrictId: '',
-    TehsilId: '',
-    NoOfLiving: '',
-    RentOwn: '',
-    Address: '',
-    LandMark: '',
-    PinCode: '',
-    DistanceBranch: '',
-    IsCommunicationAddress: '',
-    AddressId: ''
+    StateIdW :'',
+    DistrictIdW: '',
+    TehsilIdW: '',
+    NoOfLivingW: '',
+    RentOwnW: '',
+    AddressW: '',
+    LandMarkW: '',
+    PinCodeW: '',
+    DistanceBranchW: '',
+    IsCommunicationAddressW: '',
+    AddressIdW: ''
   };
 
-  documentTypes: any = '';
-  StateId: any = '';
+  CustomerKYCDoc:any= {
+      KYC_CustomerId: '',
+      KYC_DocId :'',
+      KYC_DocNumber: '',
+      KYC_DocFile: '',
+      KYC_DocFile1: null,
+      KYC_IssuedDate: '',
+      KYC_ExpiredDate: '',
+      LastVerfiedDate: '',
+      KYC_IsVerified: 0,
+      Verified_Button: true
+    }
+ 
   customer_district: any = '';
 
   ngOnInit() {
@@ -112,10 +123,24 @@ export class Customer implements OnInit {
  sameAsParmanent() {
   console.log("Checkbox value:", this.address.NoOfLivingpermanent);
 
-  if (this.address.NoOfLivingpermanent === true) {
-    this.customerPermanent = { ...this.address };
-    console.log("DONE", this.customerPermanent);
+  if (this.address.NoOfLivingpermanent) {
+    
+    this.customerPermanent = {
+      StateId: this.address.StateIdS,
+      DistrictId: this.address.DistrictIdS,
+      TehsilId: this.address.TehsilIdS,
+      NoOfLiving: this.address.NoOfLivingS,
+      RentOwn: this.address.RentOwnS,
+      Address: this.address.AddressS,
+      LandMark: this.address.LandMarkS,
+      PinCode: this.address.PinCodeS,
+      DistanceBranch: this.address.DistanceBranchS,
+      IsCommunicationAddress: this.address.IsCommunicationAddressS,
+      AddressId: this.address.AddressId
+    };
+    console.log("copied:", this.customerPermanent);
   } else {
+
     this.customerPermanent = {
       StateId: '',
       DistrictId: '',
@@ -132,6 +157,7 @@ export class Customer implements OnInit {
     console.log("cleared");
   }
 }
+
 
 
   calculateAge() {
@@ -246,8 +272,8 @@ export class Customer implements OnInit {
 
     this.http.post(url, { P_ID: 0, Type: "Nature of work" }, { headers }).subscribe({
       next: (res: any) => {
-        this.natureofwork = res;
-        console.log('customer category API Response:', this.natureofwork);
+        this.Natureofwork = res;
+        console.log('customer category API Response:', this.Natureofwork);
       },
       error: (err) => {
         console.error('Error fetching customer category:', err);
@@ -388,29 +414,43 @@ export class Customer implements OnInit {
     };
 
     const kycDoc = {
-      KYC_DocId: sanitize(this.customer.KYC_DocId || ''),
-      KYC_DocNumber: sanitize(this.customer.documentNumber || ''),
-      KYC_DocFile: '',
-      KYC_DocFile1: '',
+      KYC_DocId: sanitize(this.CustomerKYCDoc.KYC_DocId || ''),
+      KYC_DocNumber: sanitize(this.CustomerKYCDoc.KYC_DocNumber || ''),
+      KYC_DocFile: sanitize(this.CustomerKYCDoc.KYC_DocFile || ''),
+      KYC_DocFile1: sanitize(this.CustomerKYCDoc.KYC_DocFile1 || ''),
       Verified_Button: false,
-      LastVerfiedDate: '',
+      LastVerfiedDate: sanitize(this.CustomerKYCDoc.LastVerfiedDate || ''),
       KYC_IsVerified: 0
     };
 
     const address = {
-      StateId: sanitize(this.StateId || this.customer.StateId || ''),
-      DistrictId: sanitize(this.customer_district || this.customer.district || ''),
-      TehsilId: sanitize(this.customer.tehsil || ''),
-      NoOfLiving: this.customer.NoOfLiving || 0,
-      RentOwn: sanitize(this.customer.rentOwn || this.customer.RentOwn || ''),
-      Address: sanitize(this.customer.address || ''),
-      LandMark: sanitize(this.customer.landmark || ''),
-      PinCode: sanitize(this.customer.pincode || ''),
-      DistanceBranch: sanitize(this.customer.distance || ''),
+      StateId: sanitize(this.address.StateIdS || ''),
+      DistrictId: sanitize(this.address.DistrictIdS || ''),
+      TehsilId: sanitize(this.address.TehsilIdS || ''),
+      NoOfLiving: this.address.NoOfLivingS || 0,
+      RentOwn: sanitize( this.address.RentOwnS || ''),
+      Address: sanitize(this.address.AddressS || ''),
+      LandMark: sanitize(this.address.LandMarkS || ''),
+      PinCode: sanitize(this.address.PinCodeS || ''),
+      DistanceBranch: sanitize(this.address.DistanceBranchS || ''),
       IsCommunicationAddress: true
     };
 
     const customerPermanent = this.address.NoOfLivingpermanent ? { ...address } : {};
+
+    const customerWork = {
+      StateId: sanitize(this.customerWork.StateIdW || ''),
+      DistrictId: sanitize(this.customerWork.DistrictIdW|| ''),
+      TehsilId: sanitize(this.address.TehsilIdW || ''),
+      NoOfLiving: this.customerWork.NoOfLivingW|| 0,
+      RentOwn: sanitize( this.customerWork.RentOwnW || ''),
+      Address: sanitize(this.customerWork.AddressW || ''),
+      LandMark: sanitize(this.customerWork.LandMarkW || ''),
+      PinCode: sanitize(this.customerWork.PinCodeW || ''),
+      DistanceBranch: sanitize(this.customerWork.DistanceBranchW || ''),
+      IsCommunicationAddress: true
+    };
+
 
     const customerBankDetail = [
       {
