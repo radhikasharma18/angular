@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, } from '@angular/forms';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faArrowUpFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
@@ -162,40 +162,29 @@ export class Customer implements OnInit {
 
 
 
-  calculateAge() {
-    console.log('calculateAge called with DOB:', this.customer.Customer_DOB);
-    
-    if (!this.customer.Customer_DOB) {
-      console.log('No date of birth provided');
-      return;
-    }
-
-    const today = new Date();
-    const birthDate = new Date(this.customer.Customer_DOB);
-    
-    console.log('Parsed birth date:', birthDate);
-    
-    if (isNaN(birthDate.getTime())) {
-      console.error('Invalid date format');
-      return;
-    }
-
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const month = today.getMonth() - birthDate.getMonth();
-
-    if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-
-    console.log('Calculated age:', age);
-    this.customer.age = age;
-
-    if (age < 18) {
-      alert("Customer must be at least 18 years old.");
-      this.customer.Customer_DOB = '';
-      this.customer.age = '';
-    }
+calculateAge() {
+  if (!this.customer.Customer_DOB) {
+    this.customer.age = null;
+    return;
   }
+
+  const today = new Date();
+  const birthDate = new Date(this.customer.Customer_DOB);
+
+  if (isNaN(birthDate.getTime())) {
+    this.customer.age = null;
+    return;
+  }
+
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+
+  this.customer.age = age;
+}
 
   loadCustomerType() {
     const url = 'https://demo.finnaux.com/api/api/Masters/GetCommonMaster_FOR_DROPDOWN';
@@ -361,7 +350,7 @@ export class Customer implements OnInit {
     });
   }
 
-  saveCustomer() {
+  saveCustomer(customerData?: any) {
     const url = 'https://demo.finnaux.com/api/api/LMS/SaveCustomerOutside';
     const token = constantUrl.token;
 
