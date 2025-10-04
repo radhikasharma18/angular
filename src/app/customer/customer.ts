@@ -15,7 +15,6 @@ import { constantUrl } from '../constantUrls';
 })
 export class Customer implements OnInit {
   documentPreviewUrl: any;
-  profilePreviewUrl: any;
   previewUrl: string | null = null;
   states: any[] = [];
   district: any[] = [];
@@ -160,6 +159,11 @@ export class Customer implements OnInit {
   }
 }
 
+isWorkAddressFilled() {
+  return Object.values(this.customerWork).some(value => value && value.toString().trim() !== '');
+}
+
+
 
 
 calculateAge() {
@@ -169,17 +173,11 @@ calculateAge() {
   }
 
   const today = new Date();
-  const birthDate = new Date(this.customer.Customer_DOB);
+  const dob = new Date(this.customer.Customer_DOB);
+  let age = today.getFullYear() - dob.getFullYear();
+  const monthDiff = today.getMonth() - dob.getMonth();
 
-  if (isNaN(birthDate.getTime())) {
-    this.customer.age = null;
-    return;
-  }
-
-  let age = today.getFullYear() - birthDate.getFullYear();
-  const monthDiff = today.getMonth() - birthDate.getMonth();
-
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
     age--;
   }
 
@@ -446,7 +444,7 @@ calculateAge() {
     const customerWork = {
       StateId: sanitize(this.customerWork.StateIdW || ''),
       DistrictId: sanitize(this.customerWork.DistrictIdW|| ''),
-      TehsilId: sanitize(this.address.TehsilIdW || ''),
+      TehsilId: sanitize(this.customerWork.TehsilIdW || ''),
       NoOfLiving: this.customerWork.NoOfLivingW|| 0,
       RentOwn: sanitize( this.customerWork.RentOwnW || ''),
       Address: sanitize(this.customerWork.AddressW || ''),
@@ -474,7 +472,7 @@ calculateAge() {
       CustomerKYCDoc: [kycDoc],
       address,
       customerPermanent,
-      customerWork: [],
+      customerWork: [customerWork],
       CustomerBankDetail: customerBankDetail,
       Int_Id: 0
     };
@@ -490,14 +488,27 @@ calculateAge() {
     reader.readAsDataURL(file);
   }
 }
-onFileSelectedProfile(event: any) {
-  const file = event.target.files[0];
-  if (file) {
+
+profilePreviewUrl: string | ArrayBuffer | null = null;
+
+openFilePicker() {
+  const fileInput = document.getElementById('profileImage') as HTMLInputElement;
+  if (fileInput) {
+    fileInput.click();  
+  }
+}
+
+onFileSelectedProfile(event: Event) {
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files[0]) {
     const reader = new FileReader();
     reader.onload = () => {
       this.profilePreviewUrl = reader.result;
     };
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(input.files[0]);
   }
 }
+
+
+
 }

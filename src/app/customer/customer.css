@@ -5,7 +5,8 @@
   padding: 20px;
   border: 2px solid #347265;
   border-radius: 10px;
-  background: #ccefe8;
+  background: #fafbfb;
+  color: #0a4e44;
   box-shadow: 0 0 10px rgba(198, 13, 13, 0.1);
 }
 h2 {
@@ -38,11 +39,11 @@ input, select {
 button {
   flex: 1;
   padding: 10px;
-  background: #1976d2;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  background-color: red;
 }
 button{
   background: #068b5d;
@@ -54,17 +55,18 @@ button{
     gap: 20px;
 }
 .heading {
-  color: #0f7d6d;
-  border: .5px solid #0a5c50;
+  color: white;
+  border: 2px solid #0a5c50;
   padding-bottom: 5px;
   text-align: center;
   height: 30px;
   box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
   display: flex;
   align-items: center;
-  justify-items: center;
+  justify-content: center;
   padding: 5px;
   border-radius: 5px;
+  background-color: #0f7d6d;
 }
 .section {
   background-color: #f8ffff; 
@@ -83,6 +85,8 @@ input, select {
   gap: 30px;
   margin-top: 20px;
   padding: 10px;
+  border: .5px solid #347265;
+  border-radius: 5px;
 }
 .text-danger {
   color: red;
@@ -103,9 +107,9 @@ input, select {
   width:15px;
   margin-top: 10px;
 }
-.address1{
+/* .address1{
   border-bottom: 2px solid rgb(71, 69, 69) ;
-}
+} */
 .btn-save {
   color: white;
   padding: 8px 16px;
