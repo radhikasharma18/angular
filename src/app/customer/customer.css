@@ -1,11 +1,11 @@
 .form-container {
   width: 90%;
-  max-width: 800px;
+  max-width: 1000px;
   margin: 20px auto;
   padding: 20px;
   border: 2px solid #347265;
   border-radius: 10px;
-  background: #fafbfb;
+  background: #fff;
   color: #0a4e44;
   box-shadow: 0 0 10px rgba(198, 13, 13, 0.1);
 }
@@ -28,7 +28,7 @@ input, select {
   padding: 8px;
   margin-top: 5px;
   border-radius: 5px;
-  border: 1px solid #ccc;
+  border: 2px solid #32a191;
 }
 .btn-container {
   margin-top: 20px;
@@ -49,10 +49,18 @@ button{
   background: #068b5d;
 }
 .kyc-documents {
-  margin-top: 30px;
+  margin: 30px;
   display: flex;
-    flex-direction: row;
-    gap: 20px;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: space-between;
+
+}
+.document{
+  border-radius: 5px;
+  display: flex;
+  flex-direction : row;
+  gap:40px;
 }
 .heading {
   color: white;
@@ -68,6 +76,11 @@ button{
   border-radius: 5px;
   background-color: #0f7d6d;
 }
+.fa-solid{
+  color: rgb(37, 176, 137);
+  font-size: 20px;
+  margin: 10px;
+}
 .section {
   background-color: #f8ffff; 
   border: 1px solid #d9e9ec;
@@ -78,6 +91,7 @@ button{
 input, select {
   font-size: 13px;
   text-transform: uppercase;
+  width: 200px;
 }
 .address{
   display: flex;
@@ -101,11 +115,11 @@ input, select {
   align-items: center;
  }
 .communicate{
-  width: 200px;
+  width: 300px;
 }
 .box{
   width:15px;
-  margin-top: 10px;
+  margin-top: 15px;
 }
 /* .address1{
   border-bottom: 2px solid rgb(71, 69, 69) ;

@@ -478,18 +478,10 @@ calculateAge() {
     };
   }
 
- onFileSelectedDoc(event: any) {
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.documentPreviewUrl = reader.result;
-    };
-    reader.readAsDataURL(file);
-  }
-}
+
 
 profilePreviewUrl: string | ArrayBuffer | null = null;
+profilePreviewUrlProfile: string | ArrayBuffer | null = null;
 
 openFilePicker() {
   const fileInput = document.getElementById('profileImage') as HTMLInputElement;
@@ -497,8 +489,14 @@ openFilePicker() {
     fileInput.click();  
   }
 }
+openFilePickerDoc() {
+  const fileInput = document.getElementById('kycDoc0File') as HTMLInputElement;
+  if (fileInput) {
+    fileInput.click();
+  }
+}
 
-onFileSelectedProfile(event: Event) {
+onFileSelected(event: Event) {
   const input = event.target as HTMLInputElement;
   if (input.files && input.files[0]) {
     const reader = new FileReader();
@@ -508,6 +506,27 @@ onFileSelectedProfile(event: Event) {
     reader.readAsDataURL(input.files[0]);
   }
 }
+onFileSelectedProfile(event: Event) {
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.profilePreviewUrlProfile = reader.result;
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+onFileSelectedDoc(event: Event) {
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.CustomerKYCDoc[0].KYC_DocFile = reader.result as string;
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
 
 
 
