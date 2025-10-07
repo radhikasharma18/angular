@@ -3,14 +3,24 @@
 
   
   <form (ngSubmit)="saveCustomer(customerForm)" #customerForm="ngForm" novalidate>
-
-  
+<div class="customer-type">
+  <div>
     <label>Type</label>
     <select [(ngModel)]="customer.type" name="type" required #typeField="ngModel">
       <option value="">--Select--</option>
       <option>Individual</option>
       <option>Non-Individual</option>
     </select>
+    </div>
+    <div *ngIf="customer.type === 'Non-Individual'">
+      <label>Firm Type<span class="text-danger">*</span></label>
+      <select [(ngModel)]="customer.FirmType" name="firmType"
+      required #firmType="ngModel">
+        <option value="">--Select Firm Type--</option>
+        <option *ngFor="let fir of Firm " 
+        [value]="fir.Id">{{ fir.Value}}</option>
+    </select></div>
+    </div>
 
     <h3 class="heading">KYC Documents</h3>
     <div class="kyc-documents">
@@ -70,7 +80,8 @@
         <input type="file" id="kycDoc0File" style="display: none" (change)="onFileSelectedDoc($event)" /> 
         <i class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary" style="cursor: pointer;" 
         (click)="openFilePickerDoc()"></i> <div *ngIf="CustomerKYCDoc[0].KYC_DocFile"> <img [src]="CustomerKYCDoc[0].KYC_DocFile" alt="Preview" width="100" class="mt-2 rounded" /> </div> </div> 
-</div><h3 class="heading">Demographic Information</h3>
+</div>
+<h3 class="heading">Demographic Information</h3>
   <div class="address"><div><label class="form-label fw-bold">Profile Image</label>
   <input 
     type="file" 
@@ -325,9 +336,11 @@
 
       <div>
         <label>Business Type<span class="text-danger">*</span></label>
-        <select [(ngModel)]="customer.BusinessCategory" name="businessCategory" required #businessCategory="ngModel">
+        <select [(ngModel)]="customer.BusinessCategory" 
+        name="businessCategory" required #businessCategory="ngModel">
           <option value="">--Select--</option>
-          <option *ngFor="let bc of BusinessCategory" [value]="bc.Id">{{ bc.Value }}</option>
+          <option *ngFor="let bc of BusinessCategory" 
+          [value]="bc.Id">{{ bc.Value }}</option>
         </select>
       </div>
     </div>
@@ -687,6 +700,7 @@
         </div>
       </div>
     </div>
+    <div></div>
 
     <div class="btn-container">
       <button class="btn-save" type="submit" [disabled]="customerForm.invalid">

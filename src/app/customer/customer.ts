@@ -25,6 +25,7 @@ export class Customer implements OnInit {
   Natureofwork: any[] = [];
   caste: any[] = [];
   BusinessCategory: any[] = [];
+  Firm: any[] = [];
 
   constructor(library: FaIconLibrary, private http: HttpClient) {
     library.addIcons(faArrowUpFromBracket);
@@ -54,7 +55,8 @@ export class Customer implements OnInit {
     Customer_Other_Email: '',
     Customer_Relation_FirstName: '',
     Customer_Relation_LastName: '',
-    BusinessCategory: ''
+    BusinessCategory: '',
+    FirmType: '',
   };
 
   address: any = {
@@ -119,6 +121,7 @@ export class Customer implements OnInit {
     this.loadStates();
     this.loadCustomerProfile();
     this.loadCustomerType();
+    this.loadFirmType();
   }
 
  sameAsParmanent() {
@@ -200,6 +203,25 @@ calculateAge() {
       },
       error: (err) => {
         console.log('customer type API Response:', err);
+      }
+    });
+  }
+  loadFirmType() {
+    const url = 'https://demo.finnaux.com/api/api/Masters/GetCommonMaster_FOR_DROPDOWN';
+    const token = constantUrl.token;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': token
+    });
+
+    this.http.post(url, { Type: "FirmType" }, { headers }).subscribe({
+      next: (res: any) => {
+        this.Firm = res;
+        console.log('customer profile API Response:', this.Firm);
+      },
+      error: (err) => {
+        console.error('Error fetching customer profile:', err);
       }
     });
   }
@@ -411,6 +433,7 @@ calculateAge() {
       Customer_Natureofwork: sanitize(this.customer.Customer_Natureofwork),
       Customer_Cast: sanitize(this.customer.Customer_Cast),
       BusinessCategory: sanitize(this.customer.BusinessCategory),
+      // Firm: sanitize(this.customer.Firm),
       Customer_CreateBy: this.customer.Customer_CreateBy || 0,
       Customer_PhoneNo_IsVerified: this.customer.Customer_PhoneNo_IsVerified || 0,
       DocData: sanitize(this.customer.DocData || '')
