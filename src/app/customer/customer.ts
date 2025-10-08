@@ -25,7 +25,7 @@ export class Customer implements OnInit {
   Natureofwork: any[] = [];
   caste: any[] = [];
   BusinessCategory: any[] = [];
-  Firm: any[] = [];
+  firmTypes: any[] = [];
 
   constructor(library: FaIconLibrary, private http: HttpClient) {
     library.addIcons(faArrowUpFromBracket);
@@ -56,7 +56,50 @@ export class Customer implements OnInit {
     Customer_Relation_FirstName: '',
     Customer_Relation_LastName: '',
     BusinessCategory: '',
-    FirmType: '',
+    
+  };
+  
+  Firm:any ={
+    Type: 'company',
+    Firm_Type:'',
+    ApplicationNo: '',
+    FirmId: '',
+    Firm_Name: '',
+    Firm_RegAddress: '',
+    Firm_RegLandMark: '',
+    Firm_Date_Of_Incorruptions : '',
+    Firm_RegPinCode: '',
+    Firm_RegState: '',
+    Firm_RegDistrict: '',
+    Firm_RegTehsil: '',
+    Firm_CorpAddress: '',
+    Firm_CorpLandMark: '',
+    Firm_CorpPinCode: '',
+    Firm_CorpState: '',
+    Firm_CorpDistrict: '',
+    Firm_CorpTehsil: '',
+    Firm_PhoneNo: '',
+    Firm_PhoneNoIsVerified:'' ,
+    Firm_PhoneNo1: '',
+    Firm_Email: '',
+    Firm_Website: '',
+    Firm_No_Of_Partner : '',
+    Firm_No_Of_Employee: '',
+    Firm_GrossValue: '',
+    Firm_Nature_Of_Business: '',
+    Firm_RegTotalYearsOnAddress: '',
+    Firm_RegAddressRentBuy: '',
+    Firm_RegNearstBranchDistance_KM: '',
+    Firm_CorpTotalYearsOnAddress: '',
+    Firm_CorpAddressRentBuy: '',
+    Firm_CorpNearstBranchDistance_KM: '',
+    Firm_CIN_No: '',
+    BusinessCategory: '',
+    BusinessType: '',
+    Customer_Profile: '',
+    Customer_Category: '',
+    Customer_SubCategory: '',
+    Customer_Natureofwork: '',
   };
 
   address: any = {
@@ -167,6 +210,33 @@ isWorkAddressFilled() {
 }
 
 
+calculateyears() {
+  if (!this.Firm.Firm_Date_Of_Incorporation) {
+    this.Firm.Firm_YearsSinceIncorporation = null;
+    return;
+  }
+
+  const today = new Date();
+  const incDate = new Date(this.Firm.Firm_Date_Of_Incorporation);
+
+
+  if (incDate > today) {
+    this.Firm.Firm_YearsSinceIncorporation = -1;
+    return;
+  }
+  let years = today.getFullYear() - incDate.getFullYear();
+
+  
+  const monthDiff = today.getMonth() - incDate.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < incDate.getDate())) {
+    years--;
+  }
+
+  this.Firm.Firm_YearsSinceIncorporation = years;
+}
+
+
+
 
 
 calculateAge() {
@@ -174,6 +244,7 @@ calculateAge() {
     this.customer.age = null;
     return;
   }
+
 
   const today = new Date();
   const dob = new Date(this.customer.Customer_DOB);
@@ -217,11 +288,11 @@ calculateAge() {
 
     this.http.post(url, { Type: "FirmType" }, { headers }).subscribe({
       next: (res: any) => {
-        this.Firm = res;
-        console.log('customer profile API Response:', this.Firm);
+        this.firmTypes = res;
+        console.log('Firm types API Response:', this.firmTypes);
       },
       error: (err) => {
-        console.error('Error fetching customer profile:', err);
+        console.error('Error fetching firm types:', err);
       }
     });
   }
@@ -433,7 +504,6 @@ calculateAge() {
       Customer_Natureofwork: sanitize(this.customer.Customer_Natureofwork),
       Customer_Cast: sanitize(this.customer.Customer_Cast),
       BusinessCategory: sanitize(this.customer.BusinessCategory),
-      // Firm: sanitize(this.customer.Firm),
       Customer_CreateBy: this.customer.Customer_CreateBy || 0,
       Customer_PhoneNo_IsVerified: this.customer.Customer_PhoneNo_IsVerified || 0,
       DocData: sanitize(this.customer.DocData || '')
@@ -495,7 +565,7 @@ calculateAge() {
       CustomerKYCDoc: [kycDoc],
       address,
       customerPermanent,
-      customerWork: [customerWork],
+      customerWork: [],
       CustomerBankDetail: customerBankDetail,
       Int_Id: 0
     };
