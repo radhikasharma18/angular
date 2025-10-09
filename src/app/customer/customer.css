@@ -48,7 +48,7 @@ button {
   padding: 10px;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: full;
   cursor: pointer;
   background-color: red;
 }
@@ -154,3 +154,4 @@ input:disabled {
   color: #888; 
   border: 1px solid #ccc; 
 }
+

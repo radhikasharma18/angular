@@ -1,13 +1,30 @@
-<p>search-modal works!</p>
-<h2 mat-dialog-title>Search</h2>
+
+<h2 mat-dialog-title>Search By:</h2>
 
 <mat-dialog-content>
+  <div class='module' appearance="outline" >
+            <select  name="FilterBySearch" >
+                <option value="">--Select--</option>
+                <option value="Name"> Customer Name</option>
+                <option value="Phone">Customer Phone</option>
+                <option value="Pan">Pan Card</option>
+                <option value="Passport">Passport</option>
+                <option value="VotterId">Votter Id Card</option>
+                <option value="DL">Driving License</option>
+                <option value="Aadhar">Aadhar Card</option>
+                <option value="ElectricityBill">Electricity Bill</option>
+                <option value="RationCard">Ration Card</option>
+                
+              </select>
+            </div>
+
   <mat-form-field appearance="outline" style="width:100%;">
-    <mat-label>Type to search</mat-label>
+    
     <input matInput placeholder="Search..." />
   </mat-form-field>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Close</button>
+  <button mat-button style="color: white;" >Search</button>
+  <button mat-button mat-dialog-close  style="color: white;" >Close</button>
 </mat-dialog-actions>

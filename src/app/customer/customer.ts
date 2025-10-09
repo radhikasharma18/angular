@@ -184,13 +184,16 @@ export class Customer implements OnInit {
     this.loadCustomerType();
     this.loadFirmType();
   }
- openSearchModal() {
-    this.dialog.open(SearchModalComponent, {
-      width: '400px',
-      height: 'auto',
-      disableClose: false
-    });
-  }
+openSearchModal() {
+  this.dialog.open(SearchModalComponent, {
+    width: '400px',
+    height: 'auto',
+    panelClass: 'green-border-dialog', 
+    disableClose: false
+  });
+}
+
+  
  sameAsParmanent() {
   console.log("Checkbox value:", this.address.NoOfLivingpermanent);
 

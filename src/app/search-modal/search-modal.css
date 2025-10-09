@@ -1,0 +1,45 @@
+.module{
+    width: 500px;
+    color: #be3434;
+    height: 50px;
+}
+.module {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0;
+  width: 100%;
+}
+
+.module select {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  appearance: none;
+  outline: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.module select:hover {
+  border-color: #3f51b5;
+  box-shadow: 0 0 4px rgba(63,81,181,0.3);
+}
+
+.module select:focus {
+  border-color: #3f51b5;
+  box-shadow: 0 0 6px rgba(63,81,181,0.4);
+}
+button{
+    background: #068b5d;
+    color: white;
+}
+.search-btn {
+  background-color: #0b290c;               
+  font-weight: 500;
+  padding: 6px 16px;
+  transition: all 0.3s ease;
+}
+
