@@ -1,570 +1,417 @@
 <div class="form-container">
   <h2>Add Customer</h2>
-
-  
   <form (ngSubmit)="saveCustomer(customerForm)" #customerForm="ngForm" novalidate>
-<div class="customer-type">
-  <div>
-    <!-- TYPE OF CUSTOMER --> 
-    <label>Type</label>
-    <select [(ngModel)]="customer.type" name="type" required #typeField="ngModel">
-      <option value="">--Select--</option>
-      <option>Individual</option>
-      <option>Non-Individual</option>
-    </select>
+    <div class="customer-type">
+      <div>
+        <!-- TYPE OF CUSTOMER -->
+        <label>Type</label>
+        <select [(ngModel)]="customer.type" name="type" required #typeField="ngModel">
+          <option value="">--Select--</option>
+          <option>Individual</option>
+          <option>Non-Individual</option>
+        </select>
+      </div>
+      <!--NON-Individual-->
+      <div *ngIf="customer.type === 'Non-Individual'">
+        <label>Firm Type <span class="text-danger">*</span></label>
+        <select [(ngModel)]="Firm.Firm_Type" name="firmType" required #firmType="ngModel">
+          <option value="">--Select Firm Type--</option>
+          <option *ngFor="let fir of firmTypes" [value]="fir.Id">{{ fir.Value }}</option>
+        </select>
+      </div>
     </div>
-    <!--NON-Individual-->
-   <div *ngIf="customer.type === 'Non-Individual'">
-  <label>Firm Type <span class="text-danger">*</span></label>
-  <select [(ngModel)]="Firm.Firm_Type" name="firmType" required #firmType="ngModel">
-    <option value="">--Select Firm Type--</option>
-    <option *ngFor="let fir of firmTypes" [value]="fir.Id">{{ fir.Value }}</option>
-  </select>
-</div>
-    </div>
-   <!--kyc for both-->
+    <!--kyc for both-->
     <h3 class="heading">KYC Documents</h3>
     <div class="kyc-documents">
       <div class="document">
-      <div>
-        <div><label>Document Type<span class="text-danger">*</span></label></div>
         <div>
-          <select [(ngModel)]="CustomerKYCDoc[0].KYC_DocId" name="kycDoc0Id" required #kycDoc0Id="ngModel">
-            <option value="">--Select Document Type--</option>
-            <option value="6"> Aadhaar Card </option>
-            <option value="22"> CKYC ID /O</option>
-            <option value="48"> DIN </option>
-            <option value="5"> Driving License </option>
-            <option value="2"> Electricity Bill </option>
-            <option value="28"> Firm Registration No </option>
-            <option value="33"> Form-60 </option>
-            <option value="29"> GST No </option>
-            <option value="49"> MSME Registration </option>
-            <option value="42"> OCR Aadhaar </option>
-            <option value="7"> Other Photo ID </option>
-            <option value="1"> PAN Card </option>
-            <option value="3"> Passport Copy </option>
-            <option value="21"> Ration Card </option>
-            <option value="30"> Tan No. </option>
-            <option value="4"> Voter ID Card </option>
+          <div><label>Document Type<span class="text-danger">*</span></label></div>
+          <div>
+            <select [(ngModel)]="CustomerKYCDoc[0].KYC_DocId" name="kycDoc0Id" required #kycDoc0Id="ngModel">
+              <option value="">--Select Document Type--</option>
+              <option value="6"> Aadhaar Card </option>
+              <option value="22"> CKYC ID /O</option>
+              <option value="48"> DIN </option>
+              <option value="5"> Driving License </option>
+              <option value="2"> Electricity Bill </option>
+              <option value="28"> Firm Registration No </option>
+              <option value="33"> Form-60 </option>
+              <option value="29"> GST No </option>
+              <option value="49"> MSME Registration </option>
+              <option value="42"> OCR Aadhaar </option>
+              <option value="7"> Other Photo ID </option>
+              <option value="1"> PAN Card </option>
+              <option value="3"> Passport Copy </option>
+              <option value="21"> Ration Card </option>
+              <option value="30"> Tan No. </option>
+              <option value="4"> Voter ID Card </option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label>Document Number<span class="text-danger">*</span></label>
+          <input type="text" [(ngModel)]="CustomerKYCDoc[0].KYC_DocNumber" name="kycDoc0Number"
+            placeholder="Document Number" required #kycDoc0Number="ngModel" />
+          <div *ngIf="kycDoc0Number.invalid && (kycDoc0Number.dirty || kycDoc0Number.touched)" class="text-danger">
+            Document number is required.
+          </div>
+        </div>
+      </div>
+
+
+      <div> <label class="form-label fw-bold">Document Image 1</label>
+        <input type="file" id="kycDoc0File" style="display: none" (change)="onFileSelectedDoc($event)" />
+        <i class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary" style="cursor: pointer;"
+          (click)="openFilePickerDoc()"></i>
+        <div *ngIf="CustomerKYCDoc[0].KYC_DocFile">
+          <img [src]="CustomerKYCDoc[0].KYC_DocFile" alt="Preview" width="100" class="mt-2 rounded" />
+        </div>
+      </div>
+      <div> <label class="form-label fw-bold">Document Image 2</label>
+        <input type="file" id="kycDoc0File" style="display: none" (change)="onFileSelectedDoc($event)" />
+        <i class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary" style="cursor: pointer;"
+          (click)="openFilePickerDoc()"></i>
+        <div *ngIf="CustomerKYCDoc[0].KYC_DocFile"> <img [src]="CustomerKYCDoc[0].KYC_DocFile" alt="Preview" width="100"
+            class="mt-2 rounded" /> </div>
+      </div>
+    </div>
+
+    <!--Company information-->
+    <div *ngIf="customer.type !== 'Non-Individual'">
+      <h3 class="heading">Demographic Information</h3>
+      <div class="address">
+        <div><label class="form-label fw-bold">Profile Image</label>
+          <input type="file" id="profileImage" style="display: none" (change)="onFileSelected($event)" />
+          <i class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary" style="cursor: pointer;"
+            (click)="openFilePicker()"></i>
+          <div *ngIf="profilePreviewUrl">
+            <img [src]="profilePreviewUrl" alt="Preview" width="100" class="mt-2 rounded" />
+          </div>
+        </div>
+
+
+        <div>
+          <label>First Name<span class="text-danger">*</span></label>
+          <input type="text" [(ngModel)]="customer.Customer_FirstName" placeholder="First Name" name="customerFirstName"
+            required #customerFirstName="ngModel" />
+          <div *ngIf="customerFirstName.invalid && (customerFirstName.dirty || customerFirstName.touched)"
+            class="text-danger">
+            First name is required.
+          </div>
+        </div>
+
+        <div>
+          <label>Last Name<span class="text-danger">*</span></label>
+          <input type="text" [(ngModel)]="customer.Customer_LastName" name="customerLastName" placeholder="Last Name"
+            required #customerLastName="ngModel" />
+        </div>
+
+        <div>
+          <label>Relation <span class="text-danger">*</span></label>
+          <select [(ngModel)]="customer.Customer_Relation_Type" name="relationType" required #relationType="ngModel">
+            <option value="">Select</option>
+            <option value="C/O">C/O</option>
+            <option value="S/O">S/O</option>
+            <option value="D/O">D/O</option>
+            <option value="W/O">W/O</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Relation First Name<span class="text-danger">*</span></label>
+          <input type="text" [(ngModel)]="customer.Customer_Relation_FirstName" name="relationFirstName"
+            placeholder="First Name" required #relationFirstName="ngModel" />
+        </div>
+
+        <div>
+          <label>Relation Last Name<span class="text-danger">*</span></label>
+          <input type="text" [(ngModel)]="customer.Customer_Relation_LastName" name="relationLastName"
+            placeholder="Last Name" required #relationLastName="ngModel" />
+        </div>
+
+        <div>
+          <label>Gender <span class="text-danger">*</span></label>
+          <select [(ngModel)]="customer.Customer_Gender" name="gender" required #gender="ngModel">
+            <option value="">Select</option>
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+          </select>
+        </div>
+        <div>
+
+          <label for="dob">Date of Birth:</label>
+          <input type="date" id="dob" name="dob" [(ngModel)]="customer.Customer_DOB" (change)="calculateAge()" required>
+          <div *ngIf="customer.age !== null">
+            <small>Age: {{ customer.age }}</small>
+          </div>
+
+          <div *ngIf="customer.age !== null && customer.age < 18">
+            <small class="text-danger">Customer must be at least 18 years old.</small>
+          </div>
+        </div>
+
+        <div>
+          <label>Primary Contact<span class="text-danger">*</span></label>
+          <input type="text" [(ngModel)]="customer.Customer_PhoneNo" name="primaryContact" placeholder="Primary Contact"
+            required pattern="^[0-9]{10}$" maxlength="10" inputmode="numeric" #primaryContact="ngModel" />
+          <div *ngIf="primaryContact.invalid && (primaryContact.dirty || primaryContact.touched)" class="text-danger">
+            <div *ngIf="primaryContact.errors?.['required']">Contact is required.</div>
+            <div *ngIf="primaryContact.errors?.['pattern']">Contact must be 10 digits.</div>
+          </div>
+        </div>
+
+        <div>
+          <label>WhatsApp No</label>
+          <input type="text" [(ngModel)]="customer.Customer_WhatsAppNo" name="whatsappNo" placeholder="Whatsapp No"
+            pattern="^[0-9]{10}$" maxlength="10" inputmode="numeric" #whatsappNo="ngModel" />
+        </div>
+
+        <div>
+          <label>Alternate No</label>
+          <input type="text" [(ngModel)]="customer.Customer_PhoneNo1" name="altContact" pattern="^[0-9]{10}$"
+            placeholder="Alternate No" maxlength="10" inputmode="numeric" #altContact="ngModel" />
+        </div>
+
+        <div>
+          <label>Email</label>
+          <input type="email" [(ngModel)]="customer.Customer_Email" name="email" placeholder="Email "
+            #email="ngModel" />
+        </div>
+
+        <div>
+          <label>Other Email</label>
+          <input type="email" [(ngModel)]="customer.Customer_Other_Email" name="otherEmail" placeholder="Other Email"
+            #otherEmail="ngModel" />
+        </div>
+
+        <div>
+          <label>Marital Status<span class="text-danger">*</span></label>
+          <select [(ngModel)]="customer.Customer_MaritalStatus" name="maritalStatus" required #maritalStatus="ngModel">
+            <option value="">--Select--</option>
+            <option value="Married">Married</option>
+            <option value="UnMarried">UnMarried</option>
+            <option value="Widow">Widow/Widower</option>
+            <option value="Divorced">Divorced</option>
+            <option value="Separated">Separated</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Customer Religion<span class="text-danger">*</span></label>
+          <select [(ngModel)]="customer.Customer_Religion" name="religion" required #religion="ngModel">
+            <option value="">--Select--</option>
+            <option>Hindu</option>
+            <option>Muslim</option>
+            <option>Christian</option>
+            <option>Sikh</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Customer Caste<span class="text-danger">*</span></label>
+          <select [(ngModel)]="customer.Customer_Cast" name="caste" required #caste="ngModel">
+            <option value="">--Select--</option>
+            <option value="General">General</option>
+            <option value="OBC">OBC</option>
+            <option value="SC">SC</option>
+            <option value="ST">ST</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Customer Profile<span class="text-danger">*</span></label>
+          <select [(ngModel)]="customer.Customer_Profile" name="profile" required #profilefield="ngModel"
+            (ngModelChange)="loadCustomercategory($event)">
+            <option value="">--Select--</option>
+            <option *ngFor="let pro of profile" [value]="pro.Id">{{ pro.Value }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Customer Category <span class="text-danger">*</span></label>
+          <select [(ngModel)]="customer.Customer_Category" name="category" required #category="ngModel"
+            (ngModelChange)="loadCustomerSubcategory($event)">
+            <option value="">--Select--</option>
+            <option *ngFor="let c of catergory" [value]="c.Id">{{ c.Value }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Customer Sub-Category <span class="text-danger">*</span></label>
+          <select [(ngModel)]="customer.Customer_SubCategory" name="subcategory" required #subcategory="ngModel"
+            (ngModelChange)="loadCustomerNatureOfWork($event)">
+            <option value="">--Select--</option>
+            <option *ngFor="let s of subcatergory" [value]="s.Id">{{ s.Value }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Nature Of Work<span class="text-danger">*</span></label>
+          <select [(ngModel)]="customer.Customer_Natureofwork" name="natureOfWork" required #natureOfWork="ngModel">
+            <option value="">--Select--</option>
+            <option *ngFor="let n of Natureofwork" [value]="n.Id">{{ n.Value }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Business Type<span class="text-danger">*</span></label>
+          <select [(ngModel)]="customer.BusinessCategory" name="businessCategory" required #businessCategory="ngModel">
+            <option value="">--Select--</option>
+            <option *ngFor="let bc of BusinessCategory" [value]="bc.Id">{{ bc.Value }}</option>
           </select>
         </div>
       </div>
 
-      <div>
-        <label>Document Number<span class="text-danger">*</span></label>
-        <input
-          type="text"
-          [(ngModel)]="CustomerKYCDoc[0].KYC_DocNumber"
-          name="kycDoc0Number"
-          placeholder="Document Number"
-          required
-          #kycDoc0Number="ngModel"
-        />
-        <div *ngIf="kycDoc0Number.invalid && (kycDoc0Number.dirty || kycDoc0Number.touched)" class="text-danger">
-          Document number is required.
+    </div>
+    <div *ngIf="customer.type === 'Non-Individual'" class="address1">
+      <h3 class="heading">Comapany Information</h3>
+      <div class="address">
+        <div>
+          <label>Company Name<span class="text-danger">*</span></label>
+          <input type="text" [(ngModel)]="Firm.Firm_Name" placeholder="Company Name" name="FirmName" required
+            #firmName="ngModel" />
+          <div *ngIf="Firm.Firm_Name.invalid && (Firm.Firm_Name.dirty || Firm.Firm_Name.touched)" class="text-danger">
+            Comapany name is required.
+          </div>
         </div>
-      </div>
-      </div>
+        <div>
+          <label for="incDate">Date of Incorporation <span class="text-danger">*</span></label>
+          <input type="date" id="incDate" name="incDate" [(ngModel)]="Firm.Firm_Date_Of_Incorporation"
+            (change)="calculateyears()" required />
 
-     
-   <div> <label class="form-label fw-bold">Document Image 1</label> 
-    <input type="file" id="kycDoc0File" style="display: none" 
-    (change)="onFileSelectedDoc($event)" /> 
-    <i class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary" 
-    style="cursor: pointer;" 
-    (click)="openFilePickerDoc()"></i> 
-    <div *ngIf="CustomerKYCDoc[0].KYC_DocFile">
-       <img [src]="CustomerKYCDoc[0].KYC_DocFile" alt="Preview" width="100" class="mt-2 rounded" /> 
-      </div> </div>
-       <div> <label class="form-label fw-bold">Document Image 2</label> 
-        <input type="file" id="kycDoc0File" style="display: none" (change)="onFileSelectedDoc($event)" /> 
-        <i class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary" style="cursor: pointer;" 
-        (click)="openFilePickerDoc()"></i> <div *ngIf="CustomerKYCDoc[0].KYC_DocFile"> <img [src]="CustomerKYCDoc[0].KYC_DocFile" alt="Preview" width="100" class="mt-2 rounded" /> </div> </div> 
-</div>
-
-<!--Company information-->
-<div *ngIf="customer.type !== 'Non-Individual'" >
-<h3 class="heading">Demographic Information</h3>
-  <div class="address"><div><label class="form-label fw-bold">Profile Image</label>
-  <input 
-    type="file" 
-    id="profileImage" 
-    style="display: none" 
-    (change)="onFileSelected($event)" />
-     <i class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary"
-     style="cursor: pointer;"
-     (click)="openFilePicker()"></i>
-  <div *ngIf="profilePreviewUrl">
-    <img [src]="profilePreviewUrl" alt="Preview" width="100" class="mt-2 rounded" />
-</div>
-</div>
-
-
-      <div>
-        <label>First Name<span class="text-danger">*</span></label>
-        <input
-          type="text"
-          [(ngModel)]="customer.Customer_FirstName"
-          placeholder="First Name"
-          name="customerFirstName"
-          required
-          #customerFirstName="ngModel"
-        />
-        <div *ngIf="customerFirstName.invalid && (customerFirstName.dirty || customerFirstName.touched)" class="text-danger">
-          First name is required.
+          <div *ngIf="Firm.Firm_Date_Of_Incorporation">
+            <small *ngIf="Firm.Firm_YearsSinceIncorporation >= 0">
+              Years: {{ Firm.Firm_YearsSinceIncorporation }}
+            </small>
+            <small *ngIf="Firm.Firm_YearsSinceIncorporation < 0" class="text-danger">
+              Invalid incorporation date
+            </small>
+          </div>
         </div>
-      </div>
-
-      <div>
-        <label>Last Name<span class="text-danger">*</span></label>
-        <input
-          type="text"
-          [(ngModel)]="customer.Customer_LastName"
-          name="customerLastName"
-          placeholder="Last Name"
-          required
-          #customerLastName="ngModel"
-        />
-      </div>
-
-      <div>
-        <label>Relation <span class="text-danger">*</span></label>
-        <select [(ngModel)]="customer.Customer_Relation_Type" name="relationType" required #relationType="ngModel">
-          <option value="">Select</option>
-          <option value="C/O">C/O</option>
-          <option value="S/O">S/O</option>
-          <option value="D/O">D/O</option>
-          <option value="W/O">W/O</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Relation First Name<span class="text-danger">*</span></label>
-        <input
-          type="text"
-          [(ngModel)]="customer.Customer_Relation_FirstName"
-          name="relationFirstName"
-          placeholder="First Name"
-          required
-          #relationFirstName="ngModel"
-        />
-      </div>
-
-      <div>
-        <label>Relation Last Name<span class="text-danger">*</span></label>
-        <input
-          type="text"
-          [(ngModel)]="customer.Customer_Relation_LastName"
-          name="relationLastName"
-          placeholder="Last Name"
-          required
-          #relationLastName="ngModel"
-        />
-      </div>
-
-      <div>
-        <label>Gender <span class="text-danger">*</span></label>
-        <select [(ngModel)]="customer.Customer_Gender" name="gender" required #gender="ngModel">
-          <option value="">Select</option>
-          <option value="M">Male</option>
-          <option value="F">Female</option>
-        </select>
-      </div>
-<div>
-
-  <label for="dob">Date of Birth:</label>
-<input 
-  type="date" 
-  id="dob" 
-  name="dob" 
-  [(ngModel)]="customer.Customer_DOB"
-  (change)="calculateAge()" 
-  required>
- <div *ngIf="customer.age !== null">
-    <small>Age: {{ customer.age }}</small>
-  </div>
-
-  <div *ngIf="customer.age !== null && customer.age < 18">
-    <small class="text-danger">Customer must be at least 18 years old.</small>
-  </div>
-</div>
-
-      <div>
-        <label>Primary Contact<span class="text-danger">*</span></label>
-        <input
-          type="text"
-          [(ngModel)]="customer.Customer_PhoneNo"
-          name="primaryContact"
-          placeholder="Primary Contact"
-          required
-          pattern="^[0-9]{10}$"
-          maxlength="10"
-          inputmode="numeric"
-          #primaryContact="ngModel"
-        />
-        <div *ngIf="primaryContact.invalid && (primaryContact.dirty || primaryContact.touched)" class="text-danger">
-          <div *ngIf="primaryContact.errors?.['required']">Contact is required.</div>
-          <div *ngIf="primaryContact.errors?.['pattern']">Contact must be 10 digits.</div>
+        <div>
+          <label>No. of Director<span class="text-danger">*</span></label>
+          <input type="number" [(ngModel)]="Firm.Firm_No_Of_Partner" name="Firm_No_Of_Partner" maxlength="2"
+            placeholder="No. of Director"
+            oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
         </div>
-      </div>
 
-      <div>
-        <label>WhatsApp No</label>
-        <input
-          type="text"
-          [(ngModel)]="customer.Customer_WhatsAppNo"
-          name="whatsappNo"
-          placeholder="Whatsapp No"
-          pattern="^[0-9]{10}$"
-          maxlength="10"
-          inputmode="numeric"
-          #whatsappNo="ngModel"
-        />
-      </div>
+        <div>
+          <label>Net Fund <span class="text-danger">*</span></label>
+          <input type="number" [(ngModel)]="Firm.Firm_GrossValue" name="Firm_GrossValue" maxlength="2"
+            placeholder="Net Fund"
+            oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
+        </div>
+        <div>
+          <label>Primary Contact<span class="text-danger">*</span></label>
+          <input type="text" [(ngModel)]="Firm.Firm_PhoneNo" name="Firm_PhoneNo" placeholder="Primary Contact" required
+            pattern="^[0-9]{10}$" maxlength="10" inputmode="numeric" #primaryContact="ngModel" />
+          <div *ngIf="Firm.Firm_PhoneNo.invalid && (Firm.Firm_PhoneNo.dirty || Firm.Firm_PhoneNo.touched)"
+            class="text-danger">
+            <div *ngIf="Firm.Firm_PhoneNo.errors?.['required']">Contact is required.</div>
+            <div *ngIf="Firm.Firm_PhoneNo.errors?.['pattern']">Contact must be 10 digits.</div>
+          </div>
+        </div>
 
-      <div>
-        <label>Alternate No</label>
-        <input
-          type="text"
-          [(ngModel)]="customer.Customer_PhoneNo1"
-          name="altContact"
-          pattern="^[0-9]{10}$"
-           placeholder="Alternate No"
-          maxlength="10"
-          inputmode="numeric"
-          #altContact="ngModel"
-        />
-      </div>
 
-      <div>
-        <label>Email</label>
-        <input type="email" [(ngModel)]="customer.Customer_Email" name="email"  placeholder="Email " #email="ngModel" />
-      </div>
 
-      <div>
-        <label>Other Email</label>
-        <input type="email" [(ngModel)]="customer.Customer_Other_Email" name="otherEmail" placeholder="Other Email" #otherEmail="ngModel" />
-      </div>
+        <div>
+          <label>Alternate No</label>
+          <input type="text" [(ngModel)]="Firm.Firm_PhoneNo1" name="altContact" pattern="^[0-9]{10}$"
+            placeholder="Alternate No" maxlength="10" inputmode="numeric" #altContact="ngModel" />
+        </div>
 
-      <div>
-        <label>Marital Status<span class="text-danger">*</span></label>
-        <select [(ngModel)]="customer.Customer_MaritalStatus" name="maritalStatus" required #maritalStatus="ngModel">
-          <option value="">--Select--</option>
-          <option value="Married">Married</option>
-          <option value="UnMarried">UnMarried</option>
-          <option value="Widow">Widow/Widower</option>
-          <option value="Divorced">Divorced</option>
-          <option value="Separated">Separated</option>
-        </select>
-      </div>
+        <div>
+          <label> Company Email</label>
+          <input type="Firm_Email" [(ngModel)]="Firm.Firm_Email" name="Firm_Email" placeholder=" Compnay Email "
+            #email="ngModel" />
+        </div>
 
-      <div>
-        <label>Customer Religion<span class="text-danger">*</span></label>
-        <select [(ngModel)]="customer.Customer_Religion" name="religion" required #religion="ngModel">
-          <option value="">--Select--</option>
-          <option>Hindu</option>
-          <option>Muslim</option>
-          <option>Christian</option>
-          <option>Sikh</option>
-          <option>Other</option>
-        </select>
-      </div>
+        <div>
+          <label>Company Website</label>
+          <input type="website" [(ngModel)]="Firm.Firm_Website" name="Firm_Website" placeholder="Company Website"
+            #FirmWebsite="ngModel" />
+        </div>
+        <div>
+          <label>Company CIN No.<span class="text-danger">*</span></label>
+          <input type="text" [(ngModel)]="Firm.Firm_CIN_No" name="Firm_CIN_No" placeholder="CIN No" required
+            pattern="^[0-9]{10}$" maxlength="21" inputmode="numeric" #primaryContact="ngModel" />
+          <div *ngIf="Firm.Firm_PhoneNo.invalid && (Firm.Firm_PhoneNo.dirty || Firm.Firm_PhoneNo.touched)"
+            class="text-danger">
+            <div *ngIf="Firm.Firm_PhoneNo.errors?.['required']">CIN No. is required.</div>
+            <div *ngIf="Firm.Firm_PhoneNo.errors?.['pattern']">CIN No. must be 21 digits.</div>
+          </div>
+        </div>
+        <div>
+          <label>Customer Profile<span class="text-danger">*</span></label>
+          <select [(ngModel)]="customer.Customer_Profile" name="profile" required #profilefield="ngModel"
+            (ngModelChange)="loadCustomercategory($event)">
+            <option value="">--Select--</option>
+            <option *ngFor="let pro of profile" [value]="pro.Id">{{ pro.Value }}</option>
+          </select>
+        </div>
 
-      <div>
-        <label>Customer Caste<span class="text-danger">*</span></label>
-        <select [(ngModel)]="customer.Customer_Cast" name="caste" required #caste="ngModel">
-          <option value="">--Select--</option>
-          <option value="General">General</option>
-          <option value="OBC">OBC</option>
-          <option value="SC">SC</option>
-          <option value="ST">ST</option>
-          <option value="Other">Other</option>
-        </select>
-      </div>
+        <div>
+          <label>Customer Category <span class="text-danger">*</span></label>
+          <select [(ngModel)]="customer.Customer_Category" name="category" required #category="ngModel"
+            (ngModelChange)="loadCustomerSubcategory($event)">
+            <option value="">--Select--</option>
+            <option *ngFor="let c of catergory" [value]="c.Id">{{ c.Value }}</option>
+          </select>
+        </div>
 
-      <div>
-        <label>Customer Profile<span class="text-danger">*</span></label>
-        <select
-          [(ngModel)]="customer.Customer_Profile"
-          name="profile"
-          required
-          #profilefield="ngModel"
-          (ngModelChange)="loadCustomercategory($event)"
-        >
-          <option value="">--Select--</option>
-          <option *ngFor="let pro of profile" [value]="pro.Id">{{ pro.Value }}</option>
-        </select>
-      </div>
+        <div>
+          <label>Customer Sub-Category <span class="text-danger">*</span></label>
+          <select [(ngModel)]="customer.Customer_SubCategory" name="subcategory" required #subcategory="ngModel"
+            (ngModelChange)="loadCustomerNatureOfWork($event)">
+            <option value="">--Select--</option>
+            <option *ngFor="let s of subcatergory" [value]="s.Id">{{ s.Value }}</option>
+          </select>
+        </div>
 
-      <div>
-        <label>Customer Category <span class="text-danger">*</span></label>
-        <select
-          [(ngModel)]="customer.Customer_Category"
-          name="category"
-          required
-          #category="ngModel"
-          (ngModelChange)="loadCustomerSubcategory($event)"
-        >
-          <option value="">--Select--</option>
-          <option *ngFor="let c of catergory" [value]="c.Id">{{ c.Value }}</option>
-        </select>
-      </div>
+        <div>
+          <label>Nature Of Work<span class="text-danger">*</span></label>
+          <select [(ngModel)]="customer.Customer_Natureofwork" name="natureOfWork" required #natureOfWork="ngModel">
+            <option value="">--Select--</option>
+            <option *ngFor="let n of Natureofwork" [value]="n.Id">{{ n.Value }}</option>
+          </select>
+        </div>
 
-      <div>
-        <label>Customer Sub-Category <span class="text-danger">*</span></label>
-        <select
-          [(ngModel)]="customer.Customer_SubCategory"
-          name="subcategory"
-          required
-          #subcategory="ngModel"
-          (ngModelChange)="loadCustomerNatureOfWork($event)"
-        >
-          <option value="">--Select--</option>
-          <option *ngFor="let s of subcatergory" [value]="s.Id">{{ s.Value }}</option>
-        </select>
-      </div>
+        <div>
+          <label>Business Category<span class="text-danger">*</span></label>
+          <select [(ngModel)]="customer.BusinessCategory" name="businessCategory" required #businessCategory="ngModel">
+            <option value="">--Select--</option>
+            <option *ngFor="let bc of BusinessCategory" [value]="bc.Id">{{ bc.Value }}</option>
+          </select>
+        </div>
 
-      <div>
-        <label>Nature Of Work<span class="text-danger">*</span></label>
-        <select
-          [(ngModel)]="customer.Customer_Natureofwork"
-          name="natureOfWork"
-          required
-          #natureOfWork="ngModel"
-        >
-          <option value="">--Select--</option>
-          <option *ngFor="let n of Natureofwork" [value]="n.Id">{{ n.Value }}</option>
-        </select>
-      </div>
 
-      <div>
-        <label>Business Type<span class="text-danger">*</span></label>
-        <select [(ngModel)]="customer.BusinessCategory" 
-        name="businessCategory" required #businessCategory="ngModel">
-          <option value="">--Select--</option>
-          <option *ngFor="let bc of BusinessCategory" 
-          [value]="bc.Id">{{ bc.Value }}</option>
-        </select>
       </div>
     </div>
-
-  </div>
-  <div *ngIf="customer.type === 'Non-Individual'" class="address1" >
-<h3 class="heading">Comapany Information</h3>
-  <div class="address">
-    <div>
-        <label>Company Name<span class="text-danger">*</span></label>
-        <input
-          type="text"
-          [(ngModel)]="Firm.Firm_Name"
-          placeholder="Company Name"
-          name="FirmName"
-          required
-          #firmName="ngModel"
-        />
-        <div *ngIf="Firm.Firm_Name.invalid && (Firm.Firm_Name.dirty || Firm.Firm_Name.touched)" class="text-danger">
-          Comapany name is required.
-        </div>
-      </div>
-     <div>
-  <label for="incDate">Date of Incorporation <span class="text-danger">*</span></label>
-  <input
-    type="date"
-    id="incDate"
-    name="incDate"
-    [(ngModel)]="Firm.Firm_Date_Of_Incorporation"
-    (change)="calculateyears()"
-    required
-  />
-
-  <div *ngIf="Firm.Firm_Date_Of_Incorporation">
-    <small *ngIf="Firm.Firm_YearsSinceIncorporation >= 0">
-      Years: {{ Firm.Firm_YearsSinceIncorporation }}
-    </small>
-    <small *ngIf="Firm.Firm_YearsSinceIncorporation < 0" class="text-danger">
-      Invalid incorporation date
-    </small>
-  </div>
-</div>
-<div>
-<label>No. of Director<span class="text-danger">*</span></label>
-            <input
-              type="number"
-              [(ngModel)]="Firm.Firm_No_Of_Partner"
-              name="Firm_No_Of_Partner"
-              maxlength="2"
-              placeholder="No. of Director"
-              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-            />
-          </div>
-
-          <div>
-            <label>Net Fund <span class="text-danger">*</span></label>
-            <input
-              type="number"
-              [(ngModel)]="Firm.Firm_GrossValue"
-              name="Firm_GrossValue"
-              maxlength="2"
-              placeholder="Net Fund"
-              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-            />
-          </div>
-      <div>
-        <label>Primary Contact<span class="text-danger">*</span></label>
-        <input
-          type="text"
-          [(ngModel)]="Firm.Firm_PhoneNo"
-          name="Firm_PhoneNo"
-          placeholder="Primary Contact"
-          required
-          pattern="^[0-9]{10}$"
-          maxlength="10"
-          inputmode="numeric"
-          #primaryContact="ngModel"
-        />
-        <div *ngIf="Firm.Firm_PhoneNo.invalid && (Firm.Firm_PhoneNo.dirty || Firm.Firm_PhoneNo.touched)" class="text-danger">
-          <div *ngIf="Firm.Firm_PhoneNo.errors?.['required']">Contact is required.</div>
-          <div *ngIf="Firm.Firm_PhoneNo.errors?.['pattern']">Contact must be 10 digits.</div>
-        </div>
-      </div>
-
-     
-
-      <div>
-        <label>Alternate No</label>
-        <input
-          type="text"
-          [(ngModel)]="Firm.Firm_PhoneNo1"
-          name="altContact"
-          pattern="^[0-9]{10}$"
-           placeholder="Alternate No"
-          maxlength="10"
-          inputmode="numeric"
-          #altContact="ngModel"
-        />
-      </div>
-
-      <div>
-        <label> Company Email</label>
-        <input type="Firm_Email" [(ngModel)]="Firm.Firm_Email" name="Firm_Email"  placeholder=" Compnay Email " #email="ngModel" />
-      </div>
-
-      <div>
-        <label>Company Website</label>
-        <input type="website" [(ngModel)]="Firm.Firm_Website" name="Firm_Website" placeholder="Company Website" #FirmWebsite="ngModel" />
-      </div>
-<div>
-        <label>Company CIN No.<span class="text-danger">*</span></label>
-        <input
-          type="text"
-          [(ngModel)]="Firm.Firm_CIN_No"
-          name="Firm_CIN_No"
-          placeholder="CIN No"
-          required
-          pattern="^[0-9]{10}$"
-          maxlength="21"
-          inputmode="numeric"
-          #primaryContact="ngModel"
-        />
-        <div *ngIf="Firm.Firm_PhoneNo.invalid && (Firm.Firm_PhoneNo.dirty || Firm.Firm_PhoneNo.touched)" class="text-danger">
-          <div *ngIf="Firm.Firm_PhoneNo.errors?.['required']">CIN No. is required.</div>
-          <div *ngIf="Firm.Firm_PhoneNo.errors?.['pattern']">CIN No. must be 21 digits.</div>
-        </div>
-      </div>
-      <div>
-        <label>Customer Profile<span class="text-danger">*</span></label>
-        <select
-          [(ngModel)]="customer.Customer_Profile"
-          name="profile"
-          required
-          #profilefield="ngModel"
-          (ngModelChange)="loadCustomercategory($event)"
-        >
-          <option value="">--Select--</option>
-          <option *ngFor="let pro of profile" [value]="pro.Id">{{ pro.Value }}</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Customer Category <span class="text-danger">*</span></label>
-        <select
-          [(ngModel)]="customer.Customer_Category"
-          name="category"
-          required
-          #category="ngModel"
-          (ngModelChange)="loadCustomerSubcategory($event)"
-        >
-          <option value="">--Select--</option>
-          <option *ngFor="let c of catergory" [value]="c.Id">{{ c.Value }}</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Customer Sub-Category <span class="text-danger">*</span></label>
-        <select
-          [(ngModel)]="customer.Customer_SubCategory"
-          name="subcategory"
-          required
-          #subcategory="ngModel"
-          (ngModelChange)="loadCustomerNatureOfWork($event)"
-        >
-          <option value="">--Select--</option>
-          <option *ngFor="let s of subcatergory" [value]="s.Id">{{ s.Value }}</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Nature Of Work<span class="text-danger">*</span></label>
-        <select
-          [(ngModel)]="customer.Customer_Natureofwork"
-          name="natureOfWork"
-          required
-          #natureOfWork="ngModel"
-        >
-          <option value="">--Select--</option>
-          <option *ngFor="let n of Natureofwork" [value]="n.Id">{{ n.Value }}</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Business Category<span class="text-danger">*</span></label>
-        <select [(ngModel)]="customer.BusinessCategory" 
-        name="businessCategory" required #businessCategory="ngModel">
-          <option value="">--Select--</option>
-          <option *ngFor="let bc of BusinessCategory" 
-          [value]="bc.Id">{{ bc.Value }}</option>
-        </select>
-      </div>
-    
-
-  </div>
-  </div>
-    <div *ngIf="customer.type !== 'Non-Individual'" >
+    <div *ngIf="customer.type !== 'Non-Individual'">
       <!--Address for customer-->
       <h3 class="heading">Customer Address</h3>
-      <h4 >Present Address:</h4>
+      <h4>Present Address:</h4>
       <div class="address1">
         <div class="address">
           <div>
             <label>Address<span class="text-danger">*</span></label>
-            <input type="text" [(ngModel)]="address.AddressS" name="presentAddress"  placeholder="Address" required #presentAddress="ngModel" />
+            <input type="text" [(ngModel)]="address.AddressS" name="presentAddress" placeholder="Address" required
+              #presentAddress="ngModel" />
           </div>
 
           <div>
             <label>Landmark<span class="text-danger">*</span></label>
-            <input type="text" [(ngModel)]="address.LandMarkS" name="presentLandmark" placeholder="LandMark" required #presentLandmark="ngModel" />
+            <input type="text" [(ngModel)]="address.LandMarkS" name="presentLandmark" placeholder="LandMark" required
+              #presentLandmark="ngModel" />
           </div>
 
           <div>
             <label>State<span class="text-danger">*</span></label>
-            <select
-              [(ngModel)]="address.StateIdS"
-              name="presentState"
-              required
-              #presentState="ngModel"
-              (ngModelChange)="loadDistricts($event)"
-            >
+            <select [(ngModel)]="address.StateIdS" name="presentState" required #presentState="ngModel"
+              (ngModelChange)="loadDistricts($event)">
               <option value="">--Select--</option>
               <option *ngFor="let s of states" [value]="s.StateId">{{ s.State_Name }}</option>
             </select>
@@ -572,13 +419,8 @@
 
           <div>
             <label>District<span class="text-danger">*</span></label>
-            <select
-              [(ngModel)]="address.DistrictIdS"
-              name="presentDistrict"
-              required
-              #presentDistrict="ngModel"
-              (ngModelChange)="loadTehsils($event)"
-            >
+            <select [(ngModel)]="address.DistrictIdS" name="presentDistrict" required #presentDistrict="ngModel"
+              (ngModelChange)="loadTehsils($event)">
               <option value="">--Select--</option>
               <option *ngFor="let d of district" [value]="d.DistrictId">{{ d.District_Name }}</option>
             </select>
@@ -594,32 +436,20 @@
 
           <div>
             <label>Pincode</label>
-            <input
-              type="text"
-              [(ngModel)]="address.PinCodeS"
-              name="presentPincode"
-              placeholder="Pincode"
-              required
-              pattern="^[0-9]{6}$"
-              maxlength="6"
-              #presentPincode="ngModel"
-            />
+            <input type="text" [(ngModel)]="address.PinCodeS" name="presentPincode" placeholder="Pincode" required
+              pattern="^[0-9]{6}$" maxlength="6" #presentPincode="ngModel" />
             <div *ngIf="presentPincode.invalid && (presentPincode.dirty || presentPincode.touched)">
               <small class="text-danger" *ngIf="presentPincode.errors?.['required']">Pincode is required.</small>
-              <small class="text-danger" *ngIf="presentPincode.errors?.['pattern']">Pincode must be exactly 6 digits.</small>
+              <small class="text-danger" *ngIf="presentPincode.errors?.['pattern']">Pincode must be exactly 6
+                digits.</small>
             </div>
           </div>
 
           <div>
             <label>No of Living Here<span class="text-danger">*</span></label>
-            <input
-              type="number"
-              [(ngModel)]="address.NoOfLivingS"
-              placeholder="No of Living Here"
-              name="presentNoOfLiving"
-              maxlength="2"
-              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-            />
+            <input type="number" [(ngModel)]="address.NoOfLivingS" placeholder="No of Living Here"
+              name="presentNoOfLiving" maxlength="2"
+              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
           </div>
 
           <div>
@@ -633,63 +463,46 @@
 
           <div>
             <label>Distance To Branch(KM)<span class="text-danger">*</span></label>
-            <input
-              type="number"
-              [(ngModel)]="address.DistanceBranchS"
-              name="presentDistance"
-              maxlength="2"
+            <input type="number" [(ngModel)]="address.DistanceBranchS" name="presentDistance" maxlength="2"
               placeholder="Distance From Branch"
-              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-            />
+              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
           </div>
 
           <div class="communicationaddress">
-            <input
-              class="box"
-              type="checkbox"
-              [(ngModel)]="address.IsCommunicationAddress"
-              name="presentIsCommunication"
-            />
+            <input class="box" type="checkbox" [(ngModel)]="address.IsCommunicationAddress"
+              name="presentIsCommunication" />
             <label class="communicate">Is This Communication Address<span class="text-danger">*</span></label>
           </div>
         </div>
       </div>
 
       <h4>Permanent Address:</h4>
-     
+
 
       <div class="address1">
-         <div class="communicationaddress">
-        <input
-          class="box"
-          type="checkbox"
-          [(ngModel)]="address.NoOfLivingpermanent"
-          (change)="sameAsParmanent()"
-          name="copyPresentToPermanent"
-        />
-        <label>Select if Permanent Address same as Present Address</label>
-      </div>
+        <div class="communicationaddress">
+          <input class="box" type="checkbox" [(ngModel)]="address.NoOfLivingpermanent" (change)="sameAsParmanent()"
+            name="copyPresentToPermanent" />
+          <label>Select if Permanent Address same as Present Address</label>
+        </div>
         <div class="address">
-          
+
           <div>
             <label>Address<span class="text-danger">*</span></label>
-            <input type="text" [(ngModel)]="customerPermanent.Address" placeholder="Address" name="permanentAddress" required #permanentAddress="ngModel" />
+            <input type="text" [(ngModel)]="customerPermanent.Address" placeholder="Address" name="permanentAddress"
+              required #permanentAddress="ngModel" />
           </div>
 
           <div>
             <label>Landmark<span class="text-danger">*</span></label>
-            <input type="text" [(ngModel)]="customerPermanent.LandMark" placeholder="LandMark" name="permanentLandmark" required #permanentLandmark="ngModel" />
+            <input type="text" [(ngModel)]="customerPermanent.LandMark" placeholder="LandMark" name="permanentLandmark"
+              required #permanentLandmark="ngModel" />
           </div>
 
           <div>
             <label>State<span class="text-danger">*</span></label>
-            <select
-              [(ngModel)]="customerPermanent.StateId"
-              name="permanentState"
-              required
-              #permanentState="ngModel"
-              (ngModelChange)="loadDistricts($event)"
-            >
+            <select [(ngModel)]="customerPermanent.StateId" name="permanentState" required #permanentState="ngModel"
+              (ngModelChange)="loadDistricts($event)">
               <option value="">--Select--</option>
               <option *ngFor="let s of states" [value]="s.StateId">{{ s.State_Name }}</option>
             </select>
@@ -697,13 +510,8 @@
 
           <div>
             <label>District<span class="text-danger">*</span></label>
-            <select
-              [(ngModel)]="customerPermanent.DistrictId"
-              name="permanentDistrict"
-              required
-              #permanentDistrict="ngModel"
-              (ngModelChange)="loadTehsils($event)"
-            >
+            <select [(ngModel)]="customerPermanent.DistrictId" name="permanentDistrict" required
+              #permanentDistrict="ngModel" (ngModelChange)="loadTehsils($event)">
               <option value="">--Select--</option>
               <option *ngFor="let d of district" [value]="d.DistrictId">{{ d.District_Name }}</option>
             </select>
@@ -719,37 +527,26 @@
 
           <div>
             <label>Pincode</label>
-            <input
-              type="text"
-              [(ngModel)]="customerPermanent.PinCode"
-              name="permanentPincode"
-              placeholder="Pincode"
-              required
-              pattern="^[0-9]{6}$"
-              maxlength="6"
-              #permanentPincode="ngModel"
-            />
+            <input type="text" [(ngModel)]="customerPermanent.PinCode" name="permanentPincode" placeholder="Pincode"
+              required pattern="^[0-9]{6}$" maxlength="6" #permanentPincode="ngModel" />
             <div *ngIf="permanentPincode.invalid && (permanentPincode.dirty || permanentPincode.touched)">
               <small class="text-danger" *ngIf="permanentPincode.errors?.['required']">Pincode is required.</small>
-              <small class="text-danger" *ngIf="permanentPincode.errors?.['pattern']">Pincode must be exactly 6 digits.</small>
+              <small class="text-danger" *ngIf="permanentPincode.errors?.['pattern']">Pincode must be exactly 6
+                digits.</small>
             </div>
           </div>
 
           <div>
             <label>No of Living Here<span class="text-danger">*</span></label>
-            <input
-              type="number"
-              placeholder="No of Living Here"
-              [(ngModel)]="customerPermanent.NoOfLiving"
-              name="permanentNoOfLiving"
-              maxlength="2"
-              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-            />
+            <input type="number" placeholder="No of Living Here" [(ngModel)]="customerPermanent.NoOfLiving"
+              name="permanentNoOfLiving" maxlength="2"
+              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
           </div>
 
           <div>
             <label>Rent/Own<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerPermanent.RentOwn" name="permanentRentOwn" required #permanentRentOwn="ngModel">
+            <select [(ngModel)]="customerPermanent.RentOwn" name="permanentRentOwn" required
+              #permanentRentOwn="ngModel">
               <option value="">--Select--</option>
               <option>Rent</option>
               <option>Own</option>
@@ -758,23 +555,14 @@
 
           <div>
             <label>Distance To Branch(KM)<span class="text-danger">*</span></label>
-            <input
-              type="number"
-              [(ngModel)]="customerPermanent.DistanceBranch"
-              name="permanentDistance"
-              maxlength="2"
+            <input type="number" [(ngModel)]="customerPermanent.DistanceBranch" name="permanentDistance" maxlength="2"
               placeholder="Distance From Branch"
-              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-            />
+              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
           </div>
 
           <div class="communicationaddress">
-            <input
-              class="box"
-              type="checkbox"
-              [(ngModel)]="customerPermanent.IsCommunicationAddress"
-              name="permanentIsCommunication"
-            />
+            <input class="box" type="checkbox" [(ngModel)]="customerPermanent.IsCommunicationAddress"
+              name="permanentIsCommunication" />
             <label class="communicate">Is This Communication Address<span class="text-danger">*</span></label>
           </div>
         </div>
@@ -785,23 +573,20 @@
         <div class="address" ngModelGroup="workAddress" #workForm="ngModelGroup">
           <div>
             <label>Address<span class="text-danger">*</span></label>
-            <input type="text" [(ngModel)]="customerWork.AddressW" name="workAddress" placeholder="address" #workAddress="ngModel"  [required]="isWorkAddressFilled()" />
+            <input type="text" [(ngModel)]="customerWork.AddressW" name="workAddress" placeholder="address"
+              #workAddress="ngModel" [required]="isWorkAddressFilled()" />
           </div>
 
           <div>
             <label>Landmark<span class="text-danger">*</span></label>
-            <input type="text" [(ngModel)]="customerWork.LandMarkW" name="workLandmark" placeholder="Landmark" #workLandmark="ngModel"  [required]="isWorkAddressFilled()"/>
+            <input type="text" [(ngModel)]="customerWork.LandMarkW" name="workLandmark" placeholder="Landmark"
+              #workLandmark="ngModel" [required]="isWorkAddressFilled()" />
           </div>
 
           <div>
             <label>State<span class="text-danger">*</span></label>
-            <select
-             [required]="isWorkAddressFilled()"
-              [(ngModel)]="customerWork.StateIdW"
-              name="workState"
-              #workState="ngModel"
-              (ngModelChange)="loadDistricts($event)"
-            >
+            <select [required]="isWorkAddressFilled()" [(ngModel)]="customerWork.StateIdW" name="workState"
+              #workState="ngModel" (ngModelChange)="loadDistricts($event)">
               <option value="">--Select--</option>
               <option *ngFor="let s of states" [value]="s.StateId">{{ s.State_Name }}</option>
             </select>
@@ -809,13 +594,8 @@
 
           <div>
             <label>District<span class="text-danger">*</span></label>
-            <select
-              [(ngModel)]="customerWork.DistrictIdW"
-              name="workDistrict"
-               [required]="isWorkAddressFilled()"
-               #workDistrict="ngModel"
-              (ngModelChange)="loadTehsils($event)"
-            >
+            <select [(ngModel)]="customerWork.DistrictIdW" name="workDistrict" [required]="isWorkAddressFilled()"
+              #workDistrict="ngModel" (ngModelChange)="loadTehsils($event)">
               <option value="">--Select--</option>
               <option *ngFor="let d of district" [value]="d.DistrictId">{{ d.District_Name }}</option>
             </select>
@@ -823,7 +603,8 @@
 
           <div>
             <label>Tehsil<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerWork.TehsilIdW" name="workTehsil"  [required]="isWorkAddressFilled()" #workTehsil="ngModel">
+            <select [(ngModel)]="customerWork.TehsilIdW" name="workTehsil" [required]="isWorkAddressFilled()"
+              #workTehsil="ngModel">
               <option value="">--Select--</option>
               <option *ngFor="let t of tehsil" [value]="t.TehsilId">{{ t.Tehsil_Name }}</option>
             </select>
@@ -831,38 +612,26 @@
 
           <div>
             <label>Pincode</label>
-            <input
-              type="text"
-              [(ngModel)]="customerWork.PinCodeW"
-              name="workPincode"
-              placeholder="Pincode"
-              [required]="isWorkAddressFilled()"
-              pattern="^[0-9]{6}$"
-              maxlength="6"
-              #workPincode="ngModel"
-            />
+            <input type="text" [(ngModel)]="customerWork.PinCodeW" name="workPincode" placeholder="Pincode"
+              [required]="isWorkAddressFilled()" pattern="^[0-9]{6}$" maxlength="6" #workPincode="ngModel" />
             <div *ngIf="workPincode.invalid && (workPincode.dirty || workPincode.touched)">
               <small class="text-danger" *ngIf="workPincode.errors?.['required']">Pincode is required.</small>
-              <small class="text-danger" *ngIf="workPincode.errors?.['pattern']">Pincode must be exactly 6 digits.</small>
+              <small class="text-danger" *ngIf="workPincode.errors?.['pattern']">Pincode must be exactly 6
+                digits.</small>
             </div>
           </div>
 
           <div>
             <label>No of Living Here<span class="text-danger">*</span></label>
-            <input
-              type="number"
-              [(ngModel)]="customerWork.NoOfLivingW"
-              placeholder="No of Living Here"
-               [required]="isWorkAddressFilled()"
-              name="workNoOfLiving"
-              maxlength="2"
-              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-            />
+            <input type="number" [(ngModel)]="customerWork.NoOfLivingW" placeholder="No of Living Here"
+              [required]="isWorkAddressFilled()" name="workNoOfLiving" maxlength="2"
+              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
           </div>
 
           <div>
             <label>Rent/Own<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerWork.RentOwnW" name="workRentOwn"  [required]="isWorkAddressFilled()" #workRentOwn="ngModel">
+            <select [(ngModel)]="customerWork.RentOwnW" name="workRentOwn" [required]="isWorkAddressFilled()"
+              #workRentOwn="ngModel">
               <option value="">--Select--</option>
               <option>Rent</option>
               <option>Own</option>
@@ -871,55 +640,41 @@
 
           <div>
             <label>Distance To Branch(KM)<span class="text-danger">*</span></label>
-            <input
-              type="number"
-              [(ngModel)]="customerWork.DistanceBranchW"
-               [required]="isWorkAddressFilled()"
-              name="workDistance"
-              maxlength="2"
-              placeholder="Distance From Branch"
-              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-            />
+            <input type="number" [(ngModel)]="customerWork.DistanceBranchW" [required]="isWorkAddressFilled()"
+              name="workDistance" maxlength="2" placeholder="Distance From Branch"
+              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
           </div>
 
           <div class="communicationaddress">
-            <input
-              class="box"
-              type="checkbox"
-               [required]="isWorkAddressFilled()"
-              [(ngModel)]="customerWork.IsCommunicationAddressW"
-              name="workIsCommunication"
-            />
+            <input class="box" type="checkbox" [required]="isWorkAddressFilled()"
+              [(ngModel)]="customerWork.IsCommunicationAddressW" name="workIsCommunication" />
             <label class="communicate">Is This Communication Address<span class="text-danger">*</span></label>
           </div>
         </div>
       </div>
     </div>
-    <div *ngIf="customer.type === 'Non-Individual'" >
+    <div *ngIf="customer.type === 'Non-Individual'">
       <!--Address for company-->
       <h3 class="heading">Company Address</h3>
-      <h4 >Registered Address:</h4>
+      <h4>Registered Address:</h4>
       <div class="address1">
         <div class="address">
           <div>
             <label>Address<span class="text-danger">*</span></label>
-            <input type="text" [(ngModel)]="address.AddressS" name="presentAddress"  placeholder="Address" required #presentAddress="ngModel" />
+            <input type="text" [(ngModel)]="address.AddressS" name="presentAddress" placeholder="Address" required
+              #presentAddress="ngModel" />
           </div>
 
           <div>
             <label>Landmark<span class="text-danger">*</span></label>
-            <input type="text" [(ngModel)]="address.LandMarkS" name="presentLandmark" placeholder="LandMark" required #presentLandmark="ngModel" />
+            <input type="text" [(ngModel)]="address.LandMarkS" name="presentLandmark" placeholder="LandMark" required
+              #presentLandmark="ngModel" />
           </div>
 
           <div>
             <label>State<span class="text-danger">*</span></label>
-            <select
-              [(ngModel)]="address.StateIdS"
-              name="presentState"
-              required
-              #presentState="ngModel"
-              (ngModelChange)="loadDistricts($event)"
-            >
+            <select [(ngModel)]="address.StateIdS" name="presentState" required #presentState="ngModel"
+              (ngModelChange)="loadDistricts($event)">
               <option value="">--Select--</option>
               <option *ngFor="let s of states" [value]="s.StateId">{{ s.State_Name }}</option>
             </select>
@@ -927,13 +682,8 @@
 
           <div>
             <label>District<span class="text-danger">*</span></label>
-            <select
-              [(ngModel)]="address.DistrictIdS"
-              name="presentDistrict"
-              required
-              #presentDistrict="ngModel"
-              (ngModelChange)="loadTehsils($event)"
-            >
+            <select [(ngModel)]="address.DistrictIdS" name="presentDistrict" required #presentDistrict="ngModel"
+              (ngModelChange)="loadTehsils($event)">
               <option value="">--Select--</option>
               <option *ngFor="let d of district" [value]="d.DistrictId">{{ d.District_Name }}</option>
             </select>
@@ -949,32 +699,20 @@
 
           <div>
             <label>Pincode</label>
-            <input
-              type="text"
-              [(ngModel)]="address.PinCodeS"
-              name="presentPincode"
-              placeholder="Pincode"
-              required
-              pattern="^[0-9]{6}$"
-              maxlength="6"
-              #presentPincode="ngModel"
-            />
+            <input type="text" [(ngModel)]="address.PinCodeS" name="presentPincode" placeholder="Pincode" required
+              pattern="^[0-9]{6}$" maxlength="6" #presentPincode="ngModel" />
             <div *ngIf="presentPincode.invalid && (presentPincode.dirty || presentPincode.touched)">
               <small class="text-danger" *ngIf="presentPincode.errors?.['required']">Pincode is required.</small>
-              <small class="text-danger" *ngIf="presentPincode.errors?.['pattern']">Pincode must be exactly 6 digits.</small>
+              <small class="text-danger" *ngIf="presentPincode.errors?.['pattern']">Pincode must be exactly 6
+                digits.</small>
             </div>
           </div>
 
           <div>
             <label>No of Living Here<span class="text-danger">*</span></label>
-            <input
-              type="number"
-              [(ngModel)]="address.NoOfLivingS"
-              placeholder="No of Living Here"
-              name="presentNoOfLiving"
-              maxlength="2"
-              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-            />
+            <input type="number" [(ngModel)]="address.NoOfLivingS" placeholder="No of Living Here"
+              name="presentNoOfLiving" maxlength="2"
+              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
           </div>
 
           <div>
@@ -988,63 +726,46 @@
 
           <div>
             <label>Distance To Branch(KM)<span class="text-danger">*</span></label>
-            <input
-              type="number"
-              [(ngModel)]="address.DistanceBranchS"
-              name="presentDistance"
-              maxlength="2"
+            <input type="number" [(ngModel)]="address.DistanceBranchS" name="presentDistance" maxlength="2"
               placeholder="Distance From Branch"
-              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-            />
+              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
           </div>
 
           <div class="communicationaddress">
-            <input
-              class="box"
-              type="checkbox"
-              [(ngModel)]="address.IsCommunicationAddress"
-              name="presentIsCommunication"
-            />
+            <input class="box" type="checkbox" [(ngModel)]="address.IsCommunicationAddress"
+              name="presentIsCommunication" />
             <label class="communicate">Is This Communication Address<span class="text-danger">*</span></label>
           </div>
         </div>
       </div>
 
       <h4>Corporate Address:</h4>
-     
+
 
       <div class="address1">
-         <div class="communicationaddress">
-        <input
-          class="box"
-          type="checkbox"
-          [(ngModel)]="address.NoOfLivingpermanent"
-          (change)="sameAsParmanent()"
-          name="copyPresentToPermanent"
-        />
-        <label>Select if Corporate Address same as Registered Address</label>
-      </div>
+        <div class="communicationaddress">
+          <input class="box" type="checkbox" [(ngModel)]="address.NoOfLivingpermanent" (change)="sameAsParmanent()"
+            name="copyPresentToPermanent" />
+          <label>Select if Corporate Address same as Registered Address</label>
+        </div>
         <div class="address">
-          
+
           <div>
             <label>Address<span class="text-danger">*</span></label>
-            <input type="text" [(ngModel)]="customerPermanent.Address" placeholder="Address" name="permanentAddress" required #permanentAddress="ngModel" />
+            <input type="text" [(ngModel)]="customerPermanent.Address" placeholder="Address" name="permanentAddress"
+              required #permanentAddress="ngModel" />
           </div>
 
           <div>
             <label>Landmark<span class="text-danger">*</span></label>
-            <input type="text" [(ngModel)]="customerPermanent.LandMark" placeholder="LandMark" name="permanentLandmark" required #permanentLandmark="ngModel" />
+            <input type="text" [(ngModel)]="customerPermanent.LandMark" placeholder="LandMark" name="permanentLandmark"
+              required #permanentLandmark="ngModel" />
           </div>
 
           <div>
             <label>State<span class="text-danger">*</span></label>
-            <select
-              [(ngModel)]="customerPermanent.StateId"
-              name="permanentState"
-              required
-              #permanentState="ngModel"
-              (ngModelChange)="loadDistricts($event)"
-            >
+            <select [(ngModel)]="customerPermanent.StateId" name="permanentState" required #permanentState="ngModel"
+              (ngModelChange)="loadDistricts($event)">
               <option value="">--Select--</option>
               <option *ngFor="let s of states" [value]="s.StateId">{{ s.State_Name }}</option>
             </select>
@@ -1052,13 +773,8 @@
 
           <div>
             <label>District<span class="text-danger">*</span></label>
-            <select
-              [(ngModel)]="customerPermanent.DistrictId"
-              name="permanentDistrict"
-              required
-              #permanentDistrict="ngModel"
-              (ngModelChange)="loadTehsils($event)"
-            >
+            <select [(ngModel)]="customerPermanent.DistrictId" name="permanentDistrict" required
+              #permanentDistrict="ngModel" (ngModelChange)="loadTehsils($event)">
               <option value="">--Select--</option>
               <option *ngFor="let d of district" [value]="d.DistrictId">{{ d.District_Name }}</option>
             </select>
@@ -1074,37 +790,26 @@
 
           <div>
             <label>Pincode</label>
-            <input
-              type="text"
-              [(ngModel)]="customerPermanent.PinCode"
-              name="permanentPincode"
-              placeholder="Pincode"
-              required
-              pattern="^[0-9]{6}$"
-              maxlength="6"
-              #permanentPincode="ngModel"
-            />
+            <input type="text" [(ngModel)]="customerPermanent.PinCode" name="permanentPincode" placeholder="Pincode"
+              required pattern="^[0-9]{6}$" maxlength="6" #permanentPincode="ngModel" />
             <div *ngIf="permanentPincode.invalid && (permanentPincode.dirty || permanentPincode.touched)">
               <small class="text-danger" *ngIf="permanentPincode.errors?.['required']">Pincode is required.</small>
-              <small class="text-danger" *ngIf="permanentPincode.errors?.['pattern']">Pincode must be exactly 6 digits.</small>
+              <small class="text-danger" *ngIf="permanentPincode.errors?.['pattern']">Pincode must be exactly 6
+                digits.</small>
             </div>
           </div>
 
           <div>
             <label>No of Living Here<span class="text-danger">*</span></label>
-            <input
-              type="number"
-              placeholder="No of Living Here"
-              [(ngModel)]="customerPermanent.NoOfLiving"
-              name="permanentNoOfLiving"
-              maxlength="2"
-              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-            />
+            <input type="number" placeholder="No of Living Here" [(ngModel)]="customerPermanent.NoOfLiving"
+              name="permanentNoOfLiving" maxlength="2"
+              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
           </div>
 
           <div>
             <label>Rent/Own<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerPermanent.RentOwn" name="permanentRentOwn" required #permanentRentOwn="ngModel">
+            <select [(ngModel)]="customerPermanent.RentOwn" name="permanentRentOwn" required
+              #permanentRentOwn="ngModel">
               <option value="">--Select--</option>
               <option>Rent</option>
               <option>Own</option>
@@ -1113,23 +818,14 @@
 
           <div>
             <label>Distance To Branch(KM)<span class="text-danger">*</span></label>
-            <input
-              type="number"
-              [(ngModel)]="customerPermanent.DistanceBranch"
-              name="permanentDistance"
-              maxlength="2"
+            <input type="number" [(ngModel)]="customerPermanent.DistanceBranch" name="permanentDistance" maxlength="2"
               placeholder="Distance From Branch"
-              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-            />
+              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
           </div>
 
           <div class="communicationaddress">
-            <input
-              class="box"
-              type="checkbox"
-              [(ngModel)]="customerPermanent.IsCommunicationAddress"
-              name="permanentIsCommunication"
-            />
+            <input class="box" type="checkbox" [(ngModel)]="customerPermanent.IsCommunicationAddress"
+              name="permanentIsCommunication" />
             <label class="communicate">Is This Communication Address<span class="text-danger">*</span></label>
           </div>
         </div>
@@ -1139,70 +835,88 @@
         <div class="address">
           <div>
             <label>Director Name<span class="text-danger">*</span></label>
-            <input placeholder="Director Name"/>
+            <input placeholder="Director Name" disabled>
+            <button class="search" type="button" (click)="openSearchModal()"><i class="fas fa-search"></i>
+            </button>
+
+
           </div>
           <div>
             <label>Gender<span class="text-danger">*</span></label>
-            <select [(ngModel)]="address.RentOwnS" name="presentRentOwn" required #presentRentOwn="ngModel">
-              <option value="">--Select--</option>
-              <option>Rent</option>
-              <option>Own</option>
-            </select>
+            <input [(ngModel)]="Partners.PartnerGender" placeholder='Partner Gender' name="" required
+              #PartnerGender="ngModel" disabled />
+
+
+
           </div>
           <div>
             <label>Age<span class="text-danger">*</span></label>
-            <select [(ngModel)]="address.RentOwnS" name="presentRentOwn" required #presentRentOwn="ngModel">
-              <option value="">--Select--</option>
-              <option>Rent</option>
-              <option>Own</option>
-            </select>
+            <input type="number" [(ngModel)]="Partners.PartnerAge" name="PartnerAge" placeholder="Partner Age" required
+              #PartnerAge="ngModel" disabled />
           </div>
+
           <div>
-            <label>Designation<span class="text-danger">*</span></label>
-            <select [(ngModel)]="address.RentOwnS" name="presentRentOwn" required #presentRentOwn="ngModel">
-              <option value="">--Select--</option>
-              <option>Rent</option>
-              <option>Own</option>
-            </select>
+            <div><label>Designation<span class="text-danger">*</span></label></div>
+            <div>
+              <select [(ngModel)]="Partners.PartnerDesignation" name="PartnerDesignation" required="ngModel">
+                <option value="">--Select Designation--</option>
+                <option value="Shareholder"> Shareholder </option>
+                <option value="Holding Company">Holding Company</option>
+                <option value="Subsidiary Company">Subsidiary Company</option>
+                <option value="Proprietor">Proprietor</option>
+                <option value="Partner">Partner</option>
+                <option value="Trustee">Trustee</option>
+                <option value="Promoter Director">Promoter Director</option>
+                <option value="Nominee Director">Nominee Director</option>
+                <option value="Independent Director">Independent Director</option>
+                <option value="Director - Since Resigned">Director - Since Resigned</option>
+                <option value="Individual Member of SHG">Individual Member of SHG</option>
+                <option value="Other Director">Other Director</option>
+                <option value="Other">Other</option>
+                <option value="Karta (HUF)">Karta (HUF)</option>
+              </select>
+            </div>
           </div>
           <div>
             <label>Phone No.<span class="text-danger">*</span></label>
-            <select [(ngModel)]="address.RentOwnS" name="presentRentOwn" required #presentRentOwn="ngModel">
-              <option value="">--Select--</option>
-              <option>Rent</option>
-              <option>Own</option>
-            </select>
+            <input type="text" [(ngModel)]="Partners.PartnerPhoneNo" name="PartnerPhoneNo" placeholder="Phone No"
+              required pattern="^[0-9]{10}$" maxlength="10" inputmode="numeric" #primaryContact="ngModel" disabled />
+            <div
+              *ngIf="Partners.PartnerPhoneNo.invalid && (Partners.PartnerPhoneNo.dirty || Partners.PartnerPhoneNo.touched)"
+              class="text-danger">
+
+            </div>
           </div>
           <div>
             <label>DIN No.<span class="text-danger">*</span></label>
-            <select [(ngModel)]="address.RentOwnS" name="presentRentOwn" required #presentRentOwn="ngModel">
-              <option value="">--Select--</option>
-              <option>Rent</option>
-              <option>Own</option>
-            </select>
+            <input type="text" [(ngModel)]="Partners.PartnerDIN_No" name="PartnerDIN_No" placeholder="DIN No" required
+              pattern="^[0-9]{10}$" maxlength="8" inputmode="numeric" #primaryContact="ngModel" />
+            <div
+              *ngIf="Partners.PartnerDIN_No.invalid && (Partners.PartnerDIN_No.dirty || Partners.PartnerDIN_No.touched)"
+              class="text-danger">
+              <div *ngIf="Partners.PartnerDIN_No?.['required']">DIN No. is required.</div>
+              <div *ngIf="Partners.PartnerDIN_No.errors?.['pattern']">DIN No. must be 8 digits.</div>
+            </div>
           </div>
           <div>
             <label>Share %<span class="text-danger">*</span></label>
-            <select [(ngModel)]="address.RentOwnS" name="presentRentOwn" required #presentRentOwn="ngModel">
-              <option value="">--Select--</option>
-              <option>Rent</option>
-              <option>Own</option>
-            </select>
+            <input type="number" [(ngModel)]="Partners.PartnerShare" name="PartnerShare" placeholder="Share %" required
+              #PartnerShare="ngModel" />
           </div>
-        
-        
-          
-          
+
+
+
+
         </div>
       </div>
-     
+
     </div>
 
     <div class="btn-container">
       <button class="btn-save" type="submit" [disabled]="customerForm.invalid">
         Save
       </button>
-    
+
       <!-- <div *ngIf="customerForm.invalid" style="color: red; margin-top: 10px;">
         <strong>Form is invalid. Please check:</strong>
         <ul>

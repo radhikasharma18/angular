@@ -5,6 +5,11 @@ import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontaweso
 import { faArrowUpFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
 import { constantUrl } from '../constantUrls';
+import { SearchModalComponent } from '../search-modal/search-modal';
+import { MatDialog } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+
 
 @Component({
   selector: 'app-customer',
@@ -14,6 +19,7 @@ import { constantUrl } from '../constantUrls';
   styleUrls: ['./customer.css']
 })
 export class Customer implements OnInit {
+  
   documentPreviewUrl: any;
   previewUrl: string | null = null;
   states: any[] = [];
@@ -27,8 +33,11 @@ export class Customer implements OnInit {
   BusinessCategory: any[] = [];
   firmTypes: any[] = [];
 
-  constructor(library: FaIconLibrary, private http: HttpClient) {
+    
+
+  constructor(library: FaIconLibrary, private http: HttpClient, private dialog: MatDialog) {
     library.addIcons(faArrowUpFromBracket);
+    
   }
 
   customer: any = {
@@ -144,6 +153,15 @@ export class Customer implements OnInit {
     IsCommunicationAddressW: '',
     AddressIdW: ''
   };
+    Partners:any ={
+      PartnerName: '',
+      PartnerGender: '',
+      PartnerAge: '',
+      PartnerDesignation: '',
+      PartnerPhoneNo:'',
+      PartnerShare: 100,
+      PartnerDIN_No:'',
+    }
 
   CustomerKYCDoc:any[] = [{
       KYC_CustomerId: '',
@@ -166,7 +184,13 @@ export class Customer implements OnInit {
     this.loadCustomerType();
     this.loadFirmType();
   }
-
+ openSearchModal() {
+    this.dialog.open(SearchModalComponent, {
+      width: '400px',
+      height: 'auto',
+      disableClose: false
+    });
+  }
  sameAsParmanent() {
   console.log("Checkbox value:", this.address.NoOfLivingpermanent);
 
