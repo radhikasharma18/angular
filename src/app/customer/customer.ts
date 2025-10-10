@@ -186,7 +186,7 @@ export class Customer implements OnInit {
   }
 openSearchModal() {
   this.dialog.open(SearchModalComponent, {
-    width: '400px',
+    width: '800px',
     height: 'auto',
     panelClass: 'green-border-dialog', 
     disableClose: false
