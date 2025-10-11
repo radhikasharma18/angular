@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faArrowUpFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
@@ -14,11 +15,20 @@ import { MatInputModule } from '@angular/material/input';
 @Component({
   selector: 'app-customer',
   standalone: true,
-  imports: [CommonModule, FormsModule, FontAwesomeModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, FontAwesomeModule, HttpClientModule,MatDialogModule,MatFormFieldModule,MatInputModule],
   templateUrl: './customer.html',
   styleUrls: ['./customer.css']
 })
+
+
 export class Customer implements OnInit {
+  customerForm: any = {
+    Designation: '',
+    Name: '',
+    Phone: '',
+    Gender: '',
+  
+  };
   
   documentPreviewUrl: any;
   previewUrl: string | null = null;
@@ -37,7 +47,6 @@ export class Customer implements OnInit {
 
   constructor(library: FaIconLibrary, private http: HttpClient, private dialog: MatDialog) {
     library.addIcons(faArrowUpFromBracket);
-    
   }
 
   customer: any = {
@@ -185,13 +194,27 @@ export class Customer implements OnInit {
     this.loadFirmType();
   }
 openSearchModal() {
-  this.dialog.open(SearchModalComponent, {
+   const dialogRef= this.dialog.open(SearchModalComponent, {
     width: '800px',
     height: 'auto',
     panelClass: 'green-border-dialog', 
-    disableClose: false
+    disableClose: false,
+    data: {} 
   });
-}
+
+    dialogRef.afterClosed().subscribe(selected => {
+      if (selected) {
+        console.log('Selected customer:', selected);
+        this.fillCustomerDetails(selected);
+      }
+    });
+  }
+    fillCustomerDetails(customer: any) {
+    this.customerForm.Designation = customer.Designation || '';
+    this.customerForm.Name = customer.CustomertName || '';
+    this.customerForm.Phone = customer.PhoneNo || '';
+    this.customerForm.Gender = customer.Customer_Gender || '';
+  }
 
   
  sameAsParmanent() {

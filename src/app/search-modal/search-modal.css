@@ -1,6 +1,6 @@
 .module{
     width: 500px;
-    color: #be3434;
+    color: #28c380;
     height: 50px;
 }
 .module {
@@ -42,4 +42,7 @@ button{
   padding: 6px 16px;
   transition: all 0.3s ease;
 }
-
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

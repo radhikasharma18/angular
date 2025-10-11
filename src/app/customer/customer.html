@@ -835,7 +835,7 @@
         <div class="address">
           <div>
             <label>Director Name<span class="text-danger">*</span></label>
-            <input placeholder="Director Name" disabled>
+            <input placeholder="Director Name" disabled [(ngModel)]="customerForm.Name">
             <button class="search" type="button" (click)="openSearchModal()"><i class="fas fa-search"></i>
             </button>
 
@@ -844,7 +844,7 @@
           <div>
             <label>Gender<span class="text-danger">*</span></label>
             <input [(ngModel)]="Partners.PartnerGender" placeholder='Partner Gender' name="" required
-              #PartnerGender="ngModel" disabled />
+              #PartnerGender="ngModel" disabled [(ngModel)]="customerForm.gender" />
 
 
 
@@ -880,7 +880,7 @@
           <div>
             <label>Phone No.<span class="text-danger">*</span></label>
             <input type="text" [(ngModel)]="Partners.PartnerPhoneNo" name="PartnerPhoneNo" placeholder="Phone No"
-              required pattern="^[0-9]{10}$" maxlength="10" inputmode="numeric" #primaryContact="ngModel" disabled />
+              required pattern="^[0-9]{10}$" maxlength="10" inputmode="numeric" #primaryContact="ngModel" disabled  [(ngModel)]="customerForm.Phone"/>
             <div
               *ngIf="Partners.PartnerPhoneNo.invalid && (Partners.PartnerPhoneNo.dirty || Partners.PartnerPhoneNo.touched)"
               class="text-danger">
