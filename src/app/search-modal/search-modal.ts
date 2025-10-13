@@ -38,7 +38,7 @@ export class SearchModalComponent {
   customer: any;
   FilterBySearch: string = '';
   searchby: string = '';
-  dataSource = new MatTableDataSource<any>(); // Ensure MatTableDataSource is properly typed
+  dataSource = new MatTableDataSource<any>(); 
   displayedColumns: string[] = ['CustomertName', 'Customer_Gender', 'GenderAge', 'PhoneNo','select'];
   showTable: boolean = false;
   selectedCustomer: any = null;
@@ -69,7 +69,7 @@ export class SearchModalComponent {
 
     this.http.post(url, { ProductId: 0, SearchOn: this.FilterBySearch , SearchValue: this.searchby }, { headers }).subscribe({
       next: (res: any) => {
-        this.dataSource.data = res; // Ensure data is assigned correctly to dataSource.data
+        this.dataSource.data = res; 
         this.showTable = true;
         console.log('Customer type API Response:', this.dataSource);
       },
@@ -83,6 +83,7 @@ export class SearchModalComponent {
    loadSaveButton() {
     if (this.selectedCustomer) {
       this.dialogRef.close(this.selectedCustomer);
+      console.log('Selected Customer:', this.selectedCustomer);
     } else {
       alert('Please select a customer before saving.');
     }

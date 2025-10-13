@@ -11,7 +11,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
-
 @Component({
   selector: 'app-customer',
   standalone: true,
@@ -20,16 +19,8 @@ import { MatInputModule } from '@angular/material/input';
   styleUrls: ['./customer.css']
 })
 
-
 export class Customer implements OnInit {
-  customerForm: any = {
-    Designation: '',
-    Name: '',
-    Phone: '',
-    Gender: '',
-  
-  };
-  
+  SelectedCustomerFromModal: any ;
   documentPreviewUrl: any;
   previewUrl: string | null = null;
   states: any[] = [];
@@ -194,26 +185,28 @@ export class Customer implements OnInit {
     this.loadFirmType();
   }
 openSearchModal() {
-   const dialogRef= this.dialog.open(SearchModalComponent, {
+  const dialogRef = this.dialog.open(SearchModalComponent, {
     width: '800px',
     height: 'auto',
-    panelClass: 'green-border-dialog', 
+    panelClass: 'green-border-dialog',
     disableClose: false,
-    data: {} 
+    data: {} // optional, you're not passing any initial data
   });
 
-    dialogRef.afterClosed().subscribe(selected => {
-      if (selected) {
-        console.log('Selected customer:', selected);
-        this.fillCustomerDetails(selected);
-      }
-    });
-  }
+  dialogRef.afterClosed().subscribe(selected => {
+    if (selected) {
+      console.log('Selected customer:', selected);
+      this.fillCustomerDetails(selected); // ✅ Good practice
+    }
+  });
+}
+
     fillCustomerDetails(customer: any) {
-    this.customerForm.Designation = customer.Designation || '';
-    this.customerForm.Name = customer.CustomertName || '';
-    this.customerForm.Phone = customer.PhoneNo || '';
-    this.customerForm.Gender = customer.Customer_Gender || '';
+    this.Partners.PartnerName = customer.CustomertName || '';
+    this.Partners.PartnerAge = customer.GenderAge
+ || '';
+    this.Partners.PartnerGender = customer.Customer_Gender || '';
+    this.Partners.PartnerPhoneNo = customer.PhoneNo || '';
   }
 
   
