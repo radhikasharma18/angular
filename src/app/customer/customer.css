@@ -150,8 +150,8 @@ input, select {
   cursor: pointer;
 }
 input:disabled {
-  background-color: #f0f0f0; 
-  color: #888; 
-  border: 1px solid #ccc; 
+  background-color: #c7ecdc; 
+  color: #0b0606; 
+  border: 1.5px solid #09834e; 
 }
 

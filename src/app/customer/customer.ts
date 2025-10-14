@@ -196,16 +196,17 @@ openSearchModal() {
   dialogRef.afterClosed().subscribe(selected => {
     if (selected) {
       console.log('Selected customer:', selected);
-      this.fillCustomerDetails(selected); // ✅ Good practice
+      this.fillCustomerDetails(selected); 
     }
   });
 }
 
     fillCustomerDetails(customer: any) {
     this.Partners.PartnerName = customer.CustomertName || '';
-    this.Partners.PartnerAge = customer.GenderAge
- || '';
-    this.Partners.PartnerGender = customer.Customer_Gender || '';
+    this.Partners.PartnerAge = customer.GenderAge|| '';
+    this.Partners.PartnerGender = customer.Customer_Gender === 'F' ? 'Female'
+                                     : customer.Customer_Gender === 'M' ? 'Male'
+                                     : 'Other';
     this.Partners.PartnerPhoneNo = customer.PhoneNo || '';
   }
 
@@ -484,8 +485,37 @@ calculateAge() {
     });
   }
 
+
   saveCustomer(customerData?: any) {
     const url = 'https://demo.finnaux.com/api/api/LMS/SaveCustomerOutside';
+    const token = constantUrl.token;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': token
+    });
+
+    const payload = this.buildPayload();
+
+    const body = {
+      CustomerId: 0,
+      JSON: JSON.stringify(payload)
+    };
+    console.log('Wrapped body to send:', JSON.stringify(body));
+
+    this.http.post(url, body, { headers }).subscribe({
+      next: (res: any) => {
+        console.log('Customer saved successfully:', res);
+        alert('Customer data saved successfully!');
+      },
+      error: (err) => {
+        console.error('Error saving customer:', err);
+        alert('Failed to save customer. Please try again.');
+      }
+    });
+  }
+  saveCustomerfirm(customerData?: any) {
+    const url = 'https://demo.finnaux.com/api/api/LOS/Save_Customer_FirmOutSide';
     const token = constantUrl.token;
 
     const headers = new HttpHeaders({

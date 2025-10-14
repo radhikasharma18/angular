@@ -11,18 +11,14 @@
           <option>Non-Individual</option>
         </select>
       </div>
+      
       <!--NON-Individual-->
-      <div *ngIf="customer.type === 'Non-Individual'">
-        <label>Firm Type <span class="text-danger">*</span></label>
-        <select [(ngModel)]="Firm.Firm_Type" name="firmType" required #firmType="ngModel">
-          <option value="">--Select Firm Type--</option>
-          <option *ngFor="let fir of firmTypes" [value]="fir.Id">{{ fir.Value }}</option>
-        </select>
-      </div>
+      
     </div>
     <!--kyc for both-->
+    <div *ngIf="customer.type !== 'Non-Individual'">
     <h3 class="heading">KYC Documents</h3>
-    <div class="kyc-documents">
+    <div class="kyc-documents" >
       <div class="document">
         <div>
           <div><label>Document Type<span class="text-danger">*</span></label></div>
@@ -75,9 +71,9 @@
         <div *ngIf="CustomerKYCDoc[0].KYC_DocFile"> <img [src]="CustomerKYCDoc[0].KYC_DocFile" alt="Preview" width="100"
             class="mt-2 rounded" /> </div>
       </div>
-    </div>
+    </div></div>
 
-    <!--Company information-->
+    <!-- customer information-->
     <div *ngIf="customer.type !== 'Non-Individual'">
       <h3 class="heading">Demographic Information</h3>
       <div class="address">
@@ -266,130 +262,7 @@
       </div>
 
     </div>
-    <div *ngIf="customer.type === 'Non-Individual'" class="address1">
-      <h3 class="heading">Comapany Information</h3>
-      <div class="address">
-        <div>
-          <label>Company Name<span class="text-danger">*</span></label>
-          <input type="text" [(ngModel)]="Firm.Firm_Name" placeholder="Company Name" name="FirmName" required
-            #firmName="ngModel" />
-          <div *ngIf="Firm.Firm_Name.invalid && (Firm.Firm_Name.dirty || Firm.Firm_Name.touched)" class="text-danger">
-            Comapany name is required.
-          </div>
-        </div>
-        <div>
-          <label for="incDate">Date of Incorporation <span class="text-danger">*</span></label>
-          <input type="date" id="incDate" name="incDate" [(ngModel)]="Firm.Firm_Date_Of_Incorporation"
-            (change)="calculateyears()" required />
-
-          <div *ngIf="Firm.Firm_Date_Of_Incorporation">
-            <small *ngIf="Firm.Firm_YearsSinceIncorporation >= 0">
-              Years: {{ Firm.Firm_YearsSinceIncorporation }}
-            </small>
-            <small *ngIf="Firm.Firm_YearsSinceIncorporation < 0" class="text-danger">
-              Invalid incorporation date
-            </small>
-          </div>
-        </div>
-        <div>
-          <label>No. of Director<span class="text-danger">*</span></label>
-          <input type="number" [(ngModel)]="Firm.Firm_No_Of_Partner" name="Firm_No_Of_Partner" maxlength="2"
-            placeholder="No. of Director"
-            oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
-        </div>
-
-        <div>
-          <label>Net Fund <span class="text-danger">*</span></label>
-          <input type="number" [(ngModel)]="Firm.Firm_GrossValue" name="Firm_GrossValue" maxlength="2"
-            placeholder="Net Fund"
-            oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
-        </div>
-        <div>
-          <label>Primary Contact<span class="text-danger">*</span></label>
-          <input type="text" [(ngModel)]="Firm.Firm_PhoneNo" name="Firm_PhoneNo" placeholder="Primary Contact" required
-            pattern="^[0-9]{10}$" maxlength="10" inputmode="numeric" #primaryContact="ngModel" />
-          <div *ngIf="Firm.Firm_PhoneNo.invalid && (Firm.Firm_PhoneNo.dirty || Firm.Firm_PhoneNo.touched)"
-            class="text-danger">
-            <div *ngIf="Firm.Firm_PhoneNo.errors?.['required']">Contact is required.</div>
-            <div *ngIf="Firm.Firm_PhoneNo.errors?.['pattern']">Contact must be 10 digits.</div>
-          </div>
-        </div>
-
-
-
-        <div>
-          <label>Alternate No</label>
-          <input type="text" [(ngModel)]="Firm.Firm_PhoneNo1" name="altContact" pattern="^[0-9]{10}$"
-            placeholder="Alternate No" maxlength="10" inputmode="numeric" #altContact="ngModel" />
-        </div>
-
-        <div>
-          <label> Company Email</label>
-          <input type="Firm_Email" [(ngModel)]="Firm.Firm_Email" name="Firm_Email" placeholder=" Compnay Email "
-            #email="ngModel" />
-        </div>
-
-        <div>
-          <label>Company Website</label>
-          <input type="website" [(ngModel)]="Firm.Firm_Website" name="Firm_Website" placeholder="Company Website"
-            #FirmWebsite="ngModel" />
-        </div>
-        <div>
-          <label>Company CIN No.<span class="text-danger">*</span></label>
-          <input type="text" [(ngModel)]="Firm.Firm_CIN_No" name="Firm_CIN_No" placeholder="CIN No" required
-            pattern="^[0-9]{10}$" maxlength="21" inputmode="numeric" #primaryContact="ngModel" />
-          <div *ngIf="Firm.Firm_PhoneNo.invalid && (Firm.Firm_PhoneNo.dirty || Firm.Firm_PhoneNo.touched)"
-            class="text-danger">
-            <div *ngIf="Firm.Firm_PhoneNo.errors?.['required']">CIN No. is required.</div>
-            <div *ngIf="Firm.Firm_PhoneNo.errors?.['pattern']">CIN No. must be 21 digits.</div>
-          </div>
-        </div>
-        <div>
-          <label>Customer Profile<span class="text-danger">*</span></label>
-          <select [(ngModel)]="customer.Customer_Profile" name="profile" required #profilefield="ngModel"
-            (ngModelChange)="loadCustomercategory($event)">
-            <option value="">--Select--</option>
-            <option *ngFor="let pro of profile" [value]="pro.Id">{{ pro.Value }}</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Customer Category <span class="text-danger">*</span></label>
-          <select [(ngModel)]="customer.Customer_Category" name="category" required #category="ngModel"
-            (ngModelChange)="loadCustomerSubcategory($event)">
-            <option value="">--Select--</option>
-            <option *ngFor="let c of catergory" [value]="c.Id">{{ c.Value }}</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Customer Sub-Category <span class="text-danger">*</span></label>
-          <select [(ngModel)]="customer.Customer_SubCategory" name="subcategory" required #subcategory="ngModel"
-            (ngModelChange)="loadCustomerNatureOfWork($event)">
-            <option value="">--Select--</option>
-            <option *ngFor="let s of subcatergory" [value]="s.Id">{{ s.Value }}</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Nature Of Work<span class="text-danger">*</span></label>
-          <select [(ngModel)]="customer.Customer_Natureofwork" name="natureOfWork" required #natureOfWork="ngModel">
-            <option value="">--Select--</option>
-            <option *ngFor="let n of Natureofwork" [value]="n.Id">{{ n.Value }}</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Business Category<span class="text-danger">*</span></label>
-          <select [(ngModel)]="customer.BusinessCategory" name="businessCategory" required #businessCategory="ngModel">
-            <option value="">--Select--</option>
-            <option *ngFor="let bc of BusinessCategory" [value]="bc.Id">{{ bc.Value }}</option>
-          </select>
-        </div>
-
-
-      </div>
-    </div>
+   
     <div *ngIf="customer.type !== 'Non-Individual'">
       <!--Address for customer-->
       <h3 class="heading">Customer Address</h3>
@@ -653,6 +526,238 @@
         </div>
       </div>
     </div>
+   
+
+    <div class="btn-container">
+      <button  *ngIf="customer.type !== 'Non-Individual'" class="btn-save" type="submit" [disabled]="customerForm.invalid">
+        Save
+      </button>
+  <!-- <div *ngIf="customerForm.invalid" style="color: red; margin-top: 10px;">
+        <strong>Form is invalid. Please check:</strong>
+        <ul>
+          <li *ngIf="typeField.invalid">Type is required</li>
+          <li *ngIf="kycDoc0Id.invalid">KYC Document Type is required</li>
+          <li *ngIf="kycDoc0Number.invalid">KYC Document Number is required</li>
+          <li *ngIf="customerFirstName.invalid">First Name is required</li>
+          <li *ngIf="customerLastName.invalid">Last Name is required</li>
+          <li *ngIf="relationType.invalid">Relation Type is required</li>
+        
+        </ul>
+      </div> -->
+    </div>
+  </form>
+   <form (ngSubmit)="saveCustomerfirm(customerForm)" #customerForm="ngForm" novalidate>
+    <div class="customer-type">
+       <div *ngIf="customer.type === 'Non-Individual'">
+        <!-- TYPE OF CUSTOMER -->
+        <label>Type</label>
+        <select [(ngModel)]="customer.type" name="type" required #typeField="ngModel">
+          <option value="">--Select--</option>
+          <option>Individual</option>
+          <option>Non-Individual</option>
+        </select>
+      </div>
+      <div>
+        <!-- TYPE OF CUSjhskjbhjTOMER -->
+         <div *ngIf="customer.type === 'Non-Individual'">
+        <label>Firm Type <span class="text-danger">*</span></label>
+        <select [(ngModel)]="Firm.Firm_Type" name="firmType" required #firmType="ngModel">
+          <option value="">--Select Firm Type--</option>
+          <option *ngFor="let fir of firmTypes" [value]="fir.Id">{{ fir.Value }}</option>
+        </select>
+      </div>
+      </div>
+      <!--NON-Individual-->
+     
+    </div>
+    <!--kyc for both-->
+    <div *ngIf="customer.type === 'Non-Individual'">
+    <h3 class="heading">KYC Documents</h3>
+    <div class="kyc-documents" >
+      <div class="document">
+        <div>
+          <div><label>Document Type<span class="text-danger">*</span></label></div>
+          <div>
+            <select [(ngModel)]="CustomerKYCDoc[0].KYC_DocId" name="kycDoc0Id" required #kycDoc0Id="ngModel">
+              <option value="">--Select Document Type--</option>
+              <option value="6"> Aadhaar Card </option>
+              <option value="22"> CKYC ID /O</option>
+              <option value="48"> DIN </option>
+              <option value="5"> Driving License </option>
+              <option value="2"> Electricity Bill </option>
+              <option value="28"> Firm Registration No </option>
+              <option value="33"> Form-60 </option>
+              <option value="29"> GST No </option>
+              <option value="49"> MSME Registration </option>
+              <option value="42"> OCR Aadhaar </option>
+              <option value="7"> Other Photo ID </option>
+              <option value="1"> PAN Card </option>
+              <option value="3"> Passport Copy </option>
+              <option value="21"> Ration Card </option>
+              <option value="30"> Tan No. </option>
+              <option value="4"> Voter ID Card </option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label>Document Number<span class="text-danger">*</span></label>
+          <input type="text" [(ngModel)]="CustomerKYCDoc[0].KYC_DocNumber" name="kycDoc0Number"
+            placeholder="Document Number" required #kycDoc0Number="ngModel" />
+          <div *ngIf="kycDoc0Number.invalid && (kycDoc0Number.dirty || kycDoc0Number.touched)" class="text-danger">
+            Document number is required.
+          </div>
+        </div>
+      </div>
+
+
+      <div> <label class="form-label fw-bold">Document Image 1</label>
+        <input type="file" id="kycDoc0File" style="display: none" (change)="onFileSelectedDoc($event)" />
+        <i class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary" style="cursor: pointer;"
+          (click)="openFilePickerDoc()"></i>
+        <div *ngIf="CustomerKYCDoc[0].KYC_DocFile">
+          <img [src]="CustomerKYCDoc[0].KYC_DocFile" alt="Preview" width="100" class="mt-2 rounded" />
+        </div>
+      </div>
+      <div> <label class="form-label fw-bold">Document Image 2</label>
+        <input type="file" id="kycDoc0File" style="display: none" (change)="onFileSelectedDoc($event)" />
+        <i class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary" style="cursor: pointer;"
+          (click)="openFilePickerDoc()"></i>
+        <div *ngIf="CustomerKYCDoc[0].KYC_DocFile"> <img [src]="CustomerKYCDoc[0].KYC_DocFile" alt="Preview" width="100"
+            class="mt-2 rounded" /> </div>
+      </div>
+    </div></div>
+
+    <!-- customer information-->
+   
+    <div *ngIf="customer.type === 'Non-Individual'" class="address1">
+      <h3 class="heading">Comapany Information</h3>
+      <div class="address">
+        <div>
+          <label>Company Name<span class="text-danger">*</span></label>
+          <input type="text" [(ngModel)]="Firm.Firm_Name" placeholder="Company Name" name="FirmName" required
+            #firmName="ngModel" />
+          <div *ngIf="Firm.Firm_Name.invalid && (Firm.Firm_Name.dirty || Firm.Firm_Name.touched)" class="text-danger">
+            Comapany name is required.
+          </div>
+        </div>
+        <div>
+          <label for="incDate">Date of Incorporation <span class="text-danger">*</span></label>
+          <input type="date" id="incDate" name="incDate" [(ngModel)]="Firm.Firm_Date_Of_Incorporation"
+            (change)="calculateyears()" required />
+
+          <div *ngIf="Firm.Firm_Date_Of_Incorporation">
+            <small *ngIf="Firm.Firm_YearsSinceIncorporation >= 0">
+              Years: {{ Firm.Firm_YearsSinceIncorporation }}
+            </small>
+            <small *ngIf="Firm.Firm_YearsSinceIncorporation < 0" class="text-danger">
+              Invalid incorporation date
+            </small>
+          </div>
+        </div>
+        <div>
+          <label>No. of Director<span class="text-danger">*</span></label>
+          <input type="number" [(ngModel)]="Firm.Firm_No_Of_Partner" name="Firm_No_Of_Partner" maxlength="2"
+            placeholder="No. of Director"
+            oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
+        </div>
+
+        <div>
+          <label>Net Fund <span class="text-danger">*</span></label>
+          <input type="number" 
+          [(ngModel)]="Firm.Firm_GrossValue" 
+          name="Firm_GrossValue" 
+          maxlength="6"
+            placeholder="Net Fund"
+            oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
+        </div>
+        <div>
+          <label>Primary Contact<span class="text-danger">*</span></label>
+          <input type="text" [(ngModel)]="Firm.Firm_PhoneNo" name="Firm_PhoneNo" placeholder="Primary Contact" required
+            pattern="^[0-9]{10}$" maxlength="10" inputmode="numeric" #primaryContact="ngModel" />
+          <div *ngIf="Firm.Firm_PhoneNo.invalid && (Firm.Firm_PhoneNo.dirty || Firm.Firm_PhoneNo.touched)"
+            class="text-danger">
+            <div *ngIf="Firm.Firm_PhoneNo.errors?.['required']">Contact is required.</div>
+            <div *ngIf="Firm.Firm_PhoneNo.errors?.['pattern']">Contact must be 10 digits.</div>
+          </div>
+        </div>
+
+
+
+        <div>
+          <label>Alternate No</label>
+          <input type="text" [(ngModel)]="Firm.Firm_PhoneNo1" name="altContact" pattern="^[0-9]{10}$"
+            placeholder="Alternate No" maxlength="10" inputmode="numeric" #altContact="ngModel" />
+        </div>
+
+        <div>
+          <label> Company Email</label>
+          <input type="Firm_Email" [(ngModel)]="Firm.Firm_Email" name="Firm_Email" placeholder=" Compnay Email "
+            #email="ngModel" />
+        </div>
+
+        <div>
+          <label>Company Website</label>
+          <input type="website" [(ngModel)]="Firm.Firm_Website" name="Firm_Website" placeholder="Company Website"
+            #FirmWebsite="ngModel" />
+        </div>
+        <div>
+          <label>Company CIN No.<span class="text-danger">*</span></label>
+          <input type="text" [(ngModel)]="Firm.Firm_CIN_No" name="Firm_CIN_No" placeholder="CIN No" required
+            pattern="^[0-9]{10}$" maxlength="21" inputmode="numeric" #primaryContact="ngModel" />
+          <div *ngIf="Firm.Firm_PhoneNo.invalid && (Firm.Firm_PhoneNo.dirty || Firm.Firm_PhoneNo.touched)"
+            class="text-danger">
+            <div *ngIf="Firm.Firm_PhoneNo.errors?.['required']">CIN No. is required.</div>
+            <div *ngIf="Firm.Firm_PhoneNo.errors?.['pattern']">CIN No. must be 21 digits.</div>
+          </div>
+        </div>
+        <div>
+          <label>Customer Profile<span class="text-danger">*</span></label>
+          <select [(ngModel)]="Firm.Customer_Profile" name="profile" required #profilefield="ngModel"
+            (ngModelChange)="loadCustomercategory($event)">
+            <option value="">--Select--</option>
+            <option *ngFor="let pro of profile" [value]="pro.Id">{{ pro.Value }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Customer Category <span class="text-danger">*</span></label>
+          <select [(ngModel)]="Firm.Customer_Category" name="category" required #category="ngModel"
+            (ngModelChange)="loadCustomerSubcategory($event)">
+            <option value="">--Select--</option>
+            <option *ngFor="let c of catergory" [value]="c.Id">{{ c.Value }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Customer Sub-Category <span class="text-danger">*</span></label>
+          <select [(ngModel)]="Firm.Customer_SubCategory" name="subcategory" required #subcategory="ngModel"
+            (ngModelChange)="loadCustomerNatureOfWork($event)">
+            <option value="">--Select--</option>
+            <option *ngFor="let s of subcatergory" [value]="s.Id">{{ s.Value }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Nature Of Work<span class="text-danger">*</span></label>
+          <select [(ngModel)]="Firm.Customer_Natureofwork" name="natureOfWork" required #natureOfWork="ngModel">
+            <option value="">--Select--</option>
+            <option *ngFor="let n of Natureofwork" [value]="n.Id">{{ n.Value }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Business Category<span class="text-danger">*</span></label>
+          <select [(ngModel)]="Firm.BusinessCategory" name="businessCategory" required #businessCategory="ngModel">
+            <option value="">--Select--</option>
+            <option *ngFor="let bc of BusinessCategory" [value]="bc.Id">{{ bc.Value }}</option>
+          </select>
+        </div>
+
+
+      </div>
+    </div>
+    
     <div *ngIf="customer.type === 'Non-Individual'">
       <!--Address for company-->
       <h3 class="heading">Company Address</h3>
@@ -844,7 +949,7 @@
           </div>
           <div>
             <label>Gender<span class="text-danger">*</span></label>
-            <input [(ngModel)]="Partners.PartnerGender" placeholder='Partner Gender' name="" required
+            <input [(ngModel)]="Partners.PartnerGender" type="text" placeholder='Partner Gender' name="Gender" required 
               #PartnerGender="ngModel" disabled />
           </div>
           <div>
@@ -911,11 +1016,10 @@
     </div>
 
     <div class="btn-container">
-      <button class="btn-save" type="submit" [disabled]="customerForm.invalid">
+      <button  *ngIf="customer.type === 'Non-Individual'" class="btn-save" type="submit" [disabled]="customerForm.invalid">
         Save
       </button>
-
-      <!-- <div *ngIf="customerForm.invalid" style="color: red; margin-top: 10px;">
+  <!-- <div *ngIf="customerForm.invalid" style="color: red; margin-top: 10px;">
         <strong>Form is invalid. Please check:</strong>
         <ul>
           <li *ngIf="typeField.invalid">Type is required</li>
@@ -929,4 +1033,5 @@
       </div> -->
     </div>
   </form>
+  
 </div>
