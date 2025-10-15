@@ -23,7 +23,8 @@
         <div>
           <div><label>Document Type<span class="text-danger">*</span></label></div>
           <div>
-            <select [(ngModel)]="CustomerKYCDoc[0].KYC_DocId" name="kycDoc0Id" required #kycDoc0Id="ngModel">
+            <select [(ngModel)]="CustomerKYCDoc[0].KYC_DocId" name="kycDoc0Id" required 
+             [required]="customer.type === 'Individual'" #kycDoc0Id="ngModel">
               <option value="">--Select Document Type--</option>
               <option value="6"> Aadhaar Card </option>
               <option value="22"> CKYC ID /O</option>
@@ -48,7 +49,7 @@
         <div>
           <label>Document Number<span class="text-danger">*</span></label>
           <input type="text" [(ngModel)]="CustomerKYCDoc[0].KYC_DocNumber" name="kycDoc0Number"
-            placeholder="Document Number" required #kycDoc0Number="ngModel" />
+            placeholder="Document Number"  [required]="customer.type === 'Individual'" #kycDoc0Number="ngModel" />
           <div *ngIf="kycDoc0Number.invalid && (kycDoc0Number.dirty || kycDoc0Number.touched)" class="text-danger">
             Document number is required.
           </div>
@@ -90,7 +91,7 @@
         <div>
           <label>First Name<span class="text-danger">*</span></label>
           <input type="text" [(ngModel)]="customer.Customer_FirstName" placeholder="First Name" name="customerFirstName"
-            required #customerFirstName="ngModel" />
+             [required]="customer.type === 'Individual'" #customerFirstName="ngModel" />
           <div *ngIf="customerFirstName.invalid && (customerFirstName.dirty || customerFirstName.touched)"
             class="text-danger">
             First name is required.
@@ -100,12 +101,12 @@
         <div>
           <label>Last Name<span class="text-danger">*</span></label>
           <input type="text" [(ngModel)]="customer.Customer_LastName" name="customerLastName" placeholder="Last Name"
-            required #customerLastName="ngModel" />
+             [required]="customer.type === 'Individual'" #customerLastName="ngModel" />
         </div>
 
         <div>
           <label>Relation <span class="text-danger">*</span></label>
-          <select [(ngModel)]="customer.Customer_Relation_Type" name="relationType" required #relationType="ngModel">
+          <select [(ngModel)]="customer.Customer_Relation_Type" name="relationType"  [required]="customer.type === 'Individual'" #relationType="ngModel">
             <option value="">Select</option>
             <option value="C/O">C/O</option>
             <option value="S/O">S/O</option>
@@ -117,18 +118,18 @@
         <div>
           <label>Relation First Name<span class="text-danger">*</span></label>
           <input type="text" [(ngModel)]="customer.Customer_Relation_FirstName" name="relationFirstName"
-            placeholder="First Name" required #relationFirstName="ngModel" />
+            placeholder="First Name"  [required]="customer.type === 'Individual'" #relationFirstName="ngModel" />
         </div>
 
         <div>
           <label>Relation Last Name<span class="text-danger">*</span></label>
           <input type="text" [(ngModel)]="customer.Customer_Relation_LastName" name="relationLastName"
-            placeholder="Last Name" required #relationLastName="ngModel" />
+            placeholder="Last Name"  [required]="customer.type === 'Individual'" #relationLastName="ngModel" />
         </div>
 
         <div>
           <label>Gender <span class="text-danger">*</span></label>
-          <select [(ngModel)]="customer.Customer_Gender" name="gender" required #gender="ngModel">
+          <select [(ngModel)]="customer.Customer_Gender" name="gender"  [required]="customer.type === 'Individual'" #gender="ngModel">
             <option value="">Select</option>
             <option value="M">Male</option>
             <option value="F">Female</option>
@@ -137,7 +138,7 @@
         <div>
 
           <label for="dob">Date of Birth:</label>
-          <input type="date" id="dob" name="dob" [(ngModel)]="customer.Customer_DOB" (change)="calculateAge()" required>
+          <input type="date" id="dob" name="dob" [(ngModel)]="customer.Customer_DOB" (change)="calculateAge()"  [required]="customer.type === 'Individual'">
           <div *ngIf="customer.age !== null">
             <small>Age: {{ customer.age }}</small>
           </div>
@@ -150,7 +151,7 @@
         <div>
           <label>Primary Contact<span class="text-danger">*</span></label>
           <input type="text" [(ngModel)]="customer.Customer_PhoneNo" name="primaryContact" placeholder="Primary Contact"
-            required pattern="^[0-9]{10}$" maxlength="10" inputmode="numeric" #primaryContact="ngModel" />
+             [required]="customer.type === 'Individual'" pattern="^[0-9]{10}$" maxlength="10" inputmode="numeric" #primaryContact="ngModel" />
           <div *ngIf="primaryContact.invalid && (primaryContact.dirty || primaryContact.touched)" class="text-danger">
             <div *ngIf="primaryContact.errors?.['required']">Contact is required.</div>
             <div *ngIf="primaryContact.errors?.['pattern']">Contact must be 10 digits.</div>
@@ -183,7 +184,7 @@
 
         <div>
           <label>Marital Status<span class="text-danger">*</span></label>
-          <select [(ngModel)]="customer.Customer_MaritalStatus" name="maritalStatus" required #maritalStatus="ngModel">
+          <select [(ngModel)]="customer.Customer_MaritalStatus" name="maritalStatus"  [required]="customer.type === 'Individual'" #maritalStatus="ngModel">
             <option value="">--Select--</option>
             <option value="Married">Married</option>
             <option value="UnMarried">UnMarried</option>
@@ -195,7 +196,7 @@
 
         <div>
           <label>Customer Religion<span class="text-danger">*</span></label>
-          <select [(ngModel)]="customer.Customer_Religion" name="religion" required #religion="ngModel">
+          <select [(ngModel)]="customer.Customer_Religion" name="religion"  [required]="customer.type === 'Individual'" #religion="ngModel">
             <option value="">--Select--</option>
             <option>Hindu</option>
             <option>Muslim</option>
@@ -207,7 +208,7 @@
 
         <div>
           <label>Customer Caste<span class="text-danger">*</span></label>
-          <select [(ngModel)]="customer.Customer_Cast" name="caste" required #caste="ngModel">
+          <select [(ngModel)]="customer.Customer_Cast" name="caste"  [required]="customer.type === 'Individual'" #caste="ngModel">
             <option value="">--Select--</option>
             <option value="General">General</option>
             <option value="OBC">OBC</option>
@@ -219,7 +220,7 @@
 
         <div>
           <label>Customer Profile<span class="text-danger">*</span></label>
-          <select [(ngModel)]="customer.Customer_Profile" name="profile" required #profilefield="ngModel"
+          <select [(ngModel)]="customer.Customer_Profile" name="profile"  [required]="customer.type === 'Individual'" #profilefield="ngModel"
             (ngModelChange)="loadCustomercategory($event)">
             <option value="">--Select--</option>
             <option *ngFor="let pro of profile" [value]="pro.Id">{{ pro.Value }}</option>
@@ -228,7 +229,7 @@
 
         <div>
           <label>Customer Category <span class="text-danger">*</span></label>
-          <select [(ngModel)]="customer.Customer_Category" name="category" required #category="ngModel"
+          <select [(ngModel)]="customer.Customer_Category" name="category"  [required]="customer.type === 'Individual'" #category="ngModel"
             (ngModelChange)="loadCustomerSubcategory($event)">
             <option value="">--Select--</option>
             <option *ngFor="let c of catergory" [value]="c.Id">{{ c.Value }}</option>
@@ -237,7 +238,7 @@
 
         <div>
           <label>Customer Sub-Category <span class="text-danger">*</span></label>
-          <select [(ngModel)]="customer.Customer_SubCategory" name="subcategory" required #subcategory="ngModel"
+          <select [(ngModel)]="customer.Customer_SubCategory" name="subcategory"  [required]="customer.type === 'Individual'" #subcategory="ngModel"
             (ngModelChange)="loadCustomerNatureOfWork($event)">
             <option value="">--Select--</option>
             <option *ngFor="let s of subcatergory" [value]="s.Id">{{ s.Value }}</option>
@@ -246,7 +247,7 @@
 
         <div>
           <label>Nature Of Work<span class="text-danger">*</span></label>
-          <select [(ngModel)]="customer.Customer_Natureofwork" name="natureOfWork" required #natureOfWork="ngModel">
+          <select [(ngModel)]="customer.Customer_Natureofwork" name="natureOfWork"  [required]="customer.type === 'Individual'" #natureOfWork="ngModel">
             <option value="">--Select--</option>
             <option *ngFor="let n of Natureofwork" [value]="n.Id">{{ n.Value }}</option>
           </select>
@@ -254,7 +255,7 @@
 
         <div>
           <label>Business Type<span class="text-danger">*</span></label>
-          <select [(ngModel)]="customer.BusinessCategory" name="businessCategory" required #businessCategory="ngModel">
+          <select [(ngModel)]="customer.BusinessCategory" name="businessCategory"  [required]="customer.type === 'Individual'" #businessCategory="ngModel">
             <option value="">--Select--</option>
             <option *ngFor="let bc of BusinessCategory" [value]="bc.Id">{{ bc.Value }}</option>
           </select>
@@ -271,19 +272,19 @@
         <div class="address">
           <div>
             <label>Address<span class="text-danger">*</span></label>
-            <input type="text" [(ngModel)]="address.AddressS" name="presentAddress" placeholder="Address" required
+            <input type="text" [(ngModel)]="address.AddressS" name="presentAddress" placeholder="Address"  [required]="customer.type === 'Individual'"
               #presentAddress="ngModel" />
           </div>
 
           <div>
             <label>Landmark<span class="text-danger">*</span></label>
-            <input type="text" [(ngModel)]="address.LandMarkS" name="presentLandmark" placeholder="LandMark" required
+            <input type="text" [(ngModel)]="address.LandMarkS" name="presentLandmark" placeholder="LandMark"  [required]="customer.type === 'Individual'"
               #presentLandmark="ngModel" />
           </div>
 
           <div>
             <label>State<span class="text-danger">*</span></label>
-            <select [(ngModel)]="address.StateIdS" name="presentState" required #presentState="ngModel"
+            <select [(ngModel)]="address.StateIdS" name="presentState"  [required]="customer.type === 'Individual'" #presentState="ngModel"
               (ngModelChange)="loadDistricts($event)">
               <option value="">--Select--</option>
               <option *ngFor="let s of states" [value]="s.StateId">{{ s.State_Name }}</option>
@@ -292,7 +293,7 @@
 
           <div>
             <label>District<span class="text-danger">*</span></label>
-            <select [(ngModel)]="address.DistrictIdS" name="presentDistrict" required #presentDistrict="ngModel"
+            <select [(ngModel)]="address.DistrictIdS" name="presentDistrict"  [required]="customer.type === 'Individual'" #presentDistrict="ngModel"
               (ngModelChange)="loadTehsils($event)">
               <option value="">--Select--</option>
               <option *ngFor="let d of district" [value]="d.DistrictId">{{ d.District_Name }}</option>
@@ -301,7 +302,7 @@
 
           <div>
             <label>Tehsil<span class="text-danger">*</span></label>
-            <select [(ngModel)]="address.TehsilIdS" name="presentTehsil" required #presentTehsil="ngModel">
+            <select [(ngModel)]="address.TehsilIdS" name="presentTehsil"  [required]="customer.type === 'Individual'" #presentTehsil="ngModel">
               <option value="">--Select--</option>
               <option *ngFor="let t of tehsil" [value]="t.TehsilId">{{ t.Tehsil_Name }}</option>
             </select>
@@ -309,7 +310,7 @@
 
           <div>
             <label>Pincode</label>
-            <input type="text" [(ngModel)]="address.PinCodeS" name="presentPincode" placeholder="Pincode" required
+            <input type="text" [(ngModel)]="address.PinCodeS" name="presentPincode" placeholder="Pincode"  [required]="customer.type === 'Individual'"
               pattern="^[0-9]{6}$" maxlength="6" #presentPincode="ngModel" />
             <div *ngIf="presentPincode.invalid && (presentPincode.dirty || presentPincode.touched)">
               <small class="text-danger" *ngIf="presentPincode.errors?.['required']">Pincode is required.</small>
@@ -327,7 +328,7 @@
 
           <div>
             <label>Rent/Own<span class="text-danger">*</span></label>
-            <select [(ngModel)]="address.RentOwnS" name="presentRentOwn" required #presentRentOwn="ngModel">
+            <select [(ngModel)]="address.RentOwnS" name="presentRentOwn"  [required]="customer.type === 'Individual'" #presentRentOwn="ngModel">
               <option value="">--Select--</option>
               <option>Rent</option>
               <option>Own</option>
@@ -363,18 +364,18 @@
           <div>
             <label>Address<span class="text-danger">*</span></label>
             <input type="text" [(ngModel)]="customerPermanent.Address" placeholder="Address" name="permanentAddress"
-              required #permanentAddress="ngModel" />
+               [required]="customer.type === 'Individual'" #permanentAddress="ngModel" />
           </div>
 
           <div>
             <label>Landmark<span class="text-danger">*</span></label>
             <input type="text" [(ngModel)]="customerPermanent.LandMark" placeholder="LandMark" name="permanentLandmark"
-              required #permanentLandmark="ngModel" />
+               [required]="customer.type === 'Individual'" #permanentLandmark="ngModel" />
           </div>
 
           <div>
             <label>State<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerPermanent.StateId" name="permanentState" required #permanentState="ngModel"
+            <select [(ngModel)]="customerPermanent.StateId" name="permanentState"  [required]="customer.type === 'Individual'" #permanentState="ngModel"
               (ngModelChange)="loadDistricts($event)">
               <option value="">--Select--</option>
               <option *ngFor="let s of states" [value]="s.StateId">{{ s.State_Name }}</option>
@@ -383,7 +384,7 @@
 
           <div>
             <label>District<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerPermanent.DistrictId" name="permanentDistrict" required
+            <select [(ngModel)]="customerPermanent.DistrictId" name="permanentDistrict"  [required]="customer.type === 'Individual'"
               #permanentDistrict="ngModel" (ngModelChange)="loadTehsils($event)">
               <option value="">--Select--</option>
               <option *ngFor="let d of district" [value]="d.DistrictId">{{ d.District_Name }}</option>
@@ -392,7 +393,7 @@
 
           <div>
             <label>Tehsil<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerPermanent.TehsilId" name="permanentTehsil" required #permanentTehsil="ngModel">
+            <select [(ngModel)]="customerPermanent.TehsilId" name="permanentTehsil"  [required]="customer.type === 'Individual'" #permanentTehsil="ngModel">
               <option value="">--Select--</option>
               <option *ngFor="let t of tehsil" [value]="t.TehsilId">{{ t.Tehsil_Name }}</option>
             </select>
@@ -401,7 +402,7 @@
           <div>
             <label>Pincode</label>
             <input type="text" [(ngModel)]="customerPermanent.PinCode" name="permanentPincode" placeholder="Pincode"
-              required pattern="^[0-9]{6}$" maxlength="6" #permanentPincode="ngModel" />
+               [required]="customer.type === 'Individual'" pattern="^[0-9]{6}$" maxlength="6" #permanentPincode="ngModel" />
             <div *ngIf="permanentPincode.invalid && (permanentPincode.dirty || permanentPincode.touched)">
               <small class="text-danger" *ngIf="permanentPincode.errors?.['required']">Pincode is required.</small>
               <small class="text-danger" *ngIf="permanentPincode.errors?.['pattern']">Pincode must be exactly 6
@@ -418,7 +419,7 @@
 
           <div>
             <label>Rent/Own<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerPermanent.RentOwn" name="permanentRentOwn" required
+            <select [(ngModel)]="customerPermanent.RentOwn" name="permanentRentOwn"  [required]="customer.type === 'Individual'"
               #permanentRentOwn="ngModel">
               <option value="">--Select--</option>
               <option>Rent</option>
@@ -447,18 +448,18 @@
           <div>
             <label>Address<span class="text-danger">*</span></label>
             <input type="text" [(ngModel)]="customerWork.AddressW" name="workAddress" placeholder="address"
-              #workAddress="ngModel" [required]="isWorkAddressFilled()" />
+              #workAddress="ngModel" [required]="customer.type === 'Individual' && isWorkAddressFilled()"/>
           </div>
 
           <div>
             <label>Landmark<span class="text-danger">*</span></label>
             <input type="text" [(ngModel)]="customerWork.LandMarkW" name="workLandmark" placeholder="Landmark"
-              #workLandmark="ngModel" [required]="isWorkAddressFilled()" />
+              #workLandmark="ngModel" [required]="customer.type === 'Individual' && isWorkAddressFilled()" />
           </div>
 
           <div>
             <label>State<span class="text-danger">*</span></label>
-            <select [required]="isWorkAddressFilled()" [(ngModel)]="customerWork.StateIdW" name="workState"
+            <select [required]="customer.type === 'Individual' && isWorkAddressFilled()" [(ngModel)]="customerWork.StateIdW" name="workState"
               #workState="ngModel" (ngModelChange)="loadDistricts($event)">
               <option value="">--Select--</option>
               <option *ngFor="let s of states" [value]="s.StateId">{{ s.State_Name }}</option>
@@ -467,7 +468,7 @@
 
           <div>
             <label>District<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerWork.DistrictIdW" name="workDistrict" [required]="isWorkAddressFilled()"
+            <select [(ngModel)]="customerWork.DistrictIdW" name="workDistrict" [required]="customer.type === 'Individual' && isWorkAddressFilled()"
               #workDistrict="ngModel" (ngModelChange)="loadTehsils($event)">
               <option value="">--Select--</option>
               <option *ngFor="let d of district" [value]="d.DistrictId">{{ d.District_Name }}</option>
@@ -476,7 +477,7 @@
 
           <div>
             <label>Tehsil<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerWork.TehsilIdW" name="workTehsil" [required]="isWorkAddressFilled()"
+            <select [(ngModel)]="customerWork.TehsilIdW" name="workTehsil" [required]="customer.type === 'Individual' && isWorkAddressFilled()"
               #workTehsil="ngModel">
               <option value="">--Select--</option>
               <option *ngFor="let t of tehsil" [value]="t.TehsilId">{{ t.Tehsil_Name }}</option>
@@ -486,7 +487,7 @@
           <div>
             <label>Pincode</label>
             <input type="text" [(ngModel)]="customerWork.PinCodeW" name="workPincode" placeholder="Pincode"
-              [required]="isWorkAddressFilled()" pattern="^[0-9]{6}$" maxlength="6" #workPincode="ngModel" />
+             [required]="customer.type === 'Individual' && isWorkAddressFilled()" pattern="^[0-9]{6}$" maxlength="6" #workPincode="ngModel" />
             <div *ngIf="workPincode.invalid && (workPincode.dirty || workPincode.touched)">
               <small class="text-danger" *ngIf="workPincode.errors?.['required']">Pincode is required.</small>
               <small class="text-danger" *ngIf="workPincode.errors?.['pattern']">Pincode must be exactly 6
@@ -497,13 +498,13 @@
           <div>
             <label>No of Living Here<span class="text-danger">*</span></label>
             <input type="number" [(ngModel)]="customerWork.NoOfLivingW" placeholder="No of Living Here"
-              [required]="isWorkAddressFilled()" name="workNoOfLiving" maxlength="2"
+              [required]="customer.type === 'Individual' && isWorkAddressFilled()" name="workNoOfLiving" maxlength="2"
               oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
           </div>
 
           <div>
             <label>Rent/Own<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerWork.RentOwnW" name="workRentOwn" [required]="isWorkAddressFilled()"
+            <select [(ngModel)]="customerWork.RentOwnW" name="workRentOwn" [required]="customer.type === 'Individual' && isWorkAddressFilled()"
               #workRentOwn="ngModel">
               <option value="">--Select--</option>
               <option>Rent</option>
@@ -513,13 +514,13 @@
 
           <div>
             <label>Distance To Branch(KM)<span class="text-danger">*</span></label>
-            <input type="number" [(ngModel)]="customerWork.DistanceBranchW" [required]="isWorkAddressFilled()"
+            <input type="number" [(ngModel)]="customerWork.DistanceBranchW" [required]="customer.type === 'Individual' && isWorkAddressFilled()"
               name="workDistance" maxlength="2" placeholder="Distance From Branch"
               oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
           </div>
 
           <div class="communicationaddress">
-            <input class="box" type="checkbox" [required]="isWorkAddressFilled()"
+            <input class="box" type="checkbox" [required]="customer.type === 'Individual' && isWorkAddressFilled()"
               [(ngModel)]="customerWork.IsCommunicationAddressW" name="workIsCommunication" />
             <label class="communicate">Is This Communication Address<span class="text-danger">*</span></label>
           </div>
@@ -551,7 +552,7 @@
        <div *ngIf="customer.type === 'Non-Individual'">
         <!-- TYPE OF CUSTOMER -->
         <label>Type</label>
-        <select [(ngModel)]="customer.type" name="type" required #typeField="ngModel">
+        <select [(ngModel)]="customer.type" name="type"  #typeField="ngModel">
           <option value="">--Select--</option>
           <option>Individual</option>
           <option>Non-Individual</option>
@@ -561,7 +562,7 @@
         <!-- TYPE OF CUSTOMER -->
          <div *ngIf="customer.type === 'Non-Individual'">
         <label>Firm Type <span class="text-danger">*</span></label>
-        <select [(ngModel)]="Firm.Firm_Type" name="firmType" required #firmType="ngModel">
+        <select [(ngModel)]="Firm.Firm_Type" name="firmType" [required]="customer.type === 'Non-Individual'" #firmType="ngModel">
           <option value="">--Select Firm Type--</option>
           <option *ngFor="let fir of firmTypes" [value]="fir.Id">{{ fir.Value }}</option>
         </select>
@@ -578,7 +579,7 @@
         <div>
           <div><label>Document Type<span class="text-danger">*</span></label></div>
           <div>
-            <select [(ngModel)]="CustomerKYCDoc[0].KYC_DocId" name="kycDoc0Id" required #kycDoc0Id="ngModel">
+            <select [(ngModel)]="CustomerKYCDoc[0].KYC_DocId" name="kycDoc0Id" [required]="customer.type === 'Non-Individual'" #kycDoc0Id="ngModel">
               <option value="">--Select Document Type--</option>
               <option value="6"> Aadhaar Card </option>
               <option value="22"> CKYC ID /O</option>
@@ -603,7 +604,7 @@
         <div>
           <label>Document Number<span class="text-danger">*</span></label>
           <input type="text" [(ngModel)]="CustomerKYCDoc[0].KYC_DocNumber" name="kycDoc0Number"
-            placeholder="Document Number" required #kycDoc0Number="ngModel" />
+            placeholder="Document Number" [required]="customer.type === 'Non-Individual'" #kycDoc0Number="ngModel" />
           <div *ngIf="kycDoc0Number.invalid && (kycDoc0Number.dirty || kycDoc0Number.touched)" class="text-danger">
             Document number is required.
           </div>
@@ -635,7 +636,7 @@
       <div class="address">
         <div>
           <label>Company Name<span class="text-danger">*</span></label>
-          <input type="text" [(ngModel)]="Firm.Firm_Name" placeholder="Company Name" name="FirmName" required
+          <input type="text" [(ngModel)]="Firm.Firm_Name" placeholder="Company Name" name="FirmName" [required]="customer.type === 'Non-Individual'"
             #firmName="ngModel" />
           <div *ngIf="Firm.Firm_Name.invalid && (Firm.Firm_Name.dirty || Firm.Firm_Name.touched)" class="text-danger">
             Comapany name is required.
@@ -643,10 +644,10 @@
         </div>
         <div>
           <label for="incDate">Date of Incorporation <span class="text-danger">*</span></label>
-          <input type="date" id="incDate" name="incDate" [(ngModel)]="Firm.Firm_Date_Of_Incorporation"
-            (change)="calculateyears()" required />
+          <input type="date" id="incDate" name="incDate" [(ngModel)]="Firm.Firm_Date_Of_Incorporations"
+            (change)="calculateyears()" [required]="customer.type === 'Non-Individual'" />
 
-          <div *ngIf="Firm.Firm_Date_Of_Incorporation">
+          <div *ngIf="Firm.Firm_Date_Of_Incorporations">
             <small *ngIf="Firm.Firm_YearsSinceIncorporation >= 0">
               Years: {{ Firm.Firm_YearsSinceIncorporation }}
             </small>
@@ -673,7 +674,7 @@
         </div>
         <div>
           <label>Primary Contact<span class="text-danger">*</span></label>
-          <input type="text" [(ngModel)]="Firm.Firm_PhoneNo" name="Firm_PhoneNo" placeholder="Primary Contact" required
+          <input type="text" [(ngModel)]="Firm.Firm_PhoneNo" name="Firm_PhoneNo" placeholder="Primary Contact" [required]="customer.type === 'Non-Individual'"
             pattern="^[0-9]{10}$" maxlength="10" inputmode="numeric" #primaryContact="ngModel" />
           <div *ngIf="Firm.Firm_PhoneNo.invalid && (Firm.Firm_PhoneNo.dirty || Firm.Firm_PhoneNo.touched)"
             class="text-danger">
@@ -703,7 +704,7 @@
         </div>
         <div>
           <label>Company CIN No.<span class="text-danger">*</span></label>
-          <input type="text" [(ngModel)]="Firm.Firm_CIN_No" name="Firm_CIN_No" placeholder="CIN No" required
+          <input type="text" [(ngModel)]="Firm.Firm_CIN_No" name="Firm_CIN_No" placeholder="CIN No" [required]="customer.type === 'Non-Individual'"
             pattern="^[0-9]{10}$" maxlength="21" inputmode="numeric" #primaryContact="ngModel" />
           <div *ngIf="Firm.Firm_PhoneNo.invalid && (Firm.Firm_PhoneNo.dirty || Firm.Firm_PhoneNo.touched)"
             class="text-danger">
@@ -713,7 +714,7 @@
         </div>
         <div>
           <label>Customer Profile<span class="text-danger">*</span></label>
-          <select [(ngModel)]="Firm.Customer_Profile" name="profile" required #profilefield="ngModel"
+          <select [(ngModel)]="Firm.Customer_Profile" name="profile" [required]="customer.type === 'Non-Individual'" #profilefield="ngModel"
             (ngModelChange)="loadCustomercategory($event)">
             <option value="">--Select--</option>
             <option *ngFor="let pro of profile" [value]="pro.Id">{{ pro.Value }}</option>
@@ -722,7 +723,7 @@
 
         <div>
           <label>Customer Category <span class="text-danger">*</span></label>
-          <select [(ngModel)]="Firm.Customer_Category" name="category" required #category="ngModel"
+          <select [(ngModel)]="Firm.Customer_Category" name="category" [required]="customer.type === 'Non-Individual'" #category="ngModel"
             (ngModelChange)="loadCustomerSubcategory($event)">
             <option value="">--Select--</option>
             <option *ngFor="let c of catergory" [value]="c.Id">{{ c.Value }}</option>
@@ -731,7 +732,7 @@
 
         <div>
           <label>Customer Sub-Category <span class="text-danger">*</span></label>
-          <select [(ngModel)]="Firm.Customer_SubCategory" name="subcategory" required #subcategory="ngModel"
+          <select [(ngModel)]="Firm.Customer_SubCategory" name="subcategory" [required]="customer.type === 'Non-Individual'" #subcategory="ngModel"
             (ngModelChange)="loadCustomerNatureOfWork($event)">
             <option value="">--Select--</option>
             <option *ngFor="let s of subcatergory" [value]="s.Id">{{ s.Value }}</option>
@@ -740,7 +741,7 @@
 
         <div>
           <label>Nature Of Work<span class="text-danger">*</span></label>
-          <select [(ngModel)]="Firm.Customer_Natureofwork" name="natureOfWork" required #natureOfWork="ngModel">
+          <select [(ngModel)]="Firm.Customer_Natureofwork" name="natureOfWork" [required]="customer.type === 'Non-Individual'" #natureOfWork="ngModel">
             <option value="">--Select--</option>
             <option *ngFor="let n of Natureofwork" [value]="n.Id">{{ n.Value }}</option>
           </select>
@@ -748,7 +749,7 @@
 
         <div>
           <label>Business Category<span class="text-danger">*</span></label>
-          <select [(ngModel)]="Firm.BusinessCategory" name="businessCategory" required #businessCategory="ngModel">
+          <select [(ngModel)]="Firm.BusinessCategory" name="businessCategory" [required]="customer.type === 'Non-Individual'" #businessCategory="ngModel">
             <option value="">--Select--</option>
             <option *ngFor="let bc of BusinessCategory" [value]="bc.Id">{{ bc.Value }}</option>
           </select>
@@ -766,13 +767,13 @@
         <div class="address">
           <div>
             <label>Address<span class="text-danger">*</span></label>
-            <input type="text" [(ngModel)]="address.AddressS" name="presentAddress" placeholder="Address" required
+            <input type="text" [(ngModel)]="Firm.Firm_RegAddress" name="presentAddress" placeholder="Address" [required]="customer.type === 'Non-Individual'"
               #presentAddress="ngModel" />
           </div>
 
           <div>
             <label>Landmark<span class="text-danger">*</span></label>
-            <input type="text" [(ngModel)]="address.LandMarkS" name="presentLandmark" placeholder="LandMark" required
+            <input type="text" [(ngModel)]="Firm.Firm_RegLandMark" name="presentLandmark" placeholder="LandMark" [required]="customer.type === 'Non-Individual'"
               #presentLandmark="ngModel" />
           </div>
 
@@ -787,7 +788,7 @@
 
           <div>
             <label>District<span class="text-danger">*</span></label>
-            <select [(ngModel)]="address.DistrictIdS" name="presentDistrict" required #presentDistrict="ngModel"
+            <select [(ngModel)]="address.DistrictIdS" name="presentDistrict" [required]="customer.type === 'Non-Individual'" #presentDistrict="ngModel"
               (ngModelChange)="loadTehsils($event)">
               <option value="">--Select--</option>
               <option *ngFor="let d of district" [value]="d.DistrictId">{{ d.District_Name }}</option>
@@ -796,7 +797,7 @@
 
           <div>
             <label>Tehsil<span class="text-danger">*</span></label>
-            <select [(ngModel)]="address.TehsilIdS" name="presentTehsil" required #presentTehsil="ngModel">
+            <select [(ngModel)]="address.TehsilIdS" name="presentTehsil" [required]="customer.type === 'Non-Individual'" #presentTehsil="ngModel">
               <option value="">--Select--</option>
               <option *ngFor="let t of tehsil" [value]="t.TehsilId">{{ t.Tehsil_Name }}</option>
             </select>
@@ -804,7 +805,7 @@
 
           <div>
             <label>Pincode</label>
-            <input type="text" [(ngModel)]="address.PinCodeS" name="presentPincode" placeholder="Pincode" required
+            <input type="text" [(ngModel)]="address.PinCodeS" name="presentPincode" placeholder="Pincode" [required]="customer.type === 'Non-Individual'"
               pattern="^[0-9]{6}$" maxlength="6" #presentPincode="ngModel" />
             <div *ngIf="presentPincode.invalid && (presentPincode.dirty || presentPincode.touched)">
               <small class="text-danger" *ngIf="presentPincode.errors?.['required']">Pincode is required.</small>
@@ -822,7 +823,7 @@
 
           <div>
             <label>Rent/Own<span class="text-danger">*</span></label>
-            <select [(ngModel)]="address.RentOwnS" name="presentRentOwn" required #presentRentOwn="ngModel">
+            <select [(ngModel)]="address.RentOwnS" name="presentRentOwn" [required]="customer.type === 'Non-Individual'" #presentRentOwn="ngModel">
               <option value="">--Select--</option>
               <option>Rent</option>
               <option>Own</option>
@@ -858,18 +859,18 @@
           <div>
             <label>Address<span class="text-danger">*</span></label>
             <input type="text" [(ngModel)]="customerPermanent.Address" placeholder="Address" name="permanentAddress"
-              required #permanentAddress="ngModel" />
+              [required]="customer.type === 'Non-Individual'" #permanentAddress="ngModel" />
           </div>
 
           <div>
             <label>Landmark<span class="text-danger">*</span></label>
             <input type="text" [(ngModel)]="customerPermanent.LandMark" placeholder="LandMark" name="permanentLandmark"
-              required #permanentLandmark="ngModel" />
+              [required]="customer.type === 'Non-Individual'" #permanentLandmark="ngModel" />
           </div>
 
           <div>
             <label>State<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerPermanent.StateId" name="permanentState" required #permanentState="ngModel"
+            <select [(ngModel)]="customerPermanent.StateId" name="permanentState" [required]="customer.type === 'Non-Individual'" #permanentState="ngModel"
               (ngModelChange)="loadDistricts($event)">
               <option value="">--Select--</option>
               <option *ngFor="let s of states" [value]="s.StateId">{{ s.State_Name }}</option>
@@ -878,7 +879,7 @@
 
           <div>
             <label>District<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerPermanent.DistrictId" name="permanentDistrict" required
+            <select [(ngModel)]="customerPermanent.DistrictId" name="permanentDistrict" [required]="customer.type === 'Non-Individual'"
               #permanentDistrict="ngModel" (ngModelChange)="loadTehsils($event)">
               <option value="">--Select--</option>
               <option *ngFor="let d of district" [value]="d.DistrictId">{{ d.District_Name }}</option>
@@ -887,7 +888,7 @@
 
           <div>
             <label>Tehsil<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerPermanent.TehsilId" name="permanentTehsil" required #permanentTehsil="ngModel">
+            <select [(ngModel)]="customerPermanent.TehsilId" name="permanentTehsil" [required]="customer.type === 'Non-Individual'" #permanentTehsil="ngModel">
               <option value="">--Select--</option>
               <option *ngFor="let t of tehsil" [value]="t.TehsilId">{{ t.Tehsil_Name }}</option>
             </select>
@@ -896,7 +897,7 @@
           <div>
             <label>Pincode</label>
             <input type="text" [(ngModel)]="customerPermanent.PinCode" name="permanentPincode" placeholder="Pincode"
-              required pattern="^[0-9]{6}$" maxlength="6" #permanentPincode="ngModel" />
+              [required]="customer.type === 'Non-Individual'" pattern="^[0-9]{6}$" maxlength="6" #permanentPincode="ngModel" />
             <div *ngIf="permanentPincode.invalid && (permanentPincode.dirty || permanentPincode.touched)">
               <small class="text-danger" *ngIf="permanentPincode.errors?.['required']">Pincode is required.</small>
               <small class="text-danger" *ngIf="permanentPincode.errors?.['pattern']">Pincode must be exactly 6
@@ -913,7 +914,7 @@
 
           <div>
             <label>Rent/Own<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerPermanent.RentOwn" name="permanentRentOwn" required
+            <select [(ngModel)]="customerPermanent.RentOwn" name="permanentRentOwn" [required]="customer.type === 'Non-Individual'"
               #permanentRentOwn="ngModel">
               <option value="">--Select--</option>
               <option>Rent</option>
@@ -940,7 +941,7 @@
         <div class="address">
           <div>
             <label>Director Name<span class="text-danger">*</span></label>
-            <input placeholder="Director Name" disabled [(ngModel)]="Partners.PartnerName" name="PartnerName" required
+            <input placeholder="Director Name" disabled [(ngModel)]="Partners.PartnerName" name="PartnerName" [required]="customer.type === 'Non-Individual'"
               #PartnerName="ngModel" />
             <button class="search" type="button" (click)="openSearchModal()"><i class="fas fa-search"></i>
             </button>
@@ -949,19 +950,19 @@
           </div>
           <div>
             <label>Gender<span class="text-danger">*</span></label>
-            <input [(ngModel)]="Partners.PartnerGender" type="text" placeholder='Partner Gender' name="Gender" required 
+            <input [(ngModel)]="Partners.PartnerGender" type="text" placeholder='Partner Gender' name="Gender" [required]="customer.type === 'Non-Individual'" 
               #PartnerGender="ngModel" disabled />
           </div>
           <div>
             <label>Age<span class="text-danger">*</span></label>
-            <input type="number" [(ngModel)]="Partners.PartnerAge" name="PartnerAge" placeholder="Partner Age" required
+            <input type="number" [(ngModel)]="Partners.PartnerAge" name="PartnerAge" placeholder="Partner Age" [required]="customer.type === 'Non-Individual'"
               #PartnerAge="ngModel" disabled />
           </div>
 
           <div>
             <div><label>Designation<span class="text-danger">*</span></label></div>
             <div>
-              <select [(ngModel)]="Partners.PartnerDesignation" name="PartnerDesignation" required="ngModel">
+              <select [(ngModel)]="Partners.PartnerDesignation" name="PartnerDesignation" [required]="customer.type === 'Non-Individual'">
                 <option value="">--Select Designation--</option>
                 <option value="Shareholder"> Shareholder </option>
                 <option value="Holding Company">Holding Company</option>
@@ -983,7 +984,7 @@
           <div>
             <label>Phone No.<span class="text-danger">*</span></label>
             <input type="text" [(ngModel)]="Partners.PartnerPhoneNo" name="PartnerPhoneNo" placeholder="Phone No"
-              required pattern="^[0-9]{10}$" maxlength="10" inputmode="numeric" #primaryContact="ngModel" disabled />
+              [required]="customer.type === 'Non-Individual'" pattern="^[0-9]{10}$" maxlength="10" inputmode="numeric" #primaryContact="ngModel" disabled />
             <div
               *ngIf="Partners.PartnerPhoneNo.invalid && (Partners.PartnerPhoneNo.dirty || Partners.PartnerPhoneNo.touched)"
               class="text-danger">
@@ -992,7 +993,7 @@
           </div>
           <div>
             <label>DIN No.<span class="text-danger">*</span></label>
-            <input type="text" [(ngModel)]="Partners.PartnerDIN_No" name="PartnerDIN_No" placeholder="DIN No" required
+            <input type="text" [(ngModel)]="Partners.PartnerDIN_No" name="PartnerDIN_No" placeholder="DIN No" [required]="customer.type === 'Non-Individual'"
               pattern="^[0-9]{10}$" maxlength="8" inputmode="numeric" #primaryContact="ngModel" />
             <div
               *ngIf="Partners.PartnerDIN_No.invalid && (Partners.PartnerDIN_No.dirty || Partners.PartnerDIN_No.touched)"
@@ -1003,7 +1004,7 @@
           </div>
           <div>
             <label>Share %<span class="text-danger">*</span></label>
-            <input type="number" [(ngModel)]="Partners.PartnerShare" name="PartnerShare" placeholder="Share %" required
+            <input type="number" [(ngModel)]="Partners.PartnerShare" name="PartnerShare" placeholder="Share %" [required]="customer.type === 'Non-Individual'"
               #PartnerShare="ngModel" />
           </div>
 

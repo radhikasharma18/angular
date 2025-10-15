@@ -255,13 +255,13 @@ isWorkAddressFilled() {
 
 
 calculateyears() {
-  if (!this.Firm.Firm_Date_Of_Incorporation) {
+  if (!this.Firm.Firm_Date_Of_Incorporations) {
     this.Firm.Firm_YearsSinceIncorporation = null;
     return;
   }
 
   const today = new Date();
-  const incDate = new Date(this.Firm.Firm_Date_Of_Incorporation);
+  const incDate = new Date(this.Firm.Firm_Date_Of_Incorporations);
 
 
   if (incDate > today) {
@@ -523,7 +523,7 @@ calculateAge() {
       'Authorization': token
     });
 
-    const payload = this.buildPayload();
+    const payload = this.buildPayloadFirm();
 
     const body = {
       CustomerId: 0,
@@ -543,11 +543,14 @@ calculateAge() {
     });
   }
 
-  onSave() {
+ onSave() {
+  if (this.customer.type === 'Individual') {
     this.saveCustomer();
+  } else {
+    this.saveCustomerfirm();
   }
-
-  buildPayload() {
+}
+buildPayload() {
     const dobIso = this.customer.Customer_DOB ? new Date(this.customer.Customer_DOB).toISOString() : null;
 
     const sanitize = (v: any) => {
@@ -639,6 +642,87 @@ calculateAge() {
       address,
       customerPermanent,
       customerWork: [],
+      CustomerBankDetail: customerBankDetail,
+      Int_Id: 0
+    };
+  }
+  
+  buildPayloadFirm() {
+    const dobIso = this.customer.Customer_DOB ? new Date(this.customer.Customer_DOB).toISOString() : null;
+
+    const sanitize = (v: any) => {
+      if (v === undefined || v === null) return '';
+      if (typeof v === 'string' && v.trim().toLowerCase() === 'undefined') return '';
+      return v;
+    };
+
+  const applicationFirm: any={
+     Type: 'company',
+    Firm_Type:sanitize(this.Firm.Firm_Type),
+    ApplicationNo: sanitize(this.Firm.Firm_Type),
+    FirmId: sanitize(this.Firm.FirmId),
+    Firm_Name: sanitize(this.Firm. Firm_Name),
+    Firm_RegAddress: sanitize(this.Firm.Firm_RegAddress),
+    Firm_RegLandMark: sanitize(this.Firm.Firm_RegLandMark),
+    Firm_Date_Of_Incorruptions :sanitize(this.Firm.Firm_Date_Of_Incorruptions),
+    Firm_RegPinCode: sanitize(this.Firm.Firm_RegPinCode),
+    Firm_RegState: sanitize(this.Firm.Firm_RegState),
+    Firm_RegDistrict:sanitize(this.Firm.Firm_RegDistrict),
+    Firm_RegTehsil: sanitize(this.Firm. Firm_RegTehsil),
+    Firm_CorpAddress: sanitize(this.Firm. Firm_CorpAddress),
+    Firm_CorpLandMark: sanitize(this.Firm.Firm_CorpLandMark),
+    Firm_CorpPinCode: sanitize(this.Firm.Firm_CorpPinCode),
+    Firm_CorpState: sanitize(this.Firm.Firm_CorpState),
+    Firm_CorpDistrict: sanitize(this.Firm.Firm_CorpDistrict),
+    Firm_CorpTehsil: sanitize(this.Firm.Firm_CorpTehsil),
+    Firm_PhoneNo: sanitize(this.Firm.Firm_PhoneNo),
+    Firm_PhoneNoIsVerified:sanitize(this.Firm. Firm_PhoneNoIsVerified),
+    Firm_PhoneNo1: sanitize(this.Firm. Firm_PhoneNo1),
+    Firm_Email: sanitize(this.Firm.Firm_Email),
+    Firm_Website:sanitize(this.Firm.Firm_Website),
+    Firm_No_Of_Partner :sanitize(this.Firm.Firm_No_Of_Partner),
+    Firm_No_Of_Employee: sanitize(this.Firm.Firm_No_Of_Employee),
+    Firm_GrossValue:sanitize(this.Firm.Firm_GrossValue),
+    Firm_Nature_Of_Business:sanitize(this.Firm.Firm_Nature_Of_Business),
+    Firm_RegTotalYearsOnAddress: sanitize(this.Firm.Firm_RegTotalYearsOnAddress),
+    Firm_RegAddressRentBuy: sanitize(this.Firm.Firm_RegAddressRentBuy),
+    Firm_RegNearstBranchDistance_KM: sanitize(this.Firm.Firm_RegNearstBranchDistance_KM),
+    Firm_CorpTotalYearsOnAddress: sanitize(this.Firm.Firm_CorpTotalYearsOnAddress),
+    Firm_CorpAddressRentBuy:sanitize(this.Firm.Firm_CorpAddressRentBuy),
+    Firm_CorpNearstBranchDistance_KM:sanitize(this.Firm. Firm_CorpNearstBranchDistance_KM),
+    Firm_CIN_No: sanitize(this.Firm.Firm_CIN_No),
+    BusinessCategory: sanitize(this.Firm.BusinessCategory),
+    BusinessType: sanitize(this.Firm.BusinessType),
+    Customer_Profile:sanitize(this.Firm.Customer_Profile),
+    Customer_Category: sanitize(this.Firm.Customer_Category),
+    Customer_SubCategory: sanitize(this.Firm.Customer_SubCategory),
+    Customer_Natureofwork: sanitize(this.Firm.Customer_Natureofwork),
+    }
+    const kycDoc = {
+      KYC_DocId: sanitize(this.CustomerKYCDoc[0].KYC_DocId || ''),
+      KYC_DocNumber: sanitize(this.CustomerKYCDoc[0].KYC_DocNumber || ''),
+      KYC_DocFile: sanitize(this.CustomerKYCDoc[0].KYC_DocFile || ''),
+      KYC_DocFile1: sanitize(this.CustomerKYCDoc[0].KYC_DocFile1 || ''),
+      Verified_Button: false,
+      LastVerfiedDate: sanitize(this.CustomerKYCDoc[0].LastVerfiedDate || ''),
+      KYC_IsVerified: 0
+    };
+
+    const customerBankDetail = [
+      {
+        BeneficiaryName: '',
+        AccountNo: '',
+        BankName: '',
+        BankBranch: '',
+        BankAcType: '',
+        BankIFSC: '',
+        BankMICRCode: ''
+      }
+    ];
+
+    return {
+      ApplicationFirm: applicationFirm,
+      CustomerKYCDoc: [kycDoc],
       CustomerBankDetail: customerBankDetail,
       Int_Id: 0
     };
