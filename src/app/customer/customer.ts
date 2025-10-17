@@ -689,7 +689,7 @@ buildPayload() {
     Firm_RegNearstBranchDistance_KM: sanitize(this.Firm.Firm_RegNearstBranchDistance_KM),
     Firm_CorpTotalYearsOnAddress: sanitize(this.Firm.Firm_CorpTotalYearsOnAddress),
     Firm_CorpAddressRentBuy:sanitize(this.Firm.Firm_CorpAddressRentBuy),
-    Firm_CorpNearstBranchDistance_KM:sanitize(this.Firm. Firm_CorpNearstBranchDistance_KM),
+    Firm_CorpNearstBranchDistance_KM:sanitize(this.Firm.Firm_CorpNearstBranchDistance_KM),
     Firm_CIN_No: sanitize(this.Firm.Firm_CIN_No),
     BusinessCategory: sanitize(this.Firm.BusinessCategory),
     BusinessType: sanitize(this.Firm.BusinessType),
