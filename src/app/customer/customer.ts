@@ -65,8 +65,10 @@ export class Customer implements OnInit {
     Customer_Relation_FirstName: '',
     Customer_Relation_LastName: '',
     BusinessCategory: '',
+  
     
   };
+ 
   
   Firm:any ={
     Type: 'company',
@@ -78,6 +80,7 @@ export class Customer implements OnInit {
     Firm_RegLandMark: '',
     Firm_Date_Of_Incorruptions : '',
     Firm_RegPinCode: '',
+    Customer_Relation: '',
     Firm_RegState: '',
     Firm_RegDistrict: '',
     Firm_RegTehsil: '',
@@ -109,6 +112,11 @@ export class Customer implements OnInit {
     Customer_Category: '',
     Customer_SubCategory: '',
     Customer_Natureofwork: '',
+    SameAddress:true,
+    Customer_CreateBy: '',
+    LoginUserId: 2,
+    CustomerId: '',
+    Owner_CustomerId: '',
   };
 
   address: any = {
@@ -159,15 +167,16 @@ export class Customer implements OnInit {
       PartnerAge: '',
       PartnerDesignation: '',
       PartnerPhoneNo:'',
-      PartnerShare: 100,
+      PartnerShare: "100",
       PartnerDIN_No:'',
+      Owner_CustomerId: '',
     }
 
   CustomerKYCDoc:any[] = [{
       KYC_CustomerId: '',
       KYC_DocId :'',
       KYC_DocNumber: '',
-      KYC_DocFile: '',
+      KYC_DocFile: null,
       KYC_DocFile1: null,
       KYC_IssuedDate: '',
       KYC_ExpiredDate: '',
@@ -175,6 +184,7 @@ export class Customer implements OnInit {
       KYC_IsVerified: 0,
       Verified_Button: true
     }]
+  
  
   customer_district: any = '';
 
@@ -543,6 +553,20 @@ calculateAge() {
     });
   }
 
+
+  duplicateDoc(){
+    const url = 'https://demo.finnaux.com/api/api/Masters/Get_Alredy_Verified_KYC';
+    const token = constantUrl.token;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': token
+    });
+
+
+
+}
+
  onSave() {
   if (this.customer.type === 'Individual') {
     this.saveCustomer();
@@ -588,8 +612,8 @@ buildPayload() {
     const kycDoc = {
       KYC_DocId: sanitize(this.CustomerKYCDoc[0].KYC_DocId || ''),
       KYC_DocNumber: sanitize(this.CustomerKYCDoc[0].KYC_DocNumber || ''),
-      KYC_DocFile: sanitize(this.CustomerKYCDoc[0].KYC_DocFile || ''),
-      KYC_DocFile1: sanitize(this.CustomerKYCDoc[0].KYC_DocFile1 || ''),
+      KYC_DocFile: sanitize(this.CustomerKYCDoc[0]?.KYC_DocFile || ''),
+      KYC_DocFile1: sanitize(this.CustomerKYCDoc[1]?.KYC_DocFile || ''),
       Verified_Button: false,
       LastVerfiedDate: sanitize(this.CustomerKYCDoc[0].LastVerfiedDate || ''),
       KYC_IsVerified: 0
@@ -656,16 +680,25 @@ buildPayload() {
       return v;
     };
 
-  const applicationFirm: any={
+
+    const address ={
+      DistrictId: "",
+        NoOfLiving: "",
+        RentOwn: "",
+        StateId: "",
+        TehsilId: ""
+    }
+  const Firm: any={
      Type: 'company',
     Firm_Type:sanitize(this.Firm.Firm_Type),
-    ApplicationNo: sanitize(this.Firm.Firm_Type),
-    FirmId: sanitize(this.Firm.FirmId),
+    // ApplicationNo: sanitize(this.Firm.Firm_Type),
+    // FirmId: sanitize(this.Firm.FirmId),
     Firm_Name: sanitize(this.Firm. Firm_Name),
     Firm_RegAddress: sanitize(this.Firm.Firm_RegAddress),
     Firm_RegLandMark: sanitize(this.Firm.Firm_RegLandMark),
     Firm_Date_Of_Incorruptions :sanitize(this.Firm.Firm_Date_Of_Incorruptions),
     Firm_RegPinCode: sanitize(this.Firm.Firm_RegPinCode),
+    Customer_Relation: sanitize(this.Firm.Customer_Relation),
     Firm_RegState: sanitize(this.Firm.Firm_RegState),
     Firm_RegDistrict:sanitize(this.Firm.Firm_RegDistrict),
     Firm_RegTehsil: sanitize(this.Firm. Firm_RegTehsil),
@@ -692,13 +725,18 @@ buildPayload() {
     Firm_CorpNearstBranchDistance_KM:sanitize(this.Firm.Firm_CorpNearstBranchDistance_KM),
     Firm_CIN_No: sanitize(this.Firm.Firm_CIN_No),
     BusinessCategory: sanitize(this.Firm.BusinessCategory),
-    BusinessType: sanitize(this.Firm.BusinessType),
     Customer_Profile:sanitize(this.Firm.Customer_Profile),
     Customer_Category: sanitize(this.Firm.Customer_Category),
     Customer_SubCategory: sanitize(this.Firm.Customer_SubCategory),
     Customer_Natureofwork: sanitize(this.Firm.Customer_Natureofwork),
+    SameAddress: sanitize(this.Firm.SameAddress),
+    Customer_CreateBy: sanitize( this.Firm.Customer_CreateBy || 0),
+    Customer_PhoneNo_IsVerified: this.customer.Customer_PhoneNo_IsVerified || 0,
+    LoginUserId: sanitize(this.Firm.LoginUserId || 0),
+    CustomerId: sanitize(this.Firm.CustomerId || 0),
+    Owner_CustomerId: sanitize(this.Firm.Owner_CustomerId || 0),
     }
-    const kycDoc = {
+    const KYC_DOC = {
       KYC_DocId: sanitize(this.CustomerKYCDoc[0].KYC_DocId || ''),
       KYC_DocNumber: sanitize(this.CustomerKYCDoc[0].KYC_DocNumber || ''),
       KYC_DocFile: sanitize(this.CustomerKYCDoc[0].KYC_DocFile || ''),
@@ -707,7 +745,18 @@ buildPayload() {
       LastVerfiedDate: sanitize(this.CustomerKYCDoc[0].LastVerfiedDate || ''),
       KYC_IsVerified: 0
     };
-
+  
+    const Partners = [
+    {
+      PartnerName: sanitize(this.Partners.PartnerName),
+      PartnerGender: sanitize(this.Partners.PartnerGender),
+      PartnerAge:sanitize(this.Partners.PartnerAge),
+      PartnerDesignation: sanitize(this.Partners. PartnerDesignation),
+      PartnerPhoneNo:sanitize(this.Partners.PartnerPhoneNo),
+      PartnerShare:  sanitize(this.Partners.PartnerShare),
+      PartnerDIN_No:sanitize(this.Partners.PartnerDIN_No),
+    }
+  ];
     const customerBankDetail = [
       {
         BeneficiaryName: '',
@@ -721,41 +770,54 @@ buildPayload() {
     ];
 
     return {
-      ApplicationFirm: applicationFirm,
-      CustomerKYCDoc: [kycDoc],
+      Firm: Firm,
+      KYC_DOC: [KYC_DOC],
       CustomerBankDetail: customerBankDetail,
-      Int_Id: 0
+      Partners: Partners,
+      address: address,
+      
     };
   }
 
+ 
+removeDoc(index: number) {
+  const updatedDocs = [...this.CustomerKYCDoc];
+  updatedDocs[index] = { KYC_DocFile: null };
+  this.CustomerKYCDoc = updatedDocs;
+}
 
 
 profilePreviewUrl: string | ArrayBuffer | null = null;
 profilePreviewUrlProfile: string | ArrayBuffer | null = null;
 
+
 openFilePicker() {
-  const fileInput = document.getElementById('profileImage') as HTMLInputElement;
-  if (fileInput) {
-    fileInput.click();  
-  }
-}
-openFilePickerDoc() {
-  const fileInput = document.getElementById('kycDoc0File') as HTMLInputElement;
-  if (fileInput) {
-    fileInput.click();
-  }
+  const input = document.getElementById('profileImage') as HTMLInputElement;
+  input?.click();
 }
 
-onFileSelected(event: Event) {
-  const input = event.target as HTMLInputElement;
-  if (input.files && input.files[0]) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.profilePreviewUrl = reader.result;
-    };
-    reader.readAsDataURL(input.files[0]);
-  }
+removeProfileImage() {
+  this.profilePreviewUrl = null;
 }
+
+openFilePickerDoc(index: number) {
+  const input = document.getElementById(`kycDoc${index}File`) as HTMLInputElement;
+  if (input) input.click();
+}
+
+
+onFileSelected(event: any) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e: any) => {
+    this.profilePreviewUrl = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+
 onFileSelectedProfile(event: Event) {
   const input = event.target as HTMLInputElement;
   if (input.files && input.files[0]) {
@@ -766,16 +828,24 @@ onFileSelectedProfile(event: Event) {
     reader.readAsDataURL(input.files[0]);
   }
 }
-onFileSelectedDoc(event: Event) {
-  const input = event.target as HTMLInputElement;
-  if (input.files && input.files[0]) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.CustomerKYCDoc[0].KYC_DocFile = reader.result as string;
-    };
-    reader.readAsDataURL(input.files[0]);
-  }
+
+
+
+onFileSelectedDoc(event: any, index: number) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e: any) => {
+    // Clone the array so Angular detects change
+    const updatedDocs = [...this.CustomerKYCDoc];
+    updatedDocs[index] = { KYC_DocFile: e.target.result };
+    this.CustomerKYCDoc = updatedDocs;
+  };
+  reader.readAsDataURL(file);
 }
+
+
 
 
 

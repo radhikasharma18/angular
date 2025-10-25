@@ -58,35 +58,125 @@
       </div>
 
 
-      <div> <label class="form-label fw-bold">Document Image 1</label>
-        <input type="file" id="kycDoc0File" style="display: none" (change)="onFileSelectedDoc($event)" />
-        <i class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary" style="cursor: pointer;"
-          (click)="openFilePickerDoc()"></i>
-        <div *ngIf="CustomerKYCDoc[0].KYC_DocFile">
-          <img [src]="CustomerKYCDoc[0].KYC_DocFile" alt="Preview" width="100" class="mt-2 rounded" />
-        </div>
-      </div>
-      <div> <label class="form-label fw-bold">Document Image 2</label>
-        <input type="file" id="kycDoc0File" style="display: none" (change)="onFileSelectedDoc($event)" />
-        <i class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary" style="cursor: pointer;"
-          (click)="openFilePickerDoc()"></i>
-        <div *ngIf="CustomerKYCDoc[0].KYC_DocFile"> <img [src]="CustomerKYCDoc[0].KYC_DocFile" alt="Preview" width="100"
-            class="mt-2 rounded" /> </div>
-      </div>
+      <div>
+  <label class="form-label fw-bold">Document Image 1</label>
+
+  <input 
+    type="file" 
+    id="kycDoc0File" 
+    style="display: none" 
+    (change)="onFileSelectedDoc($event, 0)" 
+  />
+
+  <i 
+    *ngIf="!CustomerKYCDoc[0]?.KYC_DocFile" 
+    class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary" 
+    style="cursor: pointer;"
+    (click)="openFilePickerDoc(0)">
+  </i>
+
+  <div *ngIf="CustomerKYCDoc[0]?.KYC_DocFile">
+    <img 
+      [src]="CustomerKYCDoc[0].KYC_DocFile" 
+      alt="Preview" 
+      width="100" 
+      class="mt-2 rounded" 
+    />
+      <button 
+      type="button" (click)="removeDoc(0)">
+      ×
+    </button>
+  </div>
+</div>
+
+<!-- Document Image 2 -->
+<div>
+  <label class="form-label fw-bold">Document Image 2</label>
+
+  <input 
+    type="file" 
+    id="kycDoc1File" 
+    style="display: none" 
+    (change)="onFileSelectedDoc($event, 1)" 
+  />
+
+  <i 
+    *ngIf="!CustomerKYCDoc[1]?.KYC_DocFile" 
+    class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary" 
+    style="cursor: pointer;"
+    (click)="openFilePickerDoc(1)">
+  </i>
+
+  <div *ngIf="CustomerKYCDoc[1]?.KYC_DocFile">
+    <img 
+      [src]="CustomerKYCDoc[1].KYC_DocFile" 
+      alt="Preview" 
+      width="100" 
+      class="mt-2 rounded" 
+    />
+    <button 
+      type="button" (click)="removeDoc(0)">
+      ×
+    </button>
+  </div>
+</div>
+
     </div></div>
 
     <!-- customer information-->
     <div *ngIf="customer.type !== 'Non-Individual'">
       <h3 class="heading">Demographic Information</h3>
       <div class="address">
-        <div><label class="form-label fw-bold">Profile Image</label>
+        <!-- <div><label class="form-label fw-bold">Profile Image</label>
           <input type="file" id="profileImage" style="display: none" (change)="onFileSelected($event)" />
           <i class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary" style="cursor: pointer;"
             (click)="openFilePicker()"></i>
           <div *ngIf="profilePreviewUrl">
             <img [src]="profilePreviewUrl" alt="Preview" width="100" class="mt-2 rounded" />
+            <button type="button" (click)="removeDoc(0)"> ×</button>
           </div>
-        </div>
+        </div> -->
+
+        <div class="mb-3">
+  <label class="form-label fw-bold">Profile Image</label>
+
+  <!-- Hidden file input -->
+  <input 
+    type="file" 
+    id="profileImage" 
+    style="display: none" 
+    (change)="onFileSelected($event)" 
+  />
+
+  <!-- Upload icon (hide when preview exists) -->
+  <i 
+    *ngIf="!profilePreviewUrl"
+    class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary"
+    style="cursor: pointer;"
+    (click)="openFilePicker()">
+  </i>
+
+  <!-- Image preview + cancel button -->
+  <div 
+    *ngIf="profilePreviewUrl" 
+    class="position-relative d-inline-block mt-2"
+  >
+    <img 
+      [src]="profilePreviewUrl" 
+      alt="Preview" 
+      width="100" 
+      class="rounded border"
+    />
+
+    <button 
+      type="button"
+      (click)="removeProfileImage()"
+    >
+      ×
+    </button>
+  </div>
+</div>
+
 
 
         <div>
@@ -613,21 +703,75 @@
       </div>
 
 
-      <div> <label class="form-label fw-bold">Document Image 1</label>
-        <input type="file" id="kycDoc0File" style="display: none" (change)="onFileSelectedDoc($event)" />
-        <i class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary" style="cursor: pointer;"
-          (click)="openFilePickerDoc()"></i>
-        <div *ngIf="CustomerKYCDoc[0].KYC_DocFile">
-          <img [src]="CustomerKYCDoc[0].KYC_DocFile" alt="Preview" width="100" class="mt-2 rounded" />
-        </div>
-      </div>
-      <div> <label class="form-label fw-bold">Document Image 2</label>
-        <input type="file" id="kycDoc0File" style="display: none" (change)="onFileSelectedDoc($event)" />
-        <i class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary" style="cursor: pointer;"
-          (click)="openFilePickerDoc()"></i>
-        <div *ngIf="CustomerKYCDoc[0].KYC_DocFile"> <img [src]="CustomerKYCDoc[0].KYC_DocFile" alt="Preview" width="100"
-            class="mt-2 rounded" /> </div>
-      </div>
+      <div>
+  <label class="form-label fw-bold">Document Image 1</label>
+
+  <input 
+    type="file" 
+    id="kycDoc0File" 
+    style="display: none" 
+    (change)="onFileSelectedDoc($event, 0)" 
+  />
+
+  <!-- Upload icon (only visible before file upload) -->
+  <i 
+    *ngIf="!CustomerKYCDoc[0]?.KYC_DocFile" 
+    class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary" 
+    style="cursor: pointer;"
+    (click)="openFilePickerDoc(0)">
+  </i>
+
+  <!-- Image + Cancel Button -->
+  <div 
+    *ngIf="CustomerKYCDoc[0]?.KYC_DocFile" 
+    class="position-relative d-inline-block mt-2"
+  >
+    <img 
+      [src]="CustomerKYCDoc[0].KYC_DocFile" 
+      alt="Preview" 
+      width="100" 
+      class="rounded border"
+    />
+
+    <button 
+      type="button"
+     (click)="removeDoc(0)">
+      ×
+    </button>
+  </div>
+</div>
+
+      <div>
+  <label class="form-label fw-bold">Document Image 2</label>
+
+  <input 
+    type="file" 
+    id="kycDoc1File" 
+    style="display: none" 
+    (change)="onFileSelectedDoc($event, 1)" 
+  />
+
+  <i 
+    *ngIf="!CustomerKYCDoc[1]?.KYC_DocFile" 
+    class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary" 
+    style="cursor: pointer;"
+    (click)="openFilePickerDoc(1)">
+  </i>
+
+  <div *ngIf="CustomerKYCDoc[1]?.KYC_DocFile">
+    <img 
+      [src]="CustomerKYCDoc[1].KYC_DocFile" 
+      alt="Preview" 
+      width="100" 
+      class="mt-2 rounded" 
+    />
+    <button 
+      type="button" (click)="removeDoc(0)">
+      ×
+    </button>
+  </div>
+</div>
+
     </div></div>
 
     <!-- customer information-->
@@ -645,10 +789,10 @@
         </div>
         <div>
           <label for="incDate">Date of Incorporation <span class="text-danger">*</span></label>
-          <input type="date" id="incDate" name="incDate" [(ngModel)]="Firm.Firm_Date_Of_Incorporations"
+          <input type="date" id="incDate" name="incDate" [(ngModel)]="Firm.Firm_Date_Of_Incorruptions"
             (change)="calculateyears()" [required]="customer.type === 'Non-Individual'" />
 
-          <div *ngIf="Firm.Firm_Date_Of_Incorporations">
+          <div *ngIf="Firm.Firm_Date_Of_Incorruptions">
             <small *ngIf="Firm.Firm_YearsSinceIncorporation >= 0">
               Years: {{ Firm.Firm_YearsSinceIncorporation }}
             </small>
@@ -804,27 +948,27 @@
             </select>
           </div>
 
-          <div>
+         <div>
             <label>Pincode</label>
-            <input type="text" [(ngModel)]="Firm.Firm_RegPincode" name="presentPincode" placeholder="Pincode" [required]="customer.type === 'Non-Individual'"
-              pattern="^[0-9]{6}$" maxlength="6" #presentPincode="ngModel" />
-            <div *ngIf="presentPincode.invalid && (presentPincode.dirty || presentPincode.touched)">
-              <small class="text-danger" *ngIf="presentPincode.errors?.['required']">Pincode is required.</small>
-              <small class="text-danger" *ngIf="presentPincode.errors?.['pattern']">Pincode must be exactly 6
+            <input type="text" [(ngModel)]="Firm.Firm_RegPinCode" name="permanentPincode" placeholder="Pincode"
+              [required]="customer.type === 'Non-Individual'" pattern="^[0-9]{6}$" maxlength="6" #permanentPincode="ngModel" />
+            <div *ngIf="permanentPincode.invalid && (permanentPincode.dirty || permanentPincode.touched)">
+              <small class="text-danger" *ngIf="permanentPincode.errors?.['required']">Pincode is required.</small>
+              <small class="text-danger" *ngIf="permanentPincode.errors?.['pattern']">Pincode must be exactly 6
                 digits.</small>
             </div>
           </div>
 
           <div>
             <label>No of Living Here<span class="text-danger">*</span></label>
-            <input type="number" [(ngModel)]="address.NoOfLivingS" placeholder="No of Living Here"
+            <input type="number" [(ngModel)]="Firm.Firm_RegTotalYearsOnAddress" placeholder="No of Living Here"
               name="presentNoOfLiving" maxlength="2"
               oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
           </div>
 
           <div>
             <label>Rent/Own<span class="text-danger">*</span></label>
-            <select [(ngModel)]="address.RentOwnS" name="presentRentOwn" [required]="customer.type === 'Non-Individual'" #presentRentOwn="ngModel">
+            <select [(ngModel)]="Firm.Firm_RegAddressRentBuy" name="presentRentOwn" [required]="customer.type === 'Non-Individual'" #presentRentOwn="ngModel">
               <option value="">--Select--</option>
               <option>Rent</option>
               <option>Own</option>
@@ -833,7 +977,7 @@
 
           <div>
             <label>Distance To Branch(KM)<span class="text-danger">*</span></label>
-            <input type="number" [(ngModel)]="address.DistanceBranchS" name="presentDistance" maxlength="2"
+            <input type="number" [(ngModel)]="Firm.Firm_RegNearstBranchDistance_KM" name="presentDistance" maxlength="2"
               placeholder="Distance From Branch"
               oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
           </div>
@@ -859,19 +1003,19 @@
 
           <div>
             <label>Address<span class="text-danger">*</span></label>
-            <input type="text" [(ngModel)]="customerPermanent.Address" placeholder="Address" name="permanentAddress"
+            <input type="text" [(ngModel)]="Firm.Firm_CorpAddress" placeholder="Address" name="permanentAddress"
               [required]="customer.type === 'Non-Individual'" #permanentAddress="ngModel" />
           </div>
 
           <div>
             <label>Landmark<span class="text-danger">*</span></label>
-            <input type="text" [(ngModel)]="customerPermanent.LandMark" placeholder="LandMark" name="permanentLandmark"
+            <input type="text" [(ngModel)]="Firm.Firm_CorpLandMark" placeholder="LandMark" name="permanentLandmark"
               [required]="customer.type === 'Non-Individual'" #permanentLandmark="ngModel" />
           </div>
 
           <div>
             <label>State<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerPermanent.StateId" name="permanentState" [required]="customer.type === 'Non-Individual'" #permanentState="ngModel"
+            <select [(ngModel)]="Firm.Firm_CorpState" name="permanentState" [required]="customer.type === 'Non-Individual'" #permanentState="ngModel"
               (ngModelChange)="loadDistricts($event)">
               <option value="">--Select--</option>
               <option *ngFor="let s of states" [value]="s.StateId">{{ s.State_Name }}</option>
@@ -880,7 +1024,7 @@
 
           <div>
             <label>District<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerPermanent.DistrictId" name="permanentDistrict" [required]="customer.type === 'Non-Individual'"
+            <select [(ngModel)]="Firm.Firm_CorpDistrict" name="permanentDistrict" [required]="customer.type === 'Non-Individual'"
               #permanentDistrict="ngModel" (ngModelChange)="loadTehsils($event)">
               <option value="">--Select--</option>
               <option *ngFor="let d of district" [value]="d.DistrictId">{{ d.District_Name }}</option>
@@ -889,7 +1033,7 @@
 
           <div>
             <label>Tehsil<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerPermanent.TehsilId" name="permanentTehsil" [required]="customer.type === 'Non-Individual'" #permanentTehsil="ngModel">
+            <select [(ngModel)]="Firm.Firm_CorpTehsil" name="permanentTehsil" [required]="customer.type === 'Non-Individual'" #permanentTehsil="ngModel">
               <option value="">--Select--</option>
               <option *ngFor="let t of tehsil" [value]="t.TehsilId">{{ t.Tehsil_Name }}</option>
             </select>
@@ -897,7 +1041,7 @@
 
           <div>
             <label>Pincode</label>
-            <input type="text" [(ngModel)]="customerPermanent.PinCode" name="permanentPincode" placeholder="Pincode"
+            <input type="text" [(ngModel)]="Firm.Firm_CorpPinCode" name="permanentPincode" placeholder="Pincode"
               [required]="customer.type === 'Non-Individual'" pattern="^[0-9]{6}$" maxlength="6" #permanentPincode="ngModel" />
             <div *ngIf="permanentPincode.invalid && (permanentPincode.dirty || permanentPincode.touched)">
               <small class="text-danger" *ngIf="permanentPincode.errors?.['required']">Pincode is required.</small>
@@ -908,14 +1052,14 @@
 
           <div>
             <label>No of Living Here<span class="text-danger">*</span></label>
-            <input type="number" placeholder="No of Living Here" [(ngModel)]="customerPermanent.NoOfLiving"
+            <input type="number" placeholder="No of Living Here" [(ngModel)]="Firm.Firm_CorpTotalYearsOnAddress"
               name="permanentNoOfLiving" maxlength="2"
               oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
           </div>
 
           <div>
             <label>Rent/Own<span class="text-danger">*</span></label>
-            <select [(ngModel)]="customerPermanent.RentOwn" name="permanentRentOwn" [required]="customer.type === 'Non-Individual'"
+            <select [(ngModel)]="Firm.Firm_CorpAddressRentBuy" name="permanentRentOwn" [required]="customer.type === 'Non-Individual'"
               #permanentRentOwn="ngModel">
               <option value="">--Select--</option>
               <option>Rent</option>
@@ -925,7 +1069,7 @@
 
           <div>
             <label>Distance To Branch(KM)<span class="text-danger">*</span></label>
-            <input type="number" [(ngModel)]="customerPermanent.DistanceBranch" name="permanentDistance" maxlength="2"
+            <input type="number" [(ngModel)]="Firm.Firm_CorpNearstBranchDistance_KM" name="permanentDistance" maxlength="2"
               placeholder="Distance From Branch"
               oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
           </div>
