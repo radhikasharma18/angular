@@ -33,6 +33,7 @@ export class Customer implements OnInit {
   caste: any[] = [];
   BusinessCategory: any[] = [];
   firmTypes: any[] = [];
+  kycStatusMessage: string = ''; 
 
     
 
@@ -370,6 +371,70 @@ calculateAge() {
       }
     });
   }
+  onDocumentTypeChange(event: any) {
+  const docId = event.target.value;
+  this.CustomerKYCDoc[0].KYC_DocId = docId;
+  }
+
+   onDocNumberInput(event: any) {
+  const number = event.target.value.trim();
+  const docId = this.CustomerKYCDoc[0].KYC_DocId;
+
+  
+  if (docId && number.length >= 10) {
+    this.checkDuplicateKyc(docId, number);
+  }
+ }
+  
+  
+  checkDuplicateKyc(type: string, value: string) {
+  const url = 'https://demo.finnaux.com/api/api/LMS/LMS_CheckCustomerDuplicationKYCApp';
+  const token = constantUrl.token;
+
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Authorization': token  
+  });
+
+ const payload = {
+    Type: type,
+    value: value
+  };
+
+  this.kycStatusMessage = 'Checking KYC...';
+
+  this.http.post(url, payload, { headers }).subscribe({
+    next: (res: any) => {
+      console.log('KYC API Response:', res);
+
+      // Assuming API returns something like { status: 'Duplicate' } or similar
+      if (res?.Status === 'Duplicate') {
+        this.kycStatusMessage = 'This KYC document already exists.';
+      } else if (res?.Status === 'Valid') {
+        this.kycStatusMessage = 'KYC document is valid.';
+      } else {
+        this.kycStatusMessage = 'Unable to verify KYC document.';
+      }
+    },
+    error: (err) => {
+      console.error('Error verifying KYC:', err);
+      this.kycStatusMessage = 'Error verifying KYC. Please try again later.';
+    }
+  });
+}
+
+onAadharInput(event: any) {
+  const value = event.target.value.replace(/\D/g, '');
+  if (value.length === 12) {
+    this.checkDuplicateKyc('6', value); // 
+  }
+}
+onPanInput(event: any) {
+  const value = event.target.value.trim().toUpperCase();
+  if (value.length === 10) {
+    this.checkDuplicateKyc('1', value);
+  }
+}
 
   loadCustomercategory(profileId: any) {
     const url = 'https://demo.finnaux.com/api/api/Masters/GetCustomer_Profile_Master_For_Dropdown';

@@ -21,41 +21,62 @@
     <h3 class="heading">KYC Documents</h3>
     <div class="kyc-documents" >
       <div class="document">
-        <div>
-          <div><label>Document Type<span class="text-danger">*</span></label></div>
-          <div>
-            <select [(ngModel)]="CustomerKYCDoc[0].KYC_DocId" name="kycDoc0Id" required 
-             [required]="customer.type === 'Individual'" #kycDoc0Id="ngModel">
-              <option value="">--Select Document Type--</option>
-              <option value="6"> Aadhaar Card </option>
-              <option value="22"> CKYC ID /O</option>
-              <option value="48"> DIN </option>
-              <option value="5"> Driving License </option>
-              <option value="2"> Electricity Bill </option>
-              <option value="28"> Firm Registration No </option>
-              <option value="33"> Form-60 </option>
-              <option value="29"> GST No </option>
-              <option value="49"> MSME Registration </option>
-              <option value="42"> OCR Aadhaar </option>
-              <option value="7"> Other Photo ID </option>
-              <option value="1"> PAN Card </option>
-              <option value="3"> Passport Copy </option>
-              <option value="21"> Ration Card </option>
-              <option value="30"> Tan No. </option>
-              <option value="4"> Voter ID Card </option>
-            </select>
-          </div>
-        </div>
+  <div>
+    <div><label>Document Type<span class="text-danger">*</span></label></div>
+    <div>
+      <select
+        [(ngModel)]="CustomerKYCDoc[0].KYC_DocId"
+        name="kycDoc0Id"
+        required
+        [required]="customer.type === 'Individual'"
+        (change)="onDocumentTypeChange($event)"
+      >
+        <option value="">--Select Document Type--</option>
+        <option value="6">Aadhaar Card</option>
+        <option value="22">CKYC ID /O</option>
+        <option value="48">DIN</option>
+        <option value="5">Driving License</option>
+        <option value="2">Electricity Bill</option>
+        <option value="28">Firm Registration No</option>
+        <option value="33">Form-60</option>
+        <option value="29">GST No</option>
+        <option value="49">MSME Registration</option>
+        <option value="42">OCR Aadhaar</option>
+        <option value="7">Other Photo ID</option>
+        <option value="1">PAN Card</option>
+        <option value="3">Passport Copy</option>
+        <option value="21">Ration Card</option>
+        <option value="30">Tan No.</option>
+        <option value="4">Voter ID Card</option>
+      </select>
+    </div>
+  </div>
 
-        <div>
-          <label>Document Number<span class="text-danger">*</span></label>
-          <input type="text" [(ngModel)]="CustomerKYCDoc[0].KYC_DocNumber" name="kycDoc0Number"
-            placeholder="Document Number"  [required]="customer.type === 'Individual'" #kycDoc0Number="ngModel" />
-          <div *ngIf="kycDoc0Number.invalid && (kycDoc0Number.dirty || kycDoc0Number.touched)" class="text-danger">
-            Document number is required.
-          </div>
-        </div>
-      </div>
+  <div>
+    <label>Document Number<span class="text-danger">*</span></label>
+    <input
+      type="text"
+      [(ngModel)]="CustomerKYCDoc[0].KYC_DocNumber"
+      name="kycDoc0Number"
+      placeholder="Document Number"
+      [required]="customer.type === 'Individual'"
+      (input)="onDocNumberInput($event)"
+      #kycDocNumber="ngModel"
+    />
+    <div
+      *ngIf="kycDocNumber.invalid && (kycDocNumber.dirty || kycDocNumber.touched)"
+      class="text-danger"
+    >
+      Document number is required.
+    </div>
+
+    <!-- Optional: Show API status -->
+    <div *ngIf="kycStatusMessage" class="mt-2">
+      <small>{{ kycStatusMessage }}</small>
+    </div>
+  </div>
+</div>
+
 
 
       <div>

@@ -1,3 +1,3 @@
 export const constantUrl = {
-  token: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjEzMTA3MDksImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NDk1MDkiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQ5NTA5In0.sW68Lq6FBy1R7jhFvODjefHXdMNve515dVzVbxhnWu0"
+  token: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjE1NzM4NzUsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NDk1MDkiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQ5NTA5In0.qn0OcghzRcICwlVnbx3lfb3oZCKorikOC4t-MW89yRo"
 };
