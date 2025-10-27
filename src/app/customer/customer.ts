@@ -184,7 +184,12 @@ export class Customer implements OnInit {
       LastVerfiedDate: '',
       KYC_IsVerified: 0,
       Verified_Button: true
-    }]
+    },
+  { 
+    KYC_DocId: '',
+    KYC_DocNumber: '',
+    KYC_DocFile: '' }
+];
   
  
   customer_district: any = '';
@@ -846,9 +851,7 @@ buildPayload() {
 
  
 removeDoc(index: number) {
-  const updatedDocs = [...this.CustomerKYCDoc];
-  updatedDocs[index] = { KYC_DocFile: null };
-  this.CustomerKYCDoc = updatedDocs;
+  this.CustomerKYCDoc[index].KYC_DocFile = ''; 
 }
 
 
@@ -866,8 +869,8 @@ removeProfileImage() {
 }
 
 openFilePickerDoc(index: number) {
-  const input = document.getElementById(`kycDoc${index}File`) as HTMLInputElement;
-  if (input) input.click();
+  const input = document.getElementById('kycDoc' + index + 'File') as HTMLInputElement;
+  input?.click();
 }
 
 
@@ -894,22 +897,16 @@ onFileSelectedProfile(event: Event) {
   }
 }
 
-
-
 onFileSelectedDoc(event: any, index: number) {
   const file = event.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = (e: any) => {
-    // Clone the array so Angular detects change
-    const updatedDocs = [...this.CustomerKYCDoc];
-    updatedDocs[index] = { KYC_DocFile: e.target.result };
-    this.CustomerKYCDoc = updatedDocs;
-  };
-  reader.readAsDataURL(file);
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.CustomerKYCDoc[index].KYC_DocFile = reader.result; 
+    };
+    reader.readAsDataURL(file);
+  }
 }
-
 
 
 
