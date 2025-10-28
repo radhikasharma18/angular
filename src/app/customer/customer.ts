@@ -543,6 +543,14 @@ onPanInput(event: any) {
     });
   }
 
+addNewDocument() {
+  this.CustomerKYCDoc.push({
+    KYC_DocId: '',
+    KYC_DocNumber: '',
+    KYC_DocFile: null
+  });
+}
+
   loadTehsils(districtId: any) {
     if (!districtId) return;
 
@@ -850,10 +858,17 @@ buildPayload() {
   }
 
  
-removeDoc(index: number) {
-  this.CustomerKYCDoc[index].KYC_DocFile = ''; 
-}
 
+removeDoc(index: number): void {
+  // safety checks: ensure index is a number and within bounds
+  if (index == null || typeof index !== 'number' || index < 0 || index >= this.CustomerKYCDoc.length) {
+    console.warn('removeDoc: invalid index', index);
+    return;
+  }
+
+  // remove the document from the array
+  this.CustomerKYCDoc.splice(index, 1);
+}
 
 profilePreviewUrl: string | ArrayBuffer | null = null;
 profilePreviewUrlProfile: string | ArrayBuffer | null = null;
@@ -864,15 +879,22 @@ openFilePicker() {
   input?.click();
 }
 
+
 removeProfileImage() {
   this.profilePreviewUrl = null;
 }
-
-openFilePickerDoc(index: number) {
-  const input = document.getElementById('kycDoc' + index + 'File') as HTMLInputElement;
-  input?.click();
+removeFile(index: number, fileType: number): void {
+  if (fileType === 1) {
+    this.CustomerKYCDoc[index].photoFile = null;
+  } else if (fileType === 2) {
+    this.CustomerKYCDoc[index].documentFile = null;
+  }
 }
 
+openFilePickerDoc(index: number): void {
+  const fileInput = document.getElementById(`docFileInput${index}`) as HTMLInputElement;
+  fileInput?.click();
+}
 
 onFileSelected(event: any) {
   const file = event.target.files[0];
@@ -897,14 +919,11 @@ onFileSelectedProfile(event: Event) {
   }
 }
 
-onFileSelectedDoc(event: any, index: number) {
+
+onFileSelectedDoc(event: any, index: number): void {
   const file = event.target.files[0];
   if (file) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.CustomerKYCDoc[index].KYC_DocFile = reader.result; 
-    };
-    reader.readAsDataURL(file);
+    this.CustomerKYCDoc[index].KYC_DocFile = file;
   }
 }
 
