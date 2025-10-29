@@ -185,10 +185,7 @@ export class Customer implements OnInit {
       KYC_IsVerified: 0,
       Verified_Button: true
     },
-  { 
-    KYC_DocId: '',
-    KYC_DocNumber: '',
-    KYC_DocFile: '' }
+  
 ];
   
  
@@ -543,12 +540,20 @@ onPanInput(event: any) {
     });
   }
 
+
 addNewDocument() {
+  console.log('Before:', this.CustomerKYCDoc.length);
+  console.log('Before:', this.CustomerKYCDoc);
+
   this.CustomerKYCDoc.push({
     KYC_DocId: '',
     KYC_DocNumber: '',
-    KYC_DocFile: null
+    KYC_DocFile1: '',
+    KYC_DocFile2: ''
   });
+  console.log('After:', this.CustomerKYCDoc.length);
+  console.log('Before:', this.CustomerKYCDoc);
+
 }
 
   loadTehsils(districtId: any) {
@@ -891,11 +896,14 @@ removeFile(index: number, fileType: number): void {
   }
 }
 
-openFilePickerDoc(index: number): void {
-  const fileInput = document.getElementById(`docFileInput${index}`) as HTMLInputElement;
-  fileInput?.click();
-}
 
+
+openFilePickerDoc(index: number, fileNumber: number) {
+  const fileInput = document.getElementById(`kycDoc${index}File${fileNumber}`) as HTMLInputElement;
+  if (fileInput) {
+    fileInput.click();
+  }
+}
 onFileSelected(event: any) {
   const file = event.target.files[0];
   if (!file) return;

@@ -58,7 +58,7 @@ button{
 .kyc-documents {
   margin: 30px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 20px;
   justify-content: space-between;
 
@@ -94,6 +94,11 @@ button{
 }
 .form-label {
   font-size: 14px;
+}
+.row{
+  display: flex;
+ flex-direction: column;
+  margin-top: 10px;
 }
 input, select {
   font-size: 13px;
