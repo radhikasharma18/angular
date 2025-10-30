@@ -179,16 +179,64 @@ export class Customer implements OnInit {
       KYC_DocNumber: '',
       KYC_DocFile: null,
       KYC_DocFile1: null,
+      KYC_DocFile2: null, 
       KYC_IssuedDate: '',
       KYC_ExpiredDate: '',
       LastVerfiedDate: '',
       KYC_IsVerified: 0,
       Verified_Button: true
     },
-  
 ];
+documentOptions = [
+  { id: 6, name: 'Aadhaar Card' },
+  { id: 22, name: 'CKYC ID /O' },
+  { id: 48, name: 'DIN' },
+  { id: 5, name: 'Driving License' },
+  { id: 2, name: 'Electricity Bill' },
+  { id: 28, name: 'Firm Registration No' },
+  { id: 33, name: 'Form-60' },
+  { id: 29, name: 'GST No' },
+  { id: 49, name: 'MSME Registration' },
+  { id: 42, name: 'OCR Aadhaar' },
+  { id: 7, name: 'Other Photo ID' },
+  { id: 1, name: 'PAN Card' },
+  { id: 3, name: 'Passport Copy' },
+  { id: 21, name: 'Ration Card' },
+  { id: 30, name: 'Tan No.' },
+  { id: 4, name: 'Voter ID Card' },
+];
+documentValidationRules: any = {
+  6: {
+    name: 'Aadhaar Card',
+    pattern: '^[0-9]{12}$',
+    message: 'Aadhaar must be 12 digits.',
+  },
+  1: {
+    name: 'PAN Card',
+    pattern: '^[A-Z]{5}[0-9]{4}[A-Z]{1}$',
+    message: 'Invalid PAN format (e.g., ABCDE1234F).',
+  },
+  3: {
+    name: 'Passport Copy',
+    pattern: '^[A-Z0-9]{8,9}$',
+    message: 'Invalid passport number.',
+  },
+  4: {
+    name: 'Voter ID Card',
+    pattern: '^[A-Z0-9]{10,12}$',
+    message: 'Invalid voter ID number.',
+  },
+  5: {
+    name: 'Driving License',
+    pattern: '^[A-Z]{2}[0-9]{13}$',
+    message: 'Invalid license format (e.g., RJ1420200000000).',
+  },
+};
+
+
+
   
- 
+ selectedDocIds: number[] = [];
   customer_district: any = '';
 
   ngOnInit() {
@@ -261,6 +309,7 @@ openSearchModal() {
     console.log("cleared");
   }
 }
+
 
 isWorkAddressFilled() {
   return Object.values(this.customerWork).some(value => value && value.toString().trim() !== '');
@@ -373,22 +422,52 @@ calculateAge() {
       }
     });
   }
-  onDocumentTypeChange(event: any) {
-  const docId = event.target.value;
-  this.CustomerKYCDoc[0].KYC_DocId = docId;
+
+
+  onDocumentTypeChange(event: any, index: number): void {
+  const selectedValue = Number(event.target.value);
+
+  this.selectedDocIds = this.CustomerKYCDoc
+    .map(doc => Number(doc.KYC_DocId))
+    .filter(id => !!id);
+
+ 
+  const selectedRule = this.documentValidationRules[selectedValue];
+  if (selectedRule) {
+    this.CustomerKYCDoc[index].validationPattern = selectedRule.pattern;
+    this.CustomerKYCDoc[index].validationMessage = selectedRule.message;
+  } else {
+    this.CustomerKYCDoc[index].validationPattern = null;
+    this.CustomerKYCDoc[index].validationMessage = '';
   }
 
-   onDocNumberInput(event: any) {
-  const number = event.target.value.trim();
-  const docId = this.CustomerKYCDoc[0].KYC_DocId;
+ 
+  this.CustomerKYCDoc[index].KYC_DocNumber = '';
 
-  
-  if (docId && number.length >= 10) {
-    this.checkDuplicateKyc(docId, number);
+ 
+}
+
+onDocNumberInput(event: any, index: number): void {
+const number = event.target.value.trim().toUpperCase();
+this.CustomerKYCDoc[index].KYC_DocNumber = number; // reflect in model
+
+  const doc = this.CustomerKYCDoc[index];
+  const pattern = doc.validationPattern;
+
+  if (pattern) {
+    const regex = new RegExp(pattern, 'i'); 
+    console.log('Pattern:', pattern, 'Input:', number, 'Result:', regex.test(number));
+
+    if (!regex.test(number)) {
+      doc.validationError = doc.validationMessage;
+    } else {
+      doc.validationError = '';
+    }
+  } else {
+    doc.validationError = '';
   }
- }
-  
-  
+}
+ 
   checkDuplicateKyc(type: string, value: string) {
   const url = 'https://demo.finnaux.com/api/api/LMS/LMS_CheckCustomerDuplicationKYCApp';
   const token = constantUrl.token;
@@ -637,18 +716,49 @@ addNewDocument() {
   }
 
 
-  duplicateDoc(){
-    const url = 'https://demo.finnaux.com/api/api/Masters/Get_Alredy_Verified_KYC';
-    const token = constantUrl.token;
+ duplicateDoc(index: number): void {
+  const url = 'https://demo.finnaux.com/api/api/Masters/Get_Alredy_Verified_KYC';
+  const token = constantUrl.token;
 
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': token
-    });
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Authorization': token
+  });
 
+  const selectedDoc = this.CustomerKYCDoc[index];
 
+  // Check required fields before calling API
+  if (!selectedDoc.KYC_DocId || !selectedDoc.KYC_DocNumber) {
+    console.warn('Document type or number missing.');
+    return;
+  }
 
+  const payload = {
+    DocumentId: selectedDoc.KYC_DocId.toString(),
+    KYC_DocNumber: selectedDoc.KYC_DocNumber.trim()
+  };
+
+  console.log('Payload:', payload);
+
+  this.http.post(url, payload, { headers }).subscribe({
+    next: (response: any) => {
+      console.log('Duplicate check response:', response);
+
+      // Adjust based on your actual API response structure
+      if (response?.isDuplicate === true || response?.Status === 'Duplicate') {
+        alert(`This document number already exists.`);
+        selectedDoc.KYC_DocNumber = ''; // clear field if duplicate
+      } else {
+        console.log('Document is unique.');
+      }
+    },
+    error: (err) => {
+      console.error('Error checking duplicate:', err);
+    }
+  });
 }
+
+
 
  onSave() {
   if (this.customer.type === 'Individual') {
@@ -888,22 +998,24 @@ openFilePicker() {
 removeProfileImage() {
   this.profilePreviewUrl = null;
 }
-removeFile(index: number, fileType: number): void {
-  if (fileType === 1) {
-    this.CustomerKYCDoc[index].photoFile = null;
-  } else if (fileType === 2) {
-    this.CustomerKYCDoc[index].documentFile = null;
+removeFile(index: number, fileNo: number) {
+  if (fileNo === 1) {
+    this.CustomerKYCDoc[index].KYC_DocFile1 = null;
+  } else if (fileNo === 2) {
+    this.CustomerKYCDoc[index].KYC_DocFile2 = null;
   }
 }
 
-
-
-openFilePickerDoc(index: number, fileNumber: number) {
-  const fileInput = document.getElementById(`kycDoc${index}File${fileNumber}`) as HTMLInputElement;
+openFilePickerDoc(index: number, fileNo: number) {
+  const fileInput = document.getElementById(`kycDoc${index}File${fileNo}`) as HTMLInputElement;
   if (fileInput) {
     fileInput.click();
+  } else {
+    console.error('File input not found:', `kycDoc${index}File${fileNo}`);
   }
 }
+
+
 onFileSelected(event: any) {
   const file = event.target.files[0];
   if (!file) return;
@@ -928,12 +1040,25 @@ onFileSelectedProfile(event: Event) {
 }
 
 
-onFileSelectedDoc(event: any, index: number): void {
-  const file = event.target.files[0];
-  if (file) {
-    this.CustomerKYCDoc[index].KYC_DocFile = file;
-  }
+onFileSelectedDoc(index: number, fileNumber: number, event: Event): void {
+  const input = event.target as HTMLInputElement;
+  if (!input || !input.files || input.files.length === 0) return;
+
+  const file = input.files[0];
+  const reader = new FileReader();
+
+  reader.onload = () => {
+    const fileData = reader.result as string;
+    if (fileNumber === 1) {
+      this.CustomerKYCDoc[index].KYC_DocFile1 = fileData;
+    } else {
+      this.CustomerKYCDoc[index].KYC_DocFile2 = fileData;
+    }
+  };
+
+  reader.readAsDataURL(file);
 }
+
 
 
 

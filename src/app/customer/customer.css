@@ -100,6 +100,12 @@ button{
  flex-direction: column;
   margin-top: 10px;
 }
+.documents{
+  height: 34px;
+  width: 250px;
+  display: flex;
+  justify-content: space-between;
+}
 input, select {
   font-size: 13px;
   text-transform: uppercase;

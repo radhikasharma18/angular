@@ -24,95 +24,100 @@
       class="col-md-12 mb-4"
       *ngFor="let doc of CustomerKYCDoc; let i = index"
     >
-      <div class="document p-3 border rounded">
-        <!-- Document Type -->
+      <div class="document">
+        
         <div class="mb-3">
-          <label>Document Type <span class="text-danger">*</span></label>
-          <select
-            [(ngModel)]="doc.KYC_DocId"
-            name="kycDoc{{i}}Id"
-            required
-            class="form-select"
-            (change)="onDocumentTypeChange($event)"
-          >
-            <option value="">--Select Document Type--</option>
-            <option value="6">Aadhaar Card</option>
-            <option value="22">CKYC ID /O</option>
-            <option value="48">DIN</option>
-            <option value="5">Driving License</option>
-            <option value="2">Electricity Bill</option>
-            <option value="28">Firm Registration No</option>
-            <option value="33">Form-60</option>
-            <option value="29">GST No</option>
-            <option value="49">MSME Registration</option>
-            <option value="42">OCR Aadhaar</option>
-            <option value="7">Other Photo ID</option>
-            <option value="1">PAN Card</option>
-            <option value="3">Passport Copy</option>
-            <option value="21">Ration Card</option>
-            <option value="30">Tan No.</option>
-            <option value="4">Voter ID Card</option>
-          </select>
+          
+           <label>Document Type <span class="text-danger">*</span></label>
+       <select
+  [(ngModel)]="doc.KYC_DocId"
+  name="kycDoc{{i}}Id"
+  required
+  class="documents"
+  style="width: 100%; padding: 8px; margin-bottom: 10px;"
+  (change)="onDocumentTypeChange($event, i); duplicateDoc(i)"
+>
+  <option value="">--Select Document Type--</option>
+  <option
+    *ngFor="let option of documentOptions"
+    [value]="option.id"
+    [disabled]="
+      selectedDocIds.includes(option.id) &&
+      option.id !== doc.KYC_DocId
+    "
+  >
+    {{ option.name }}
+  </option>
+</select>
+
         </div>
+       
 
         <!-- Document Number -->
         <div class="mb-3">
           <label>Document Number <span class="text-danger">*</span></label>
-          <input
-            type="text"
-            [(ngModel)]="doc.KYC_DocNumber"
-            name="kycDoc{{i}}Number"
-            placeholder="Enter document number"
-            class="form-control"
-          />
+        <input type="text" [(ngModel)]="doc.KYC_DocNumber" name="kycDoc{{i}}Number" placeholder="Enter document number" class="form-control"
+  [pattern]="doc.validationPattern"
+  (input)="onDocNumberInput($event, i)"
+  required
+/>
+<div *ngIf="doc.validationMessage && doc.KYC_DocNumber && !doc.KYC_DocNumber.match(doc.validationPattern)" class="text-danger small mt-1">
+  {{ doc.validationMessage }}
+</div>
         </div>
 
         <!-- Upload buttons -->
-        <div class="row">
-          <div class="col-md-6">
-            <label class="form-label fw-bold">Document Image 1</label>
-            <input
-              type="file"
-              id="kycDoc{{i}}File1"
-              style="display: none"
-              (change)="onFileSelectedDoc( i, 1)"
-            />
-            <i
-              *ngIf="!doc.KYC_DocFile1"
-              class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary"
-              style="cursor: pointer;"
-              (click)="openFilePickerDoc(i, 1)">
-            </i>
-            <div *ngIf="doc.KYC_DocFile1" class="mt-2">
-              <img [src]="doc.KYC_DocFile1" alt="Preview 1" width="100" class="rounded" />
-              <button type="button" class="btn btn-sm btn-outline-danger ms-2" (click)="removeFile(i, 1)">
-                ×
-              </button>
-            </div>
-          </div>
+      <div class="document">
+  <!-- Document Image 1 -->
+  <div class="col-md-6">
+    <label class="form-label fw-bold">Document Image 1</label>
+    <input
+      type="file"
+      id="kycDoc{{i}}File1"
+      style="display: none"
+      accept="image/*"
+      (change)="onFileSelectedDoc(i, 1, $event)"
+    />
+    <i
+      *ngIf="!doc.KYC_DocFile1"
+      class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary"
+      style="cursor: pointer;"
+      (click)="openFilePickerDoc(i, 1)">
+    </i>
+    <div *ngIf="doc.KYC_DocFile1" class="mt-2">
+      <img [src]="doc.KYC_DocFile1" alt="Preview 1" width="100" class="rounded" />
+      <button type="button" class="btn btn-sm btn-outline-danger ms-2" (click)="removeFile(i, 1)">
+        ×
+      </button>
+    </div>
+  </div>
 
-          <div class="col-md-6">
-            <label class="form-label fw-bold">Document Image 2</label>
-            <input
-              type="file"
-              id="kycDoc{{i}}File2"
-              style="display: none"
-              (change)="onFileSelectedDoc(i, 2)"
-            />
-            <i
-              *ngIf="!doc.KYC_DocFile2"
-              class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary"
-              style="cursor: pointer;"
-              (click)="openFilePickerDoc(i, 2)">
-            </i>
-            <div *ngIf="doc.KYC_DocFile2" class="mt-2">
-              <img [src]="doc.KYC_DocFile2" alt="Preview 2" width="100" class="rounded" />
-              <button type="button" class="btn btn-sm btn-outline-danger ms-2" (click)="removeFile(i, 2)">
-                ×
-              </button>
-            </div>
-          </div>
-        </div>
+  <!-- Document Image 2 -->
+  <div class="col-md-6">
+    <label class="form-label fw-bold">Document Image 2</label>
+    <input
+      type="file"
+      id="kycDoc{{i}}File2"
+      style="display: none"
+      accept="image/*"
+      (change)="onFileSelectedDoc(i, 2, $event)"
+    />
+    <i
+      *ngIf="!doc.KYC_DocFile2"
+      class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary"
+      style="cursor: pointer;"
+      (click)="openFilePickerDoc(i, 2)">
+    </i>
+    <div *ngIf="doc.KYC_DocFile2" class="mt-2">
+      <img [src]="doc.KYC_DocFile2" alt="Preview 2" width="100" class="rounded" />
+      <button type="button" class="btn btn-sm btn-outline-danger ms-2" (click)="removeFile(i, 2)">
+        ×
+      </button>
+    </div>
+  </div>
+</div>
+
+
 
         <!-- Remove doc -->
         <div class="mt-3 text-end">
@@ -124,12 +129,7 @@
             −
           </button>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Add new doc -->
-  <div class="text-end mt-3">
+         <div class="text-end mt-3" *ngIf="i === CustomerKYCDoc.length - 1">
     <button
       type="button"
       class="btn btn-outline-primary"
@@ -137,6 +137,14 @@
       +
     </button>
   </div>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  <!-- Add new doc -->
+ 
 </div>
 
 
@@ -682,115 +690,160 @@
     </div>
     <!--kyc for both-->
     <div *ngIf="customer.type === 'Non-Individual'">
-    <h3 class="heading">KYC Documents</h3>
-    <div class="kyc-documents" >
+  <h3 class="heading">KYC Documents</h3>
+
+  <div class="kyc-documents row">
+    <div
+      class="col-md-12 mb-4"
+      *ngFor="let doc of CustomerKYCDoc; let i = index"
+    >
       <div class="document">
-        <div>
-          <div><label>Document Type<span class="text-danger">*</span></label></div>
-          <div>
-            <select [(ngModel)]="CustomerKYCDoc[0].KYC_DocId" name="kycDoc0Id" [required]="customer.type === 'Non-Individual'" #kycDoc0Id="ngModel">
-              <option value="">--Select Document Type--</option>
-              <option value="6"> Aadhaar Card </option>
-              <option value="22"> CKYC ID /O</option>
-              <option value="48"> DIN </option>
-              <option value="5"> Driving License </option>
-              <option value="2"> Electricity Bill </option>
-              <option value="28"> Firm Registration No </option>
-              <option value="33"> Form-60 </option>
-              <option value="29"> GST No </option>
-              <option value="49"> MSME Registration </option>
-              <option value="42"> OCR Aadhaar </option>
-              <option value="7"> Other Photo ID </option>
-              <option value="1"> PAN Card </option>
-              <option value="3"> Passport Copy </option>
-              <option value="21"> Ration Card </option>
-              <option value="30"> Tan No. </option>
-              <option value="4"> Voter ID Card </option>
-            </select>
-          </div>
-        </div>
-
-        <div>
-          <label>Document Number<span class="text-danger">*</span></label>
-          <input type="text" [(ngModel)]="CustomerKYCDoc[0].KYC_DocNumber" name="kycDoc0Number"
-            placeholder="Document Number" [required]="customer.type === 'Non-Individual'" #kycDoc0Number="ngModel" />
-          <div *ngIf="kycDoc0Number.invalid && (kycDoc0Number.dirty || kycDoc0Number.touched)" class="text-danger">
-            Document number is required.
-          </div>
-        </div>
-      </div>
-
-
-      <div>
-  <label class="form-label fw-bold">Document Image 1</label>
-
-  <input 
-    type="file" 
-    id="kycDoc0File" 
-    style="display: none" 
-    (change)="onFileSelectedDoc($event, 0)" 
-  />
-
-  <!-- Upload icon (only visible before file upload) -->
-  <i 
-    *ngIf="!CustomerKYCDoc[0]?.KYC_DocFile" 
-    class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary" 
-    style="cursor: pointer;"
-    (click)="openFilePickerDoc(0, 1)">
-  </i>
-
-  <!-- Image + Cancel Button -->
-  <div 
-    *ngIf="CustomerKYCDoc[0]?.KYC_DocFile" 
-    class="position-relative d-inline-block mt-2"
+        
+        <div class="mb-3">
+          <!-- <label>Document Type <span class="text-danger">*</span></label>
+          <select
+            [(ngModel)]="doc.KYC_DocId"
+            name="kycDoc{{i}}Id"
+            required
+            class="form-select"
+            (change)="onDocumentTypeChange($event)"
+          >
+            <option value="">--Select Document Type--</option>
+            <option value="6">Aadhaar Card</option>
+            <option value="22">CKYC ID /O</option>
+            <option value="48">DIN</option>
+            <option value="5">Driving License</option>
+            <option value="2">Electricity Bill</option>
+            <option value="28">Firm Registration No</option>
+            <option value="33">Form-60</option>
+            <option value="29">GST No</option>
+            <option value="49">MSME Registration</option>
+            <option value="42">OCR Aadhaar</option>
+            <option value="7">Other Photo ID</option>
+            <option value="1">PAN Card</option>
+            <option value="3">Passport Copy</option>
+            <option value="21">Ration Card</option>
+            <option value="30">Tan No.</option>
+            <option value="4">Voter ID Card</option>
+          </select> -->
+           <label>Document Type <span class="text-danger">*</span></label>
+        <select
+  [(ngModel)]="doc.KYC_DocId"
+  name="kycDoc{{i}}Id"
+  required
+  class="documents"
+  style="width: 100%; padding: 8px; margin-bottom: 10px;"
+  (change)="onDocumentTypeChange($event, i)"
+>
+  <option value="">--Select Document Type--</option>
+  <option
+    *ngFor="let option of documentOptions"
+    [value]="option.id"
+    [disabled]="
+      selectedDocIds.includes(option.id) &&
+      option.id !== doc.KYC_DocId
+    "
   >
-    <img 
-      [src]="CustomerKYCDoc[0].KYC_DocFile" 
-      alt="Preview" 
-      width="100" 
-      class="rounded border"
-    />
+    {{ option.name }}
+  </option>
+</select>
 
-    <button 
+        </div>
+       
+
+        <!-- Document Number -->
+        <div class="mb-3">
+          <label>Document Number <span class="text-danger">*</span></label>
+          <input
+            type="text"
+            [(ngModel)]="doc.KYC_DocNumber"
+            name="kycDoc{{i}}Number"
+            placeholder="Enter document number"
+            class="form-control"
+          />
+        </div>
+
+        <!-- Upload buttons -->
+      <div class="document">
+  <!-- Document Image 1 -->
+  <div class="col-md-6">
+    <label class="form-label fw-bold">Document Image 1</label>
+    <input
+      type="file"
+      id="kycDoc{{i}}File1"
+      style="display: none"
+      accept="image/*"
+      (change)="onFileSelectedDoc(i, 1, $event)"
+    />
+    <i
+      *ngIf="!doc.KYC_DocFile1"
+      class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary"
+      style="cursor: pointer;"
+      (click)="openFilePickerDoc(i, 1)">
+    </i>
+    <div *ngIf="doc.KYC_DocFile1" class="mt-2">
+      <img [src]="doc.KYC_DocFile1" alt="Preview 1" width="100" class="rounded" />
+      <button type="button" class="btn btn-sm btn-outline-danger ms-2" (click)="removeFile(i, 1)">
+        ×
+      </button>
+    </div>
+  </div>
+
+  <!-- Document Image 2 -->
+  <div class="col-md-6">
+    <label class="form-label fw-bold">Document Image 2</label>
+    <input
+      type="file"
+      id="kycDoc{{i}}File2"
+      style="display: none"
+      accept="image/*"
+      (change)="onFileSelectedDoc(i, 2, $event)"
+    />
+    <i
+      *ngIf="!doc.KYC_DocFile2"
+      class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary"
+      style="cursor: pointer;"
+      (click)="openFilePickerDoc(i, 2)">
+    </i>
+    <div *ngIf="doc.KYC_DocFile2" class="mt-2">
+      <img [src]="doc.KYC_DocFile2" alt="Preview 2" width="100" class="rounded" />
+      <button type="button" class="btn btn-sm btn-outline-danger ms-2" (click)="removeFile(i, 2)">
+        ×
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
+        <!-- Remove doc -->
+        <div class="mt-3 text-end">
+          <button
+            *ngIf="CustomerKYCDoc.length > 1"
+            type="button"
+            class="btn btn-outline-danger"
+            (click)="removeDoc(i)">
+            −
+          </button>
+        </div>
+         <div class="text-end mt-3" *ngIf="i === CustomerKYCDoc.length - 1">
+    <button
       type="button"
-     (click)="removeDoc(0)">
-      ×
+      class="btn btn-outline-primary"
+      (click)="addNewDocument()">
+      +
     </button>
   </div>
-</div>
-
-      <div>
-  <label class="form-label fw-bold">Document Image 2</label>
-
-  <input 
-    type="file" 
-    id="kycDoc1File" 
-    style="display: none" 
-    (change)="onFileSelectedDoc($event, 1)" 
-  />
-
-  <i 
-    *ngIf="!CustomerKYCDoc[1]?.KYC_DocFile" 
-    class="fa-solid fa-arrow-up-from-bracket fa-2x text-primary" 
-    style="cursor: pointer;"
-    (click)="openFilePickerDoc(1, 2)">
-  </i>
-
-  <div *ngIf="CustomerKYCDoc[1]?.KYC_DocFile">
-    <img 
-      [src]="CustomerKYCDoc[1].KYC_DocFile" 
-      alt="Preview" 
-      width="100" 
-      class="mt-2 rounded" 
-    />
-    <button 
-      type="button" (click)="removeDoc(1)">
-      ×
-    </button>
+      </div>
+      
+    </div>
+    
   </div>
-</div>
 
-    </div></div>
+  <!-- Add new doc -->
+ 
+</div>
+    
 
     <!-- customer information-->
    
