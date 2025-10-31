@@ -253,7 +253,7 @@ export class Customer implements OnInit {
       height: 'auto',
       panelClass: 'green-border-dialog',
       disableClose: false,
-      data: {}, // optional, you're not passing any initial data
+      data: {}, 
     });
 
     dialogRef.afterClosed().subscribe((selected) => {
@@ -263,22 +263,30 @@ export class Customer implements OnInit {
       }
     });
   }
-  openModal() {
+openModal(selectedDoc?: any) {
+  
+  if (!selectedDoc?.KYC_DocId || !selectedDoc?.KYC_DocNumber) {
+    console.warn('Document type or number missing.');
+    return;
+  }
+
     const dialogRef = this.dialog.open(Modal, {
-      width: '800px',
-      height: 'auto',
-      panelClass: 'green-border-dialog',
-      disableClose: false,
-      data: {},
-    });
+    width: '800px',
+    height: 'auto',
+    panelClass: 'green-border-dialog',
+    disableClose: false,
+    data: selectedDoc, 
+  });
 
-    dialogRef.afterClosed().subscribe((selected) => {
-      if (selected) {
-        console.log('Selected customer:', selected);
-        this.fillCustomerDetails(selected);
-      }
-    });
-  }
+  
+  dialogRef.afterClosed().subscribe((selected) => {
+    if (selected) {
+      console.log('Selected customer:', selected);
+      this.fillCustomerDetails(selected);
+    }
+  });
+}
+
 
   fillCustomerDetails(customer: any) {
     this.Partners.PartnerName = customer.CustomertName || '';
@@ -475,55 +483,7 @@ export class Customer implements OnInit {
     }
   }
 
-  checkDuplicateKyc(type: string, value: string) {
-    const url = 'https://demo.finnaux.com/api/api/LMS/LMS_CheckCustomerDuplicationKYCApp';
-    const token = constantUrl.token;
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: token,
-    });
-
-    const payload = {
-      Type: type,
-      value: value,
-    };
-
-    this.kycStatusMessage = 'Checking KYC...';
-
-    this.http.post(url, payload, { headers }).subscribe({
-      next: (res: any) => {
-        console.log('KYC API Response:', res);
-
-        // Assuming API returns something like { status: 'Duplicate' } or similar
-        if (res?.Status === 'Duplicate') {
-          this.kycStatusMessage = 'This KYC document already exists.';
-        } else if (res?.Status === 'Valid') {
-          this.kycStatusMessage = 'KYC document is valid.';
-        } else {
-          this.kycStatusMessage = 'Unable to verify KYC document.';
-        }
-      },
-      error: (err) => {
-        console.error('Error verifying KYC:', err);
-        this.kycStatusMessage = 'Error verifying KYC. Please try again later.';
-      },
-    });
-  }
-
-  onAadharInput(event: any) {
-    const value = event.target.value.replace(/\D/g, '');
-    if (value.length === 12) {
-      this.checkDuplicateKyc('6', value); //
-    }
-  }
-  onPanInput(event: any) {
-    const value = event.target.value.trim().toUpperCase();
-    if (value.length === 10) {
-      this.checkDuplicateKyc('1', value);
-    }
-  }
-
+  
   loadCustomercategory(profileId: any) {
     const url = 'https://demo.finnaux.com/api/api/Masters/GetCustomer_Profile_Master_For_Dropdown';
     const token = constantUrl.token;
@@ -781,15 +741,15 @@ LMS_CheckCustomerDuplicationKYCApp(index: number): void {
   console.log("Selected Document:", selectedDoc);
 
   // Validate document number
-  if (!selectedDoc.KYC_DocNumber) {
-    console.warn('Document number is missing.');
+  if (!selectedDoc.KYC_DocId || !selectedDoc.KYC_DocNumber) {
+    console.warn('Document type or number is missing.');
     return;
   }
 
-  // ✅ Correct payload format as per API requirement
+  
   const payload = {
-    Type: "Aadhaar Card",  // e.g. "Aadhaar Card"
-    value: selectedDoc.KYC_DocNumber.trim(),                // e.g. "659104028647"
+    Type: "Aadhaar Card", 
+    value: selectedDoc.KYC_DocNumber.trim(),
   };
 
   console.log('Payload being sent:', payload);
@@ -798,19 +758,25 @@ LMS_CheckCustomerDuplicationKYCApp(index: number): void {
     next: (response: any) => {
       console.log('Duplicate check response:', response);
 
-      // ✅ Adjust according to API response format
-      if (response?.isDuplicate === true || response?.Status === 'Duplicate') {
-        alert(`This ${payload.Type} number already exists.`);
-        selectedDoc.KYC_DocNumber = ''; // Clear input field
-      } else {
-        console.log('Document is unique.');
+      const customer = response?.Item1?.[0];
+      const customerId = customer?.CustomerId || 0;
+
+    
+      if (customerId === 0) {
+        console.warn('CustomerId is 0 — Modal will NOT open.');
+        return;
       }
+
+    
+      this.openModal(customer);
     },
     error: (err) => {
       console.error('Error checking duplicate:', err);
     },
   });
 }
+
+
 
   onSave() {
     if (this.customer.type === 'Individual') {
